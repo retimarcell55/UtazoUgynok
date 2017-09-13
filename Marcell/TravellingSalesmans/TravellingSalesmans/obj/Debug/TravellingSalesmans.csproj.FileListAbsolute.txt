@@ -1,0 +1,10 @@
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\bin\Debug\TravellingSalesmans.exe.config
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\bin\Debug\TravellingSalesmans.exe
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\bin\Debug\TravellingSalesmans.pdb
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\obj\Debug\TravellingSalesmans.csprojResolveAssemblyReference.cache
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\obj\Debug\TravellingSalesmans.Form1.resources
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\obj\Debug\TravellingSalesmans.Properties.Resources.resources
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\obj\Debug\TravellingSalesmans.csproj.GenerateResource.Cache
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\obj\Debug\TravellingSalesmans.csproj.CoreCompileInputs.cache
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\obj\Debug\TravellingSalesmans.exe
+C:\Users\mreti\Desktop\TravellingSalesmans\TravellingSalesmans\TravellingSalesmans\obj\Debug\TravellingSalesmans.pdb
