@@ -38,10 +38,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.LoadConfigurations = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.RunAlgorithm = new System.Windows.Forms.Button();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.ConfigurationsComboBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.button5 = new System.Windows.Forms.Button();
@@ -134,10 +134,10 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.LoadConfigurations);
-            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.RunAlgorithm);
             this.groupBox2.Controls.Add(this.comboBox2);
             this.groupBox2.Controls.Add(this.label4);
-            this.groupBox2.Controls.Add(this.comboBox1);
+            this.groupBox2.Controls.Add(this.ConfigurationsComboBox);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Location = new System.Drawing.Point(24, 371);
             this.groupBox2.Name = "groupBox2";
@@ -156,14 +156,15 @@
             this.LoadConfigurations.UseVisualStyleBackColor = true;
             this.LoadConfigurations.Click += new System.EventHandler(this.LoadConfigurations_Click);
             // 
-            // button2
+            // RunAlgorithm
             // 
-            this.button2.Location = new System.Drawing.Point(17, 218);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(229, 34);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Run Algorithm";
-            this.button2.UseVisualStyleBackColor = true;
+            this.RunAlgorithm.Location = new System.Drawing.Point(17, 218);
+            this.RunAlgorithm.Name = "RunAlgorithm";
+            this.RunAlgorithm.Size = new System.Drawing.Size(229, 34);
+            this.RunAlgorithm.TabIndex = 5;
+            this.RunAlgorithm.Text = "Run Algorithm";
+            this.RunAlgorithm.UseVisualStyleBackColor = true;
+            this.RunAlgorithm.Click += new System.EventHandler(this.RunAlgorithm_Click);
             // 
             // comboBox2
             // 
@@ -182,13 +183,13 @@
             this.label4.TabIndex = 3;
             this.label4.Text = "Select algorithm:";
             // 
-            // comboBox1
+            // ConfigurationsComboBox
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(17, 74);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(229, 21);
-            this.comboBox1.TabIndex = 2;
+            this.ConfigurationsComboBox.FormattingEnabled = true;
+            this.ConfigurationsComboBox.Location = new System.Drawing.Point(17, 74);
+            this.ConfigurationsComboBox.Name = "ConfigurationsComboBox";
+            this.ConfigurationsComboBox.Size = new System.Drawing.Size(229, 21);
+            this.ConfigurationsComboBox.TabIndex = 2;
             // 
             // label3
             // 
@@ -278,9 +279,9 @@
         private System.Windows.Forms.TextBox AgentPath;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox ConfigurationsComboBox;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button RunAlgorithm;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBox3;

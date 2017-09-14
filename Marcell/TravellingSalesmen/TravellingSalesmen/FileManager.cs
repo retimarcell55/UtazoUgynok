@@ -59,7 +59,7 @@ namespace TravellingSalesmen
         public void saveConfiguration(Configuration configuration)
         {
 
-            string path = BASE_FOLDER_LOCATION + @"\" + configuration.Name + ".xml";
+            string path = BASE_FOLDER_LOCATION + @"\" + configuration.Name + ".txt";
 
             if (File.Exists(path))
             {
@@ -74,9 +74,9 @@ namespace TravellingSalesmen
 
         }
 
-        public Configuration loadConfiguration(string name)
+        private Configuration loadConfiguration(string name)
         {
-            string path = BASE_FOLDER_LOCATION + @"\" + name + ".xml";
+            string path = BASE_FOLDER_LOCATION + @"\" + name;
 
             Configuration configuration = null;
 
@@ -87,6 +87,22 @@ namespace TravellingSalesmen
             }
             return configuration;
 
+        }
+
+        public List<Configuration> loadConfigurations()
+        {
+            string[] fileNames = Directory.GetFiles(BASE_FOLDER_LOCATION, "*.txt")
+                                     .Select(Path.GetFileName)
+                                     .ToArray();
+
+            List<Configuration> configurations = new List<Configuration>();
+
+            for (int i = 0; i < fileNames.Length; i++)
+            {
+                configurations.Add(loadConfiguration(fileNames[i]));
+            }
+
+            return configurations;
         }
     }
 }

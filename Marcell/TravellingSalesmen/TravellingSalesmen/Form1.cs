@@ -42,7 +42,20 @@ namespace TravellingSalesmen
 
         private void LoadConfigurations_Click(object sender, EventArgs e)
         {
+            FileManager fm = new FileManager();
 
+            List<Configuration> configurations = fm.loadConfigurations();
+
+            for (int i = 0; i < configurations.Count; i++)
+            {
+                ConfigurationsComboBox.Items.Add(configurations[i].Name);
+            }
+
+        }
+
+        private void RunAlgorithm_Click(object sender, EventArgs e)
+        {
+              
         }
     }
 }
