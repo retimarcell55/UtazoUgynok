@@ -26,5 +26,10 @@ namespace TravellingSalesmen
             this.Algorithm = algorithm;
             algorithmStarted = false;
         }
+
+        public void runAlgorithm()
+        {
+
+        }
     }
 }

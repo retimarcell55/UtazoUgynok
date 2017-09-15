@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace TravellingSalesmen
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -55,7 +55,40 @@ namespace TravellingSalesmen
 
         private void RunAlgorithm_Click(object sender, EventArgs e)
         {
-              
+            Coordinator coordinator = new Coordinator();
+            switch (AlgorithmComboBox.SelectedItem.ToString())
+            {
+                case "GreedySearch":
+                    coordinator.Algorithm = new GreedySearch();
+                    break;
+            }
+
+            coordinator.Configuration = new FileManager().loadConfiguration(ConfigurationsComboBox.SelectedItem.ToString());
+
+            coordinator.runAlgorithm();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            LoadConfigurations_Click(null, null);
+            ConfigurationsComboBox.SelectedIndex = 0;
+            AlgorithmComboBox.SelectedIndex = 0;
+            this.ActiveControl = label1;
+        }
+
+        private void AdjacencyPath_Enter(object sender, EventArgs e)
+        {
+            AdjacencyPath.Text = string.Empty;
+        }
+
+        private void AgentPath_Enter(object sender, EventArgs e)
+        {
+            AgentPath.Text = string.Empty;
+        }
+
+        private void ConfigurationName_Enter(object sender, EventArgs e)
+        {
+            ConfigurationName.Text = string.Empty;
         }
     }
 }

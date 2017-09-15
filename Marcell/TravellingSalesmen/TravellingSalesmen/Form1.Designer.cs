@@ -1,6 +1,6 @@
 ﻿namespace TravellingSalesmen
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -39,7 +39,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.LoadConfigurations = new System.Windows.Forms.Button();
             this.RunAlgorithm = new System.Windows.Forms.Button();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.AlgorithmComboBox = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.ConfigurationsComboBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -77,6 +77,7 @@
             this.ConfigurationName.Size = new System.Drawing.Size(229, 20);
             this.ConfigurationName.TabIndex = 6;
             this.ConfigurationName.Text = "Enter name here";
+            this.ConfigurationName.Enter += new System.EventHandler(this.ConfigurationName_Enter);
             // 
             // label5
             // 
@@ -104,6 +105,7 @@
             this.AgentPath.Size = new System.Drawing.Size(229, 20);
             this.AgentPath.TabIndex = 3;
             this.AgentPath.Text = "Enter path here";
+            this.AgentPath.Enter += new System.EventHandler(this.AgentPath_Enter);
             // 
             // label2
             // 
@@ -121,6 +123,7 @@
             this.AdjacencyPath.Size = new System.Drawing.Size(229, 20);
             this.AdjacencyPath.TabIndex = 1;
             this.AdjacencyPath.Text = "Enter path here";
+            this.AdjacencyPath.Enter += new System.EventHandler(this.AdjacencyPath_Enter);
             // 
             // label1
             // 
@@ -135,7 +138,7 @@
             // 
             this.groupBox2.Controls.Add(this.LoadConfigurations);
             this.groupBox2.Controls.Add(this.RunAlgorithm);
-            this.groupBox2.Controls.Add(this.comboBox2);
+            this.groupBox2.Controls.Add(this.AlgorithmComboBox);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.ConfigurationsComboBox);
             this.groupBox2.Controls.Add(this.label3);
@@ -166,13 +169,15 @@
             this.RunAlgorithm.UseVisualStyleBackColor = true;
             this.RunAlgorithm.Click += new System.EventHandler(this.RunAlgorithm_Click);
             // 
-            // comboBox2
+            // AlgorithmComboBox
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(17, 160);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(229, 21);
-            this.comboBox2.TabIndex = 4;
+            this.AlgorithmComboBox.FormattingEnabled = true;
+            this.AlgorithmComboBox.Items.AddRange(new object[] {
+            "GreedySearch"});
+            this.AlgorithmComboBox.Location = new System.Drawing.Point(17, 160);
+            this.AlgorithmComboBox.Name = "AlgorithmComboBox";
+            this.AlgorithmComboBox.Size = new System.Drawing.Size(229, 21);
+            this.AlgorithmComboBox.TabIndex = 4;
             // 
             // label4
             // 
@@ -250,7 +255,7 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -258,8 +263,10 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Name = "Form1";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "MainForm";
             this.Text = "Travelling Salesmen Algorithm Visualizer";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -282,7 +289,7 @@
         private System.Windows.Forms.ComboBox ConfigurationsComboBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button RunAlgorithm;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox AlgorithmComboBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button button5;

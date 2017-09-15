@@ -8,3 +8,13 @@ C:\Users\mreti\Desktop\TravellingSalesmen\TravellingSalesmen\bin\Debug\Travellin
 C:\Users\mreti\Desktop\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.Form1.resources
 C:\Users\mreti\Desktop\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.exe
 C:\Users\mreti\Desktop\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.pdb
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\bin\Debug\TravellingSalesmen.exe.config
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\bin\Debug\TravellingSalesmen.exe
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\bin\Debug\TravellingSalesmen.pdb
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.csprojResolveAssemblyReference.cache
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.Properties.Resources.resources
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.csproj.GenerateResource.Cache
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.csproj.CoreCompileInputs.cache
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.exe
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.pdb
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.MainForm.resources

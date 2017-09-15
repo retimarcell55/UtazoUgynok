@@ -74,9 +74,9 @@ namespace TravellingSalesmen
 
         }
 
-        private Configuration loadConfiguration(string name)
+        public Configuration loadConfiguration(string name)
         {
-            string path = BASE_FOLDER_LOCATION + @"\" + name;
+            string path = BASE_FOLDER_LOCATION + @"\" + name + ".txt";
 
             Configuration configuration = null;
 
@@ -92,7 +92,7 @@ namespace TravellingSalesmen
         public List<Configuration> loadConfigurations()
         {
             string[] fileNames = Directory.GetFiles(BASE_FOLDER_LOCATION, "*.txt")
-                                     .Select(Path.GetFileName)
+                                     .Select(Path.GetFileNameWithoutExtension)
                                      .ToArray();
 
             List<Configuration> configurations = new List<Configuration>();
