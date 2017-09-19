@@ -11,25 +11,63 @@ namespace TravellingSalesmen
         private Configuration configuration;
         private Algorithm algorithm;
         private bool algorithmStarted;
+        private MainForm mainForm;
 
         public Configuration Configuration { get => configuration; set => configuration = value; }
         public Algorithm Algorithm { get => algorithm; set => algorithm = value; }
 
-        public Coordinator()
+        public Coordinator(MainForm mainForm)
         {
+            this.mainForm = mainForm;
             algorithmStarted = false;
         }
 
-        public Coordinator(Configuration configuration,Algorithm algorithm)
+        public Coordinator(MainForm mainForm,Configuration configuration,Algorithm algorithm)
         {
+            this.mainForm = mainForm;
             this.Configuration = configuration;
             this.Algorithm = algorithm;
             algorithmStarted = false;
         }
 
-        public void runAlgorithm()
+        public void startAlgorithm()
         {
+            algorithm.Initialize();
 
+            mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager,algorithm.Vertices,algorithm.Edges);
+
+            algorithmStarted = true;
+        }
+
+        public void runAlgorithmNextMove()
+        {
+            if(algorithmStarted)
+            {
+                if(algorithm.hasNonVisitedVertexLeft())
+                {
+                    algorithm.NextTurn();
+                    mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager, algorithm.Vertices, algorithm.Edges);
+                }
+                else
+                {
+                    algorithmStarted = false;
+                }
+            }
+        }
+
+        public void runAlgorithmThrough()
+        {
+            if(algorithmStarted)
+            {
+                while (algorithm.hasNonVisitedVertexLeft())
+                {
+                    algorithm.NextTurn();
+                    mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager, algorithm.Vertices, algorithm.Edges);
+
+                    System.Threading.Thread.Sleep(500);
+                }
+                algorithmStarted = false;
+            }
         }
     }
 }
