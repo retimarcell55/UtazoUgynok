@@ -1,3 +1,3 @@
 Miklós readme-ja :)
 
-Egyenlõre nincs itt érdekes dolog.
+Algoritmus 1 ügynökre
