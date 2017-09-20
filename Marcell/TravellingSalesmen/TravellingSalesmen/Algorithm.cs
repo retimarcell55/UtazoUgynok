@@ -48,8 +48,11 @@ namespace TravellingSalesmen
                 vertices.Add(new Vertex(i));
             }
 
+
+
             for (int i = 0; i < agentManager.Agents.Count; i++)
             {
+                agentManager.Agents[i].ActualPosition = agentManager.Agents[i].StartPosition;
                 vertices[agentManager.Agents[i].StartPosition].Used = true;
             }
         }
