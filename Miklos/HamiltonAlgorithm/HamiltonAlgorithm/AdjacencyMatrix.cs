@@ -13,6 +13,7 @@ namespace HamiltonAlgorithm
     class AdjacencyMatrix
     {
         private int size;
+        //private int totalWeight; (total / 2)
         private int[,] matrix;
 
         public int Size { get{ return size;} private set { size = value; } }
