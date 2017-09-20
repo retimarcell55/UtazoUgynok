@@ -24,7 +24,10 @@ namespace TravellingSalesmen
             this.agentManager = agentManager;
         }
 
-        abstract public string GetName();
+        public string GetName()
+        {
+            return this.GetType().Name;
+        }
 
         public virtual void Initialize()
         {
@@ -71,7 +74,7 @@ namespace TravellingSalesmen
             }
         }
 
-        public int getActualResult()
+        public virtual int getActualResult()
         {
             int result = 0;
 

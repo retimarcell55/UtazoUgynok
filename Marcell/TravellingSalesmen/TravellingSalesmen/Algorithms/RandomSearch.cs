@@ -14,11 +14,6 @@ namespace TravellingSalesmen
             rnd = new Random();
         }
 
-        public override string GetName()
-        {
-            return "RandomSearch";
-        }
-
         public override void NextTurn()
         {
             for (int i = 0; i < agentManager.Agents.Count; i++)
