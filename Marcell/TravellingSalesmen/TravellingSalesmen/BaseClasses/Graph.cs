@@ -9,19 +9,19 @@ namespace TravellingSalesmen
     [Serializable]
     public class Graph
     {
-        private int vertices;
-        private int edges;
+        private int vertexCount;
+        private int edgeCount;
         private int[,] adjacencyMatrix;
 
-        public int Vertices { get => vertices; }
-        public int Edges { get => edges; }
+        public int VertexCount { get => vertexCount; }
+        public int EdgeCount { get => edgeCount; }
         public int[,] AdjacencyMatrix { get => adjacencyMatrix; }
 
         public Graph(int[,] adjacencyMatrix)
         {
             this.adjacencyMatrix = adjacencyMatrix;
-            this.vertices = adjacencyMatrix.GetLength(0);
-            this.edges = vertices * vertices;
+            this.vertexCount = adjacencyMatrix.GetLength(0);
+            this.edgeCount = vertexCount * vertexCount;
         }
     }
 }
