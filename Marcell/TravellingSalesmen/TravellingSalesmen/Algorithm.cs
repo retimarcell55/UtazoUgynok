@@ -36,7 +36,7 @@ namespace TravellingSalesmen
                 {
                     if(graph.AdjacencyMatrix[i,j] != 0)
                     {
-                        edges.Add(new Edge(i, j));
+                        edges.Add(new Edge(i, j, graph.AdjacencyMatrix[i,j]));
                     }
                 }
             }
@@ -69,6 +69,20 @@ namespace TravellingSalesmen
             {
                 return false;
             }
+        }
+
+        public int getActualResult()
+        {
+            int result = 0;
+
+            foreach (var edge in edges)
+            {
+                if(edge.Used)
+                {
+                    result += edge.Weight;
+                }
+            }
+            return result;
         }
 
     }

@@ -14,7 +14,7 @@ namespace TravellingSalesmen
     {
         private Coordinator coordinator;
         private const int VERTEX_RADIUS = 10;
-        private const int CIRCLE_RADIUS = 200;
+        private const int CIRCLE_RADIUS = 270;
 
         public MainForm()
         {
@@ -62,6 +62,7 @@ namespace TravellingSalesmen
 
         private void RunAlgorithm_Click(object sender, EventArgs e)
         {
+            ActualResult.Text = string.Empty;
             coordinator.Configuration = new FileManager().loadConfiguration(ConfigurationsComboBox.SelectedItem.ToString());
 
             switch (AlgorithmComboBox.SelectedItem.ToString())
@@ -96,6 +97,8 @@ namespace TravellingSalesmen
             Restart.Enabled = false;
             RunThrough.Enabled = false;
             NextMove.Enabled = false;
+
+            ActualResult.Font = new Font("Arial", 18, FontStyle.Bold);
         }
 
         private void AdjacencyPath_Enter(object sender, EventArgs e)
@@ -113,44 +116,55 @@ namespace TravellingSalesmen
             ConfigurationName.Text = string.Empty;
         }
 
-        public void DrawGraph(int graphVertexCount, AgentManager agentManager, List<Vertex> usedVertices, List<Edge> usedEdges)
+        public void DrawGraph(int graphVertexCount, AgentManager agentManager, List<Vertex> vertices, List<Edge> edges)
         {
 
-            System.Drawing.Graphics graphics = visualizer.CreateGraphics();
+            Graphics graphics = visualizer.CreateGraphics();
             graphics.Clear(Color.YellowGreen);
             Point center = new Point(visualizer.Width / 2, visualizer.Height / 2);
             PointF[] nPoints = CalculateVertices(graphVertexCount, CIRCLE_RADIUS, 0, center);
 
+            Font drawFont = new Font("Arial", 12);
+            SolidBrush drawBrush = new SolidBrush(Color.Black);
+            StringFormat drawFormat = new StringFormat();
+
             for (int i = 0; i < nPoints.Length; i++)
             {
-                System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(
+                Rectangle rectangle = new Rectangle(
                  (int)nPoints[i].X - (VERTEX_RADIUS / 2), (int)nPoints[i].Y - (VERTEX_RADIUS / 2), VERTEX_RADIUS, VERTEX_RADIUS);
                 if (agentManager.Agents.Exists(agent => agent.ActualPosition == i))
                 {
-                    graphics.FillEllipse(new System.Drawing.SolidBrush(System.Drawing.Color.Red), rectangle);
+                    graphics.FillEllipse(new SolidBrush(Color.Red), rectangle);
                 }
-                else if (usedVertices.Any(vertex => vertex.Id == i && vertex.Used))
+                else if (vertices.Any(vertex => vertex.Id == i && vertex.Used))
                 {
-                    graphics.FillEllipse(new System.Drawing.SolidBrush(System.Drawing.Color.Yellow), rectangle);
+                    graphics.FillEllipse(new SolidBrush(Color.Yellow), rectangle);
                 }
                 else
                 {
-                    graphics.FillEllipse(new System.Drawing.SolidBrush(System.Drawing.Color.Black), rectangle);
+                    graphics.FillEllipse(new SolidBrush(Color.Black), rectangle);
                 }
+                string drawString = ((char)(i+65)).ToString();
+                graphics.DrawString(drawString, drawFont, drawBrush, (int)nPoints[i].X, (int)nPoints[i].Y, drawFormat);
             }
 
             for (int i = 0; i < nPoints.Length - 1; i++)
             {
                 for (int j = i + 1; j < nPoints.Length; j++)
                 {
-                    if (usedEdges.Exists(edge => edge.Start == i && edge.End == j && edge.Used) || usedEdges.Exists(edge => edge.End == i && edge.Start == j && edge.Used))
+                    if (edges.Exists(edge => edge.Start == i && edge.End == j && edge.Used) || edges.Exists(edge => edge.End == i && edge.Start == j && edge.Used))
                     {
-                        graphics.DrawLine(System.Drawing.Pens.Yellow, new Point((int)nPoints[i].X, (int)nPoints[i].Y), new Point((int)nPoints[j].X, (int)nPoints[j].Y));
+                        drawBrush = new SolidBrush(Color.Yellow);
+                        graphics.DrawLine(Pens.Yellow, new Point((int)nPoints[i].X, (int)nPoints[i].Y), new Point((int)nPoints[j].X, (int)nPoints[j].Y));
                     }
                     else
                     {
-                        graphics.DrawLine(System.Drawing.Pens.Black, new Point((int)nPoints[i].X, (int)nPoints[i].Y), new Point((int)nPoints[j].X, (int)nPoints[j].Y));
+                        drawBrush = new SolidBrush(Color.Black);
+                        graphics.DrawLine(Pens.Black, new Point((int)nPoints[i].X, (int)nPoints[i].Y), new Point((int)nPoints[j].X, (int)nPoints[j].Y));
                     }
+                    string drawString = edges.Find(edge => (edge.Start == i && edge.End == j) || (edge.Start == j && edge.End == i)).Weight.ToString();
+                    
+                    graphics.DrawString(drawString, drawFont, drawBrush, ((int)nPoints[i].X + (int)nPoints[j].X)/2, ((int)nPoints[i].Y+ (int)nPoints[j].Y)/2, drawFormat);
                 }
             }
         }
@@ -182,6 +196,11 @@ namespace TravellingSalesmen
             return xy;
         }
 
+        public void UpdateResult(string result)
+        {
+            ActualResult.Text = result;
+        }
+
         private void NextMove_Click(object sender, EventArgs e)
         {
             coordinator.runAlgorithmNextMove();
@@ -194,6 +213,7 @@ namespace TravellingSalesmen
 
         private void Restart_Click(object sender, EventArgs e)
         {
+            ActualResult.Text = string.Empty;
             coordinator.startAlgorithm();
         }
     }

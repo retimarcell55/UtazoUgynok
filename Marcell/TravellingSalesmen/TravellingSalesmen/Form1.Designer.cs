@@ -48,6 +48,8 @@
             this.NextMove = new System.Windows.Forms.Button();
             this.Restart = new System.Windows.Forms.Button();
             this.visualizer = new System.Windows.Forms.PictureBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.ActualResult = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -142,7 +144,7 @@
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.ConfigurationsComboBox);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Location = new System.Drawing.Point(24, 371);
+            this.groupBox2.Location = new System.Drawing.Point(24, 441);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(264, 279);
             this.groupBox2.TabIndex = 1;
@@ -207,20 +209,22 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.ActualResult);
+            this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Controls.Add(this.RunThrough);
             this.groupBox3.Controls.Add(this.NextMove);
             this.groupBox3.Controls.Add(this.Restart);
             this.groupBox3.Controls.Add(this.visualizer);
             this.groupBox3.Location = new System.Drawing.Point(317, 26);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(755, 624);
+            this.groupBox3.Size = new System.Drawing.Size(932, 694);
             this.groupBox3.TabIndex = 2;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Visualizer";
             // 
             // RunThrough
             // 
-            this.RunThrough.Location = new System.Drawing.Point(585, 573);
+            this.RunThrough.Location = new System.Drawing.Point(530, 633);
             this.RunThrough.Name = "RunThrough";
             this.RunThrough.Size = new System.Drawing.Size(141, 34);
             this.RunThrough.TabIndex = 7;
@@ -230,7 +234,7 @@
             // 
             // NextMove
             // 
-            this.NextMove.Location = new System.Drawing.Point(295, 573);
+            this.NextMove.Location = new System.Drawing.Point(278, 633);
             this.NextMove.Name = "NextMove";
             this.NextMove.Size = new System.Drawing.Size(141, 34);
             this.NextMove.TabIndex = 6;
@@ -240,7 +244,7 @@
             // 
             // Restart
             // 
-            this.Restart.Location = new System.Drawing.Point(26, 573);
+            this.Restart.Location = new System.Drawing.Point(26, 633);
             this.Restart.Name = "Restart";
             this.Restart.Size = new System.Drawing.Size(141, 34);
             this.Restart.TabIndex = 5;
@@ -254,15 +258,33 @@
             this.visualizer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.visualizer.Location = new System.Drawing.Point(26, 34);
             this.visualizer.Name = "visualizer";
-            this.visualizer.Size = new System.Drawing.Size(700, 500);
+            this.visualizer.Size = new System.Drawing.Size(877, 562);
             this.visualizer.TabIndex = 0;
             this.visualizer.TabStop = false;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(715, 644);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Actual Result:";
+            // 
+            // ActualResult
+            // 
+            this.ActualResult.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ActualResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ActualResult.Location = new System.Drawing.Point(803, 633);
+            this.ActualResult.Name = "ActualResult";
+            this.ActualResult.Size = new System.Drawing.Size(100, 33);
+            this.ActualResult.TabIndex = 9;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1084, 662);
+            this.ClientSize = new System.Drawing.Size(1277, 747);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -275,6 +297,7 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.visualizer)).EndInit();
             this.ResumeLayout(false);
 
@@ -302,6 +325,8 @@
         private System.Windows.Forms.TextBox ConfigurationName;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button LoadConfigurations;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label ActualResult;
     }
 }
 

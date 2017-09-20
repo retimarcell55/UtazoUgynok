@@ -47,6 +47,7 @@ namespace TravellingSalesmen
                 {
                     algorithm.NextTurn();
                     mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager, algorithm.Vertices, algorithm.Edges);
+                    mainForm.UpdateResult(algorithm.getActualResult().ToString());
                 }
                 else
                 {
@@ -63,6 +64,7 @@ namespace TravellingSalesmen
                 {
                     algorithm.NextTurn();
                     mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager, algorithm.Vertices, algorithm.Edges);
+                    mainForm.UpdateResult(algorithm.getActualResult().ToString());
 
                     System.Threading.Thread.Sleep(500);
                 }
