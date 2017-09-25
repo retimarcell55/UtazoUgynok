@@ -50,6 +50,7 @@
     <Compile Include="BaseClasses\AgentManager.cs" />
     <Compile Include="Algorithms\Algorithm.cs" />
     <Compile Include="BaseClasses\Configuration.cs" />
+    <Compile Include="BaseClasses\Coordinate.cs" />
     <Compile Include="Coordinator.cs" />
     <Compile Include="BaseClasses\Edge.cs" />
     <Compile Include="FileManager.cs" />

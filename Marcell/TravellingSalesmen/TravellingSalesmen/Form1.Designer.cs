@@ -34,7 +34,7 @@
             this.SaveConfigurationButton = new System.Windows.Forms.Button();
             this.AgentPath = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.AdjacencyPath = new System.Windows.Forms.TextBox();
+            this.VertexCoordPath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.LoadConfigurations = new System.Windows.Forms.Button();
@@ -44,12 +44,12 @@
             this.ConfigurationsComboBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.ActualResult = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.RunThrough = new System.Windows.Forms.Button();
             this.NextMove = new System.Windows.Forms.Button();
             this.Restart = new System.Windows.Forms.Button();
             this.visualizer = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.ActualResult = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -63,7 +63,7 @@
             this.groupBox1.Controls.Add(this.SaveConfigurationButton);
             this.groupBox1.Controls.Add(this.AgentPath);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.AdjacencyPath);
+            this.groupBox1.Controls.Add(this.VertexCoordPath);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(22, 26);
             this.groupBox1.Name = "groupBox1";
@@ -118,23 +118,23 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Agent informations:";
             // 
-            // AdjacencyPath
+            // VertexCoordPath
             // 
-            this.AdjacencyPath.Location = new System.Drawing.Point(18, 58);
-            this.AdjacencyPath.Name = "AdjacencyPath";
-            this.AdjacencyPath.Size = new System.Drawing.Size(229, 20);
-            this.AdjacencyPath.TabIndex = 1;
-            this.AdjacencyPath.Text = "Enter path here";
-            this.AdjacencyPath.Enter += new System.EventHandler(this.AdjacencyPath_Enter);
+            this.VertexCoordPath.Location = new System.Drawing.Point(18, 58);
+            this.VertexCoordPath.Name = "VertexCoordPath";
+            this.VertexCoordPath.Size = new System.Drawing.Size(229, 20);
+            this.VertexCoordPath.TabIndex = 1;
+            this.VertexCoordPath.Text = "Enter path here";
+            this.VertexCoordPath.Enter += new System.EventHandler(this.AdjacencyPath_Enter);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(15, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(167, 13);
+            this.label1.Size = new System.Drawing.Size(129, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Graph weighted adjacency matrix:";
+            this.label1.Text = "Graph vertex coordinates:";
             // 
             // groupBox2
             // 
@@ -222,6 +222,24 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Visualizer";
             // 
+            // ActualResult
+            // 
+            this.ActualResult.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.ActualResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ActualResult.Location = new System.Drawing.Point(765, 633);
+            this.ActualResult.Name = "ActualResult";
+            this.ActualResult.Size = new System.Drawing.Size(138, 33);
+            this.ActualResult.TabIndex = 9;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(686, 644);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Actual Result:";
+            // 
             // RunThrough
             // 
             this.RunThrough.Location = new System.Drawing.Point(530, 633);
@@ -262,24 +280,6 @@
             this.visualizer.TabIndex = 0;
             this.visualizer.TabStop = false;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(715, 644);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(73, 13);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "Actual Result:";
-            // 
-            // ActualResult
-            // 
-            this.ActualResult.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ActualResult.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ActualResult.Location = new System.Drawing.Point(803, 633);
-            this.ActualResult.Name = "ActualResult";
-            this.ActualResult.Size = new System.Drawing.Size(100, 33);
-            this.ActualResult.TabIndex = 9;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -307,7 +307,7 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox AdjacencyPath;
+        private System.Windows.Forms.TextBox VertexCoordPath;
         private System.Windows.Forms.Button SaveConfigurationButton;
         private System.Windows.Forms.TextBox AgentPath;
         private System.Windows.Forms.Label label2;

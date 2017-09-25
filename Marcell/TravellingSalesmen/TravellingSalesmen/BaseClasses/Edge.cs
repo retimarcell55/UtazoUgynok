@@ -6,24 +6,27 @@ using System.Threading.Tasks;
 
 namespace TravellingSalesmen
 {
+    [Serializable]
     public class Edge
     {
-        private int start;
-        private int end;
+        private Vertex startVertex;
+        private Vertex endVertex;
         private bool used;
-        private int weight;
+        private double weight;
 
-        public int Start { get => start; set => start = value; }
-        public int End { get => end; set => end = value; }
         public bool Used { get => used; set => used = value; }
-        public int Weight { get => weight; set => weight = value; }
+        public double Weight { get => weight; set => weight = value; }
+        public Vertex StartVertex { get => startVertex; set => startVertex = value; }
+        public Vertex EndVertex { get => endVertex; set => endVertex = value; }
 
-        public Edge(int start, int end, int weight)
+
+        public Edge(Vertex startVertex, Vertex endVertex, bool used, double weight)
         {
-            Start = start;
-            End = end;
-            Weight = weight;
-            Used = false;
+            this.startVertex = startVertex;
+            this.endVertex = endVertex;
+            this.used = used;
+            this.weight = weight;
         }
+
     }
 }

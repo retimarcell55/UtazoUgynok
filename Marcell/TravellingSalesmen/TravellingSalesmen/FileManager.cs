@@ -21,21 +21,18 @@ namespace TravellingSalesmen
         public Graph readGraphFromFile(String path)
         {
             int lines = File.ReadAllLines(path).Length;
-            int[,] matrix = new int[lines, lines];
+            List<Vertex> vertices = new List<Vertex>();
 
             using (StreamReader sr = new StreamReader(path))
             {
                 for (int i = 0; i < lines; i++)
                 {
                     String[] data = sr.ReadLine().Split(' ');
-                    for (int j = 0; j < lines; j++)
-                    {
-                        matrix[i, j] = int.Parse(data[j]);
-                    }
+                    vertices.Add(new Vertex(i, new Coordinate(int.Parse(data[0]), int.Parse(data[1]))));
                 }
             }
 
-            return new Graph(matrix);
+            return new Graph(vertices);
         }
 
         public AgentManager readAgentsFromFile(String path)
@@ -53,7 +50,6 @@ namespace TravellingSalesmen
             }
 
             return agentManager;
-
         }
 
         public void saveConfiguration(Configuration configuration)

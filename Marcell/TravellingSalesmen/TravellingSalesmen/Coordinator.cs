@@ -34,7 +34,7 @@ namespace TravellingSalesmen
         {
             algorithm.Initialize();
 
-            mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager,algorithm.Vertices,algorithm.Edges);
+            mainForm.DrawGraph(configuration.Graph,configuration.AgentManager);
 
             algorithmStarted = true;
         }
@@ -46,7 +46,7 @@ namespace TravellingSalesmen
                 if(algorithm.hasNonVisitedVertexLeft())
                 {
                     algorithm.NextTurn();
-                    mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager, algorithm.Vertices, algorithm.Edges);
+                    mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
                     mainForm.UpdateResult(algorithm.getActualResult().ToString());
                 }
                 else
@@ -63,7 +63,7 @@ namespace TravellingSalesmen
                 while (algorithm.hasNonVisitedVertexLeft())
                 {
                     algorithm.NextTurn();
-                    mainForm.DrawGraph(configuration.Graph.VertexCount, configuration.AgentManager, algorithm.Vertices, algorithm.Edges);
+                    mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
                     mainForm.UpdateResult(algorithm.getActualResult().ToString());
 
                     System.Threading.Thread.Sleep(500);

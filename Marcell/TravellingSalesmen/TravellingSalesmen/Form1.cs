@@ -31,7 +31,7 @@ namespace TravellingSalesmen
 
             FileManager fm = new FileManager();
 
-            Graph graph = fm.readGraphFromFile(AdjacencyPath.Text);
+            Graph graph = fm.readGraphFromFile(VertexCoordPath.Text);
             AgentManager agentManager = fm.readAgentsFromFile(AgentPath.Text);
 
             Configuration conf = new Configuration(ConfigurationName.Text, graph, agentManager);
@@ -103,7 +103,7 @@ namespace TravellingSalesmen
 
         private void AdjacencyPath_Enter(object sender, EventArgs e)
         {
-            AdjacencyPath.Text = string.Empty;
+            VertexCoordPath.Text = string.Empty;
         }
 
         private void AgentPath_Enter(object sender, EventArgs e)
@@ -116,27 +116,25 @@ namespace TravellingSalesmen
             ConfigurationName.Text = string.Empty;
         }
 
-        public void DrawGraph(int graphVertexCount, AgentManager agentManager, List<Vertex> vertices, List<Edge> edges)
+        public void DrawGraph(Graph graph, AgentManager agentManager)
         {
 
             Graphics graphics = visualizer.CreateGraphics();
             graphics.Clear(Color.YellowGreen);
-            Point center = new Point(visualizer.Width / 2, visualizer.Height / 2);
-            PointF[] nPoints = CalculateVertices(graphVertexCount, CIRCLE_RADIUS, 0, center);
 
             Font drawFont = new Font("Arial", 12);
             SolidBrush drawBrush = new SolidBrush(Color.Black);
             StringFormat drawFormat = new StringFormat();
 
-            for (int i = 0; i < nPoints.Length; i++)
+            foreach (var vertex in graph.Vertices)
             {
                 Rectangle rectangle = new Rectangle(
-                 (int)nPoints[i].X - (VERTEX_RADIUS / 2), (int)nPoints[i].Y - (VERTEX_RADIUS / 2), VERTEX_RADIUS, VERTEX_RADIUS);
-                if (agentManager.Agents.Exists(agent => agent.ActualPosition == i))
+                 vertex.Position.X - (VERTEX_RADIUS / 2), vertex.Position.Y - (VERTEX_RADIUS / 2), VERTEX_RADIUS, VERTEX_RADIUS);
+                if (agentManager.Agents.Exists(agent => agent.ActualPosition == vertex.Id))
                 {
                     graphics.FillEllipse(new SolidBrush(Color.Red), rectangle);
                 }
-                else if (vertices.Any(vertex => vertex.Id == i && vertex.Used))
+                else if (vertex.Used)
                 {
                     graphics.FillEllipse(new SolidBrush(Color.Yellow), rectangle);
                 }
@@ -144,56 +142,30 @@ namespace TravellingSalesmen
                 {
                     graphics.FillEllipse(new SolidBrush(Color.Black), rectangle);
                 }
-                string drawString = ((char)(i+65)).ToString();
-                graphics.DrawString(drawString, drawFont, drawBrush, (int)nPoints[i].X, (int)nPoints[i].Y, drawFormat);
+                string drawString = ((char)(vertex.Id + 65)).ToString();
+                graphics.DrawString(drawString, drawFont, drawBrush, vertex.Position.X, vertex.Position.Y, drawFormat);
             }
 
-            for (int i = 0; i < nPoints.Length - 1; i++)
+            Pen pen = null;
+
+            foreach (var edge in graph.Edges)
             {
-                for (int j = i + 1; j < nPoints.Length; j++)
+                if (edge.Used)
                 {
-                    if (edges.Exists(edge => edge.Start == i && edge.End == j && edge.Used) || edges.Exists(edge => edge.End == i && edge.Start == j && edge.Used))
-                    {
-                        drawBrush = new SolidBrush(Color.Yellow);
-                        graphics.DrawLine(Pens.Yellow, new Point((int)nPoints[i].X, (int)nPoints[i].Y), new Point((int)nPoints[j].X, (int)nPoints[j].Y));
-                    }
-                    else
-                    {
-                        drawBrush = new SolidBrush(Color.Black);
-                        graphics.DrawLine(Pens.Black, new Point((int)nPoints[i].X, (int)nPoints[i].Y), new Point((int)nPoints[j].X, (int)nPoints[j].Y));
-                    }
-                    string drawString = edges.Find(edge => (edge.Start == i && edge.End == j) || (edge.Start == j && edge.End == i)).Weight.ToString();
-                    
-                    graphics.DrawString(drawString, drawFont, drawBrush, ((int)nPoints[i].X + (int)nPoints[j].X)/2, ((int)nPoints[i].Y+ (int)nPoints[j].Y)/2, drawFormat);
+                    drawBrush = new SolidBrush(Color.Yellow);
+                    pen = Pens.Yellow;
                 }
+                else
+                {
+                    drawBrush = new SolidBrush(Color.Black);
+                    pen = Pens.Black;
+                }
+                graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
+                string drawString = edge.Weight.ToString();
+
+                graphics.DrawString(drawString, drawFont, drawBrush, (edge.StartVertex.Position.X + edge.EndVertex.Position.X) / 2, (edge.StartVertex.Position.Y + edge.EndVertex.Position.Y) / 2, drawFormat);
+
             }
-        }
-
-        private PointF[] CalculateVertices(int sides, int radius, float startingAngle, Point center)
-        {
-
-            List<PointF> points = new List<PointF>();
-            float step = 360.0f / sides;
-
-            float angle = startingAngle; //starting angle
-            for (double i = startingAngle; i < startingAngle + 360.0; i += step) //go in a circle
-            {
-                points.Add(DegreesToXY(angle, radius, center));
-                angle += step;
-            }
-
-            return points.ToArray();
-        }
-
-        private PointF DegreesToXY(float degrees, float radius, Point origin)
-        {
-            PointF xy = new PointF();
-            double radians = degrees * Math.PI / 180.0;
-
-            xy.X = (int)(Math.Cos(radians) * radius + origin.X);
-            xy.Y = (int)(Math.Sin(-radians) * radius + origin.Y);
-
-            return xy;
         }
 
         public void UpdateResult(string result)

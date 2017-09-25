@@ -27,10 +27,10 @@ namespace TravellingSalesmen.Algorithms
 
         private void computeBestRoute()
         {
-            for (int i = 0; i < edges.Count; i++)
+            for (int i = 0; i < graph.Edges.Count; i++)
             {
                 List<Edge> actualRoute = new List<Edge>();
-                for (int j = 0; j < edges.Count; j++)
+                for (int j = 0; j < graph.Edges.Count; j++)
                 {
 
                 }

@@ -11,17 +11,40 @@ namespace TravellingSalesmen
     {
         private int vertexCount;
         private int edgeCount;
-        private int[,] adjacencyMatrix;
+        private double[,] adjacencyMatrix;
+        private List<Vertex> vertices;
+        private List<Edge> edges;
 
         public int VertexCount { get => vertexCount; }
         public int EdgeCount { get => edgeCount; }
-        public int[,] AdjacencyMatrix { get => adjacencyMatrix; }
+        public double[,] AdjacencyMatrix { get => adjacencyMatrix; }
+        public List<Vertex> Vertices { get => vertices; }
+        public List<Edge> Edges { get => edges; }
 
-        public Graph(int[,] adjacencyMatrix)
+        public Graph(List<Vertex> vertices)
         {
-            this.adjacencyMatrix = adjacencyMatrix;
-            this.vertexCount = adjacencyMatrix.GetLength(0);
-            this.edgeCount = vertexCount * vertexCount;
+            this.vertices = vertices;
+            adjacencyMatrix = new double[vertices.Count, vertices.Count];
+            vertexCount = vertices.Count;
+            edgeCount = vertices.Count * vertices.Count;
+            edges = new List<Edge>();
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                for (int j = 0; j < vertices.Count; j++)
+                {
+                    double distance = 0;
+                    if(i != j)
+                    {
+                        distance = Math.Sqrt(Math.Pow(vertices[j].Position.X - vertices[i].Position.X, 2) + Math.Pow(vertices[j].Position.Y - vertices[i].Position.Y, 2));
+                        distance = Math.Round(distance, 2);
+                        if (j >= i)
+                        {
+                            edges.Add(new Edge(vertices[i], vertices[j], false, distance));
+                        }
+                    }
+                    adjacencyMatrix[i, j] = distance;
+                }
+            }
         }
     }
 }
