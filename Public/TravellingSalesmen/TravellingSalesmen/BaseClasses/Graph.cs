@@ -15,8 +15,8 @@ namespace TravellingSalesmen
         private List<Vertex> vertices;
         private List<Edge> edges;
 
-        public int VertexCount { get => vertexCount; }
-        public int EdgeCount { get => edgeCount; }
+        public int VertexCount { get => vertexCount; set => vertexCount = value; }
+        public int EdgeCount { get => edgeCount; set => edgeCount = value; }
         public double[,] AdjacencyMatrix { get => adjacencyMatrix; }
         public List<Vertex> Vertices { get => vertices; }
         public List<Edge> Edges { get => edges; }
@@ -45,6 +45,30 @@ namespace TravellingSalesmen
                     adjacencyMatrix[i, j] = distance;
                 }
             }
+        }
+
+        public void AddEdge(Edge e)
+        {
+            Edges.Add(e);
+            EdgeCount++;
+        }
+
+        public void RemoveEdge(Edge e)
+        {
+            Edges.Remove(e);
+            EdgeCount = Edges.Count;
+        }
+
+        public void AddVertex(Vertex v)
+        {
+            Vertices.Add(v);
+            VertexCount++;
+        }
+
+        public void RemoveVertex(Vertex v)
+        {
+            Vertices.Remove(v);
+            VertexCount = Vertices.Count;
         }
     }
 }
