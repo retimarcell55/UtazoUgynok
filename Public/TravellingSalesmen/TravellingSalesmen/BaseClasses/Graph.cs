@@ -18,8 +18,8 @@ namespace TravellingSalesmen
         public int VertexCount { get => vertexCount; set => vertexCount = value; }
         public int EdgeCount { get => edgeCount; set => edgeCount = value; }
         public double[,] AdjacencyMatrix { get => adjacencyMatrix; }
-        public List<Vertex> Vertices { get => vertices; }
-        public List<Edge> Edges { get => edges; }
+        public List<Vertex> Vertices { get => vertices; set => vertices = value; }
+        public List<Edge> Edges { get => edges; set => edges = value; }
 
         public Graph(List<Vertex> vertices)
         {
