@@ -49,6 +49,7 @@
     <Compile Include="BaseClasses\Agent.cs" />
     <Compile Include="BaseClasses\AgentManager.cs" />
     <Compile Include="Algorithms\Algorithm.cs" />
+    <Compile Include="BaseClasses\CompleteGraph.cs" />
     <Compile Include="BaseClasses\Configuration.cs" />
     <Compile Include="BaseClasses\Coordinate.cs" />
     <Compile Include="Coordinator.cs" />

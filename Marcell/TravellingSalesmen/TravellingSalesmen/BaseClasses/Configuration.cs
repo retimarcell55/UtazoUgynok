@@ -9,11 +9,11 @@ namespace TravellingSalesmen
     [Serializable]
     public class Configuration
     {
-        public Graph Graph;
+        public CompleteGraph Graph;
         public AgentManager AgentManager;
         public string Name;
 
-        public Configuration(string name, Graph graph, AgentManager agentManager)
+        public Configuration(string name, CompleteGraph graph, AgentManager agentManager)
         {
             Name = name;
             Graph = graph;

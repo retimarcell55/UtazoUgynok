@@ -13,7 +13,7 @@ namespace TravellingSalesmen.Algorithms
 
         public int BestResult { get => bestResult; set => bestResult = value; }
 
-        public BruteForce(Graph graph, AgentManager agentManager) : base(graph, agentManager)
+        public BruteForce(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
 
         }

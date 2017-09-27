@@ -8,13 +8,13 @@ namespace TravellingSalesmen
 {
     abstract class Algorithm
     {
-        protected Graph graph;
+        protected CompleteGraph graph;
         protected AgentManager agentManager;
 
-        public Graph Graph { get => graph; set => graph = value; }
+        public CompleteGraph Graph { get => graph; set => graph = value; }
         public AgentManager AgentManager { get => agentManager; set => agentManager = value; }
 
-        public Algorithm(Graph graph,AgentManager agentManager)
+        public Algorithm(CompleteGraph graph,AgentManager agentManager)
         {
             this.graph = graph;
             this.agentManager = agentManager;

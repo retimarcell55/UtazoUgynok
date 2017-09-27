@@ -9,40 +9,59 @@ namespace TravellingSalesmen
     [Serializable]
     public class Graph
     {
-        private int vertexCount;
-        private int edgeCount;
-        private double[,] adjacencyMatrix;
-        private List<Vertex> vertices;
-        private List<Edge> edges;
+        protected int vertexCount;
+        protected int edgeCount;
+        protected double[,] adjacencyMatrix;
+        protected List<Vertex> vertices;
+        protected List<Edge> edges;
 
-        public int VertexCount { get => vertexCount; }
-        public int EdgeCount { get => edgeCount; }
-        public double[,] AdjacencyMatrix { get => adjacencyMatrix; }
-        public List<Vertex> Vertices { get => vertices; }
-        public List<Edge> Edges { get => edges; }
-
-        public Graph(List<Vertex> vertices)
+        public virtual int VertexCount { get => vertexCount;}
+        public virtual int EdgeCount { get => edgeCount;}
+        public virtual double[,] AdjacencyMatrix { get => adjacencyMatrix;}
+        public virtual List<Vertex> Vertices
         {
-            this.vertices = vertices;
+            get => vertices;
+            set
+            {
+                vertices = value;
+                vertexCount = vertices.Count;
+                BuildAdjacencyMatrix();
+            }
+        }
+        public virtual List<Edge> Edges
+        {
+            get => edges;
+            set
+            {
+                edges = value;
+                edgeCount = edges.Count;
+                BuildAdjacencyMatrix();
+            }
+        }
+
+        public Graph()
+        {
+            this.Vertices = new List<Vertex>();
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
             vertexCount = vertices.Count;
             edgeCount = vertices.Count * vertices.Count;
             edges = new List<Edge>();
+        }
+
+        private void BuildAdjacencyMatrix()
+        {
+            adjacencyMatrix = new double[vertices.Count, vertices.Count];
             for (int i = 0; i < vertices.Count; i++)
             {
                 for (int j = 0; j < vertices.Count; j++)
                 {
                     double distance = 0;
-                    if(i != j)
+                    if (i != j && Edges.Exists(edge => (edge.StartVertex.Id == i && edge.EndVertex.Id == j) || edge.StartVertex.Id == j && edge.EndVertex.Id == i))
                     {
                         distance = Math.Sqrt(Math.Pow(vertices[j].Position.X - vertices[i].Position.X, 2) + Math.Pow(vertices[j].Position.Y - vertices[i].Position.Y, 2));
                         distance = Math.Round(distance, 2);
-                        if (j >= i)
-                        {
-                            edges.Add(new Edge(vertices[i], vertices[j], false, distance));
-                        }
                     }
-                    adjacencyMatrix[i, j] = distance;
+                    AdjacencyMatrix[i, j] = distance;
                 }
             }
         }

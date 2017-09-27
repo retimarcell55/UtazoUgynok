@@ -9,7 +9,7 @@ namespace TravellingSalesmen
     class RandomSearch : Algorithm
     {
         Random rnd;
-        public RandomSearch(Graph graph, AgentManager agentManager) : base(graph, agentManager)
+        public RandomSearch(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
             rnd = new Random();
         }

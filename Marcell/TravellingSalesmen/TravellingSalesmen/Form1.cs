@@ -31,7 +31,7 @@ namespace TravellingSalesmen
 
             FileManager fm = new FileManager();
 
-            Graph graph = fm.readGraphFromFile(VertexCoordPath.Text);
+            CompleteGraph graph = fm.readGraphFromFile(VertexCoordPath.Text);
             AgentManager agentManager = fm.readAgentsFromFile(AgentPath.Text);
 
             Configuration conf = new Configuration(ConfigurationName.Text, graph, agentManager);
