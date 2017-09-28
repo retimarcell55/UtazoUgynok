@@ -168,6 +168,16 @@ namespace TravellingSalesmen
             }
         }
 
+        public void HighLightEdges(List<Edge> edges)
+        {
+            Graphics graphics = visualizer.CreateGraphics();
+            Pen pen = Pens.Red;
+            foreach (var edge in edges)
+            {
+                graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
+            }
+        }
+
         public void UpdateResult(string result)
         {
             ActualResult.Text = result;
