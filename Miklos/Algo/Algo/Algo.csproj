@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2ECC08F4-D8C2-4648-A623-5B49AA07BCEE}</ProjectGuid>
+    <ProjectGuid>{070F069F-0079-43BC-9F94-AB96983BC565}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Algorithms</RootNamespace>
-    <AssemblyName>Algorithms</AssemblyName>
+    <RootNamespace>Algo</RootNamespace>
+    <AssemblyName>Algo</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
