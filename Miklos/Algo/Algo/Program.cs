@@ -39,5 +39,40 @@ namespace Algo
             newGraph.Vertices = newGraphVertices;
             return newGraph;//TODO
         }
+
+        public List<Edge> CalculateEulerianCycle(Graph originalGraph)
+        {
+            List<Edge> eulerianCycle = new List<Edge>();
+            List<Edge> originalEdges = originalGraph.Edges;
+            foreach (Edge e in originalEdges)
+            {
+                e.Used = false;
+            }
+
+            Vertex currentVertex = originalGraph.Vertices[0];   //a random vertex
+            for (int i = 0; i < originalEdges.Count; i++)
+            {
+                foreach (Edge e in originalEdges)
+                {
+                    if( e.StartVertex.Equals(currentVertex)  && e.Used == false )
+                    {
+                        e.Used = true;
+                        eulerianCycle.Add(e);
+                        e.EndVertex = currentVertex;    //it is the cuttent place where we are
+                        break;                          //break from foreach, we want add just one new edge
+                    }
+                    else if (e.EndVertex.Equals(currentVertex) && e.Used == false)
+                    {
+                        e.Used = true;
+                        eulerianCycle.Add(e);
+                        e.StartVertex = currentVertex;    //it is the cuttent place where we are
+                        break;                  //break from foreach, we want add just one new edge
+                    }
+                }
+            }
+
+            return eulerianCycle;   //ennek SZÁMÍT a sorrendje, mert azt bejárva megkapjukaz euler kört
+        }
+
     }
 }
