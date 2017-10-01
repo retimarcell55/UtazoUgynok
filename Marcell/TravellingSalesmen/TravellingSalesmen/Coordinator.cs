@@ -46,7 +46,22 @@ namespace TravellingSalesmen
                 if(algorithm.hasNonVisitedVertexLeft())
                 {
                     algorithm.NextTurn();
-                    mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
+                    switch (algorithm.ActualDrawingMode)
+                    {
+                        case Algorithm.DRAWING_MODE.GRAPH:
+                            mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
+                            break;
+                        case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
+                            if(algorithm.GetType() == typeof(Christofides))
+                            {
+                                mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
+                                mainForm.HighLightEdges(((Christofides)algorithm).MinimumSpanningTree.Edges);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    
                     mainForm.UpdateResult(algorithm.getActualResult().ToString());
                 }
                 else
