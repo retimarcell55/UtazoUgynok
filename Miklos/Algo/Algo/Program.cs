@@ -55,39 +55,77 @@ namespace Algo
             return newGraph;
         }
 
-        public List<Edge> CalculateEulerianCycle(Graph originalGraph)
+        //http://www.geeksforgeeks.org/hierholzers-algorithm-directed-graph/
+        public List<Vertex> CalculateEulerianCycle(Graph g)
         {
-            List<Edge> eulerianCycle = new List<Edge>();
-            List<Edge> originalEdges = originalGraph.Edges;
-            foreach (Edge e in originalEdges)
+            Graph originalGraph = g;
+            foreach (Edge e in originalGraph.Edges)
             {
                 e.Used = false;
             }
 
-            Vertex currentVertex = originalGraph.Vertices[0];   //a random vertex
-            for (int i = 0; i < originalEdges.Count; i++)
+            //List<Edge> eulerianCircuit = new List<Edge>();  //At euler út éleinek sorrendje
+            List<Vertex> currentPath = new List<Vertex>();  //Egy pálya, addig megy egy úton amíg talál egy szabad élet
+            List<Vertex> circuit = new List<Vertex>();      //Az Euler kör csúcsainak a sorrendje
+            List<Edge> unusedEdge = originalGraph.Edges;    //A használatlan csúcsok
+
+            currentPath.Add(originalGraph.Edges[0].StartVertex);    //random edge's start- and endvertex
+            currentPath.Add(originalGraph.Edges[0].EndVertex);      //random edge's start- and endvertex
+            originalGraph.Edges[0].Used = true;                     //már használtuk
+            unusedEdge.Remove(originalGraph.Edges[0]);              //kivesszük a használatlanok kzül
+
+            while (unusedEdge.Count != 0)
             {
-                foreach (Edge e in originalEdges)
+                if (currentPath[0].Equals(currentPath.Last<Vertex>()) )  //ha az első és az utolsó csúcs megegyezik, itt BIZTOS VAN használatlan csúcs
                 {
-                    if( e.StartVertex.Equals(currentVertex)  && e.Used == false )
+                    while(true)
                     {
-                        e.Used = true;
-                        eulerianCycle.Add(e);
-                        e.EndVertex = currentVertex;    //it is the cuttent place where we are
-                        break;                          //break from foreach, we want add just one new edge
+                        bool haveUnusedEdge = false;
+                        foreach (Edge e in unusedEdge)
+                        {
+                            if (e.StartVertex.Equals(currentPath.Last<Vertex>()) || e.EndVertex.Equals(currentPath.Last<Vertex>()))
+                            {
+                                haveUnusedEdge = true;
+                                break;                  //kilép a foreachból
+                            }
+                        }
+                        if(haveUnusedEdge)
+                        {
+                            break;      //kilép a while-ból, a currentPath utolsó tagjának van használatlan éle
+                        }
+                        else
+                        {
+                            circuit.Add(currentPath.Last<Vertex>());        //a körhöz adjuk
+                            currentPath.RemoveAt(currentPath.Count - 1);    //elveszük a pályából
+                        }
                     }
-                    else if (e.EndVertex.Equals(currentVertex) && e.Used == false)
+                }
+                else        //ha a pálya első és utolsó csúcsa nem egyezik meg
+                {
+                    foreach (Edge e in unusedEdge)
                     {
-                        e.Used = true;
-                        eulerianCycle.Add(e);
-                        e.StartVertex = currentVertex;    //it is the cuttent place where we are
-                        break;                  //break from foreach, we want add just one new edge
+                        if (e.StartVertex.Equals(currentPath.Last<Vertex>()) && e.Used == false)
+                        {
+                            e.Used = true;
+                            currentPath.Add(e.EndVertex);
+                            unusedEdge.Remove(e);           //kiszedjük az élet a használatanok közül
+                            break;                          //kilépünk a foreachból, csak egy új élet kértünk
+                        }
+                        else if (e.EndVertex.Equals(currentPath.Last<Vertex>()) && e.Used == false)
+                        {
+                            e.Used = true;
+                            currentPath.Add(e.StartVertex);
+                            unusedEdge.Remove(e);           //kiszedjük az élet a használatanok közül
+                            break;                          //kilépünk a foreachból, csak egy új élet kértünk
+                        }
                     }
                 }
             }
 
-            return eulerianCycle;   //ennek SZÁMÍT a sorrendje, mert azt bejárva megkapjukaz euler kört
+            return circuit;   //ennek SZÁMÍT a sorrendje, mert azt bejárva megkapjukaz euler kört
         }
 
+
+        
     }
 }
