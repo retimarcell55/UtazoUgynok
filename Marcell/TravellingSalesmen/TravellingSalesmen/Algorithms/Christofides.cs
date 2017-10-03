@@ -26,7 +26,10 @@ namespace TravellingSalesmen
             switch (actualStage)
             {
                 case STAGES.MIN_SPANNING_TREE:
-                    MinimumSpanningTree mSP = new MinimumSpanningTree(graph);
+                    Graph tmp = new Graph();
+                    tmp.Vertices = new List<Vertex>(graph.Vertices);
+                    tmp.Edges = new List<Edge>(graph.Edges);
+                    MinimumSpanningTree mSP = new MinimumSpanningTree(tmp);
                     minimumSpanningTree = mSP.CalculateMinimumSpanningTree();
                     break;
                 default:

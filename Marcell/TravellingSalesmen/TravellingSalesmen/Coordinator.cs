@@ -54,7 +54,7 @@ namespace TravellingSalesmen
                         case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
                             if(algorithm.GetType() == typeof(Christofides))
                             {
-                                mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
+                                //mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
                                 mainForm.HighLightEdges(((Christofides)algorithm).MinimumSpanningTree.Edges);
                             }
                             break;

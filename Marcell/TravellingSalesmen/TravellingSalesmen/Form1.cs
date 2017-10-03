@@ -174,7 +174,7 @@ namespace TravellingSalesmen
         public void HighLightEdges(List<Edge> edges)
         {
             Graphics graphics = visualizer.CreateGraphics();
-            Pen pen = Pens.Red;
+            Pen pen = new Pen(Color.FromArgb(125, 255, 0, 0), 7);
             foreach (var edge in edges)
             {
                 graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
