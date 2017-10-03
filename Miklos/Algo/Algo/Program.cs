@@ -16,13 +16,15 @@ namespace Algo
 
 
 
-        public Graph CereateCompleteGraphFromOddDegreeVertices(Graph originalGraph)
+        public Graph CereateCompleteGraphFromOddDegreeVertices(Graph g)
         {
+            Graph originalGraph = g;
+            List<Edge> newGraphEdges = new List<Edge>();
             List<Vertex> newGraphVertices = new List<Vertex>();
             foreach (Vertex v in originalGraph.Vertices)
             {
                 int degree = 0;
-                foreach (Edge e in originalGraph.Edges)
+                foreach (Edge e in originalGraph.Edges) //megszámolja a fokszámokat
                 {
                     if (e.StartVertex.Equals(v))
                         degree++;
@@ -30,14 +32,27 @@ namespace Algo
                         degree++;
                 }
 
-                if(degree % 2 != 0) //degree is odd
+                if(degree % 2 != 0)         //páratlan fokszámú
                 {
                     newGraphVertices.Add(v);
+                    v.Used = true;          //Ha beletettük akkor használt
+                }
+                else
+                {
+                    v.Used = false;         //h nem tettük bele akkor legyen nem használt
+                }
+            }
+            foreach (Edge e in originalGraph.Edges) //ha az él két oldalán használt csúcs van akkor kell nekünk
+            {
+                if(e.StartVertex.Used && e.EndVertex.Used)
+                {
+                    newGraphEdges.Add(e);
                 }
             }
             Graph newGraph = new Graph();
             newGraph.Vertices = newGraphVertices;
-            return newGraph;//TODO
+            newGraph.Edges = newGraphEdges;
+            return newGraph;
         }
 
         public List<Edge> CalculateEulerianCycle(Graph originalGraph)
