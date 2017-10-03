@@ -26,6 +26,10 @@ namespace Algo
             nonTreeVertices = originalGraph.Vertices;
             nonTreeVertices.Remove(originalGraph.Vertices[0]);
             treeEdges = new List<Edge>();
+<<<<<<< HEAD
+=======
+            treeEdges = new List<Edge>();
+>>>>>>> 9f0c5d1946073df039bc328fa22bc138781f2469
             intermediateEdges = new List<Edge>();
             maxEdgeWeight = 0;
             foreach (Edge e in originalGraph.Edges)   //calc max weight
