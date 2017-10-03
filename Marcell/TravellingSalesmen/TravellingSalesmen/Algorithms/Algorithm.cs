@@ -8,16 +8,20 @@ namespace TravellingSalesmen
 {
     abstract class Algorithm
     {
+        public enum DRAWING_MODE { GRAPH, MIN_SPANNING_TREE };
         protected CompleteGraph graph;
         protected AgentManager agentManager;
+        protected DRAWING_MODE actualDrawingMode;
 
         public CompleteGraph Graph { get => graph; set => graph = value; }
         public AgentManager AgentManager { get => agentManager; set => agentManager = value; }
+        public DRAWING_MODE ActualDrawingMode { get => actualDrawingMode;}
 
         public Algorithm(CompleteGraph graph,AgentManager agentManager)
         {
             this.graph = graph;
             this.agentManager = agentManager;
+            actualDrawingMode = DRAWING_MODE.GRAPH;
         }
 
         public string GetName()
