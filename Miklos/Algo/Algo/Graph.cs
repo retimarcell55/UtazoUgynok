@@ -15,8 +15,9 @@ namespace Algo
         protected List<Vertex> vertices;
         protected List<Edge> edges;
 
-        public virtual int VertexCount { get => vertexCount;}
-        public virtual int EdgeCount { get => edgeCount;}
+        //Átírom hogy lehessen settere !!!!
+        public virtual int VertexCount { set => vertexCount = value; get => vertexCount; }
+        public virtual int EdgeCount { set => edgeCount = value; get => edgeCount;}
         public virtual double[,] AdjacencyMatrix { get => adjacencyMatrix;}
         public virtual List<Vertex> Vertices
         {
@@ -68,11 +69,31 @@ namespace Algo
         }
 
         //TODO: egy public függvény ami mátrixból csinál (frissíti) él - és csúcslistát
-        public void RefreshEdgesVertices()
+        public void BuildEdgesAndVertices()
         {
             //a mátrixból felépítjük a listákat és frissítjük
-
+            Edges.Clear();
+            foreach (Vertex v in vertices)
+            {
+                v.Edges.Clear();
+            }
+            EdgeCount = 0;
+            for(int i = 0; i < vertexCount; i++)
+            {
+                for(int j = 0; j < vertexCount; j++)
+                {
+                    if(adjacencyMatrix[i,j] != -1)
+                    {
+                        Edge e = new Edge(vertices[i], vertices[j], false, adjacencyMatrix[i, j]);
+                        e.StartVertex.Edges.Add(e);
+                        e.EndVertex.Edges.Add(e);
+                        Edges.Add(e);
+                        EdgeCount++;
+                    }
+                }
+            }
         }
+        
         
 
 
