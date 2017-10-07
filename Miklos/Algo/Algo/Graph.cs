@@ -47,8 +47,9 @@ namespace Algo
             edgeCount = vertices.Count * vertices.Count;
             edges = new List<Edge>();
         }
-
-        private void BuildAdjacencyMatrix()
+        
+        //TODO: public legyen, ez a függvény az éllistából és a csúcslistából képes legyen mártixot építeni (frissíteni) !!
+        public void BuildAdjacencyMatrix() 
         {
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
             for (int i = 0; i < vertices.Count; i++)
@@ -65,5 +66,16 @@ namespace Algo
                 }
             }
         }
+
+        //TODO: egy public függvény ami mátrixból csinál (frissíti) él - és csúcslistát
+        public void RefreshEdgesVertices()
+        {
+            //a mátrixból felépítjük a listákat és frissítjük
+
+        }
+        
+
+
+
     }
 }

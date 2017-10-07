@@ -11,9 +11,11 @@ namespace Algo
     {
         private Vertex startVertex;
         private Vertex endVertex;
+        private int id;
         private bool used;
         private double weight;
 
+        public int Id { get => id; set => id = value; }
         public bool Used { get => used; set => used = value; }
         public double Weight { get => weight; set => weight = value; }
         public Vertex StartVertex { get => startVertex; set => startVertex = value; }

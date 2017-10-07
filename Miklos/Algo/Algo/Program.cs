@@ -65,23 +65,22 @@ namespace Algo
             }
 
             //List<Edge> eulerianCircuit = new List<Edge>();  //At euler út éleinek sorrendje
-            List<Vertex> currentPath = new List<Vertex>();  //Egy pálya, addig megy egy úton amíg talál egy szabad élet
+            List<Vertex> currentPath = new List<Vertex>();  //Egy pálya, addig megy egy úton amíg talál szabad élet
             List<Vertex> circuit = new List<Vertex>();      //Az Euler kör csúcsainak a sorrendje
-            List<Edge> unusedEdge = originalGraph.Edges;    //A használatlan csúcsok
+            List<Edge> unusedEdges = originalGraph.Edges;    //A használatlan csúcsok
 
             currentPath.Add(originalGraph.Edges[0].StartVertex);    //random edge's start- and endvertex
             currentPath.Add(originalGraph.Edges[0].EndVertex);      //random edge's start- and endvertex
-            originalGraph.Edges[0].Used = true;                     //már használtuk
-            unusedEdge.Remove(originalGraph.Edges[0]);              //kivesszük a használatlanok kzül
+            unusedEdges.Remove(originalGraph.Edges[0]);              //kivesszük a használatlanok közül
 
-            while (unusedEdge.Count != 0)
+            while (unusedEdges.Count != 0)
             {
                 if (currentPath[0].Equals(currentPath.Last<Vertex>()) )  //ha az első és az utolsó csúcs megegyezik, itt BIZTOS VAN használatlan csúcs
                 {
                     while(true)
                     {
                         bool haveUnusedEdge = false;
-                        foreach (Edge e in unusedEdge)
+                        foreach (Edge e in unusedEdges)
                         {
                             if (e.StartVertex.Equals(currentPath.Last<Vertex>()) || e.EndVertex.Equals(currentPath.Last<Vertex>()))
                             {
@@ -95,31 +94,34 @@ namespace Algo
                         }
                         else
                         {
-                            circuit.Add(currentPath.Last<Vertex>());        //a körhöz adjuk
-                            currentPath.RemoveAt(currentPath.Count - 1);    //elveszük a pályából
+                            circuit.Add(currentPath.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
+                            currentPath.RemoveAt(currentPath.Count - 1);    //elveszük a pályából az utolsót
                         }
                     }
                 }
                 else        //ha a pálya első és utolsó csúcsa nem egyezik meg
                 {
-                    foreach (Edge e in unusedEdge)
+                    foreach (Edge e in unusedEdges)
                     {
                         if (e.StartVertex.Equals(currentPath.Last<Vertex>()) && e.Used == false)
                         {
-                            e.Used = true;
                             currentPath.Add(e.EndVertex);
-                            unusedEdge.Remove(e);           //kiszedjük az élet a használatanok közül
+                            unusedEdges.Remove(e);           //kiszedjük az élet a használatanok közül
                             break;                          //kilépünk a foreachból, csak egy új élet kértünk
                         }
                         else if (e.EndVertex.Equals(currentPath.Last<Vertex>()) && e.Used == false)
                         {
-                            e.Used = true;
                             currentPath.Add(e.StartVertex);
-                            unusedEdge.Remove(e);           //kiszedjük az élet a használatanok közül
+                            unusedEdges.Remove(e);           //kiszedjük az élet a használatanok közül
                             break;                          //kilépünk a foreachból, csak egy új élet kértünk
                         }
                     }
                 }
+            }
+            while(currentPath.Count != 0)
+            {
+                circuit.Add(currentPath.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
+                currentPath.RemoveAt(currentPath.Count - 1);    //elveszük a pályából az utolsót
             }
 
             return circuit;   //ennek SZÁMÍT a sorrendje, mert azt bejárva megkapjukaz euler kört
