@@ -9,7 +9,7 @@ namespace Algo
     [Serializable]
     public class Edge
     {
-        private static int idCounter = 0;   //hogy ne legyen ugyan olyan id-jű
+        private static int idCounter = 0;
 
         private Vertex startVertex;
         private Vertex endVertex;

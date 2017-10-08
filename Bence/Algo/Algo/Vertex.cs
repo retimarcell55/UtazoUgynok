@@ -24,7 +24,6 @@ namespace Algo
             this.id = id;
             this.position = position;
             this.used = false;
-            edges = new List<Edge>();
         }
     }
 }

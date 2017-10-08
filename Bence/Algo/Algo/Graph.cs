@@ -69,7 +69,6 @@ namespace Algo
         }
 
         //TODO: egy public függvény ami mátrixból csinál (frissíti) él - és csúcslistát
-        //FONTOS!! ez csak akkor jó ha a mátrix alsó/felső háromszögében -1 van !! különben mindenhol dupla élet csinálna !!!
         public void BuildEdgesAndVertices()
         {
             //a mátrixból felépítjük a listákat és frissítjük
@@ -81,9 +80,9 @@ namespace Algo
             EdgeCount = 0;
             for(int i = 0; i < vertexCount; i++)
             {
-                for(int j = i; j < vertexCount; j++)
+                for(int j = 0; j < vertexCount; j++)
                 {
-                    if(adjacencyMatrix[i,j] != 0)
+                    if(adjacencyMatrix[i,j] != -1)
                     {
                         Edge e = new Edge(vertices[i], vertices[j], false, adjacencyMatrix[i, j]);
                         e.StartVertex.Edges.Add(e);
