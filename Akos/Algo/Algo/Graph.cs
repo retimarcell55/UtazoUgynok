@@ -48,7 +48,17 @@ namespace Algo
             edgeCount = vertices.Count * vertices.Count;
             edges = new List<Edge>();
         }
-        
+
+        public Graph(Graph g)
+        {
+            this.Vertices = new List<Vertex>();
+            this.Vertices.AddRange(g.Vertices);
+            adjacencyMatrix = new double[vertices.Count, vertices.Count];
+            vertexCount = vertices.Count;
+            edgeCount = vertices.Count * vertices.Count;
+            edges = new List<Edge>();
+        }
+
         //TODO: public legyen, ez a függvény az éllistából és a csúcslistából képes legyen mártixot építeni (frissíteni) !!
         public void BuildAdjacencyMatrix() 
         {
