@@ -69,6 +69,7 @@ namespace Algo
         }
 
         //TODO: egy public függvény ami mátrixból csinál (frissíti) él - és csúcslistát
+        //FONTOS!! ez csak akkor jó ha a mátrix alsó/felső háromszögében -1 van !! különben mindenhol dupla élet csinálna !!!
         public void BuildEdgesAndVertices()
         {
             //a mátrixból felépítjük a listákat és frissítjük
