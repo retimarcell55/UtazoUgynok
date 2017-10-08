@@ -81,9 +81,9 @@ namespace Algo
             EdgeCount = 0;
             for(int i = 0; i < vertexCount; i++)
             {
-                for(int j = 0; j < vertexCount; j++)
+                for(int j = i; j < vertexCount; j++)
                 {
-                    if(adjacencyMatrix[i,j] != -1)
+                    if(adjacencyMatrix[i,j] != 0)
                     {
                         Edge e = new Edge(vertices[i], vertices[j], false, adjacencyMatrix[i, j]);
                         e.StartVertex.Edges.Add(e);
