@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravellingSalesmen.Algorithms;
 
 namespace TravellingSalesmen
 {
@@ -22,7 +23,7 @@ namespace TravellingSalesmen
             algorithmStarted = false;
         }
 
-        public Coordinator(MainForm mainForm,Configuration configuration,Algorithm algorithm)
+        public Coordinator(MainForm mainForm, Configuration configuration, Algorithm algorithm)
         {
             this.mainForm = mainForm;
             this.Configuration = configuration;
@@ -34,16 +35,16 @@ namespace TravellingSalesmen
         {
             algorithm.Initialize();
 
-            mainForm.DrawGraph(configuration.Graph,configuration.AgentManager);
+            mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
 
             algorithmStarted = true;
         }
 
         public void runAlgorithmNextMove()
         {
-            if(algorithmStarted)
+            if (algorithmStarted)
             {
-                if(algorithm.hasNonVisitedVertexLeft())
+                if (algorithm.hasNonVisitedVertexLeft())
                 {
                     algorithm.NextTurn();
                     switch (algorithm.ActualDrawingMode)
@@ -52,16 +53,12 @@ namespace TravellingSalesmen
                             mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
                             break;
                         case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
-                            if(algorithm.GetType() == typeof(Christofides))
-                            {
-                                //mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
-                                mainForm.HighLightEdges(((Christofides)algorithm).MinimumSpanningTree.Edges);
-                            }
+                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.RED);
                             break;
                         default:
                             break;
                     }
-                    
+
                     mainForm.UpdateResult(algorithm.getActualResult().ToString());
                 }
                 else
@@ -73,7 +70,7 @@ namespace TravellingSalesmen
 
         public void runAlgorithmThrough()
         {
-            if(algorithmStarted)
+            if (algorithmStarted)
             {
                 while (algorithm.hasNonVisitedVertexLeft())
                 {
