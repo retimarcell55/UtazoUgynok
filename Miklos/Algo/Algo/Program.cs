@@ -200,7 +200,7 @@ namespace Algo
         }
 
         //http://www.geeksforgeeks.org/hierholzers-algorithm-directed-graph/
-        public List<Edge> CalculateEulerianCycle(Graph g)
+        public List<Edge> CalculateEulerianCircuit(Graph g)
         {
             Graph originalGraph = g;
             foreach (Edge e in originalGraph.Edges)
@@ -267,19 +267,30 @@ namespace Algo
                 circuitVertices.Add(currentPath.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
                 currentPath.Remove(currentPath.Last<Vertex>());         //elveszük a pályából az utolsót
             }
+            
             //itt már kész a csúcsok sorrendje, kiszámoljuk az éleket is
             foreach (Edge e in originalGraph.Edges)
             {
                 e.Used = false;
             }
-
             for (int i = 0; i < circuitVertices.Count - 1; i++)  // -1 mert élből eggyel kevesebb van mint csúcsból
             {
                 foreach (Edge e in circuitVertices[i].Edges)
                 {
                     //ha az egyik kezdete vagy a vége i+1 edik, és még nem hasznátuk
-                    if ((e.EndVertex.Equals(circuitVertices[i + 1]) && e.Used == false) || (e.StartVertex.Equals(circuitVertices[i + 1]) && e.Used == false))
+                    if (e.EndVertex.Equals(circuitVertices[i + 1]) && e.Used == false)
                     {
+                        circuitEdges.Add(e);
+                        e.Used = true;          //használjuk, dupla éleknél kell majd
+                        break;                  //kilépünk a foreachból, mert csak egy kell nekünk, ha dupla él van akkor az később kell
+                    }
+                    else if(e.StartVertex.Equals(circuitVertices[i + 1]) && e.Used == false)
+                    {
+                        //fel kell cserélni a start és az endvertexet, hogy már "irányított" legyen:
+                        Vertex temp = e.StartVertex;
+                        e.StartVertex = e.EndVertex;
+                        e.EndVertex = temp;
+
                         circuitEdges.Add(e);
                         e.Used = true;          //használjuk, dupla éleknél kell majd
                         break;                  //kilépünk a foreachból, mert csak egy kell nekünk, ha dupla él van akkor az később kell
@@ -288,9 +299,23 @@ namespace Algo
             }
 
             return circuitEdges;   //ennek SZÁMÍT a sorrendje, mert azt bejárva megkapjukaz euler kört
+            //és már rendezve is van, hogy az euler a start-nál indul és az endnél ér majd véget....
         }
 
+        public List<Edge> CreateHamiltonCircuitFromEulerian(List<Edge> eulerCircuit, Graph g)
+        {
+            //már rendezett éllistát kaptunk !
+            List<Edge> hamiltonCircuit = new List<Edge>();
+            Graph originalGraph = g;
+            List<Edge> euler = eulerCircuit;
 
+            //TODO
+
+      
+
+
+            return hamiltonCircuit;
+        }
 
 
         //a program osztály vége
