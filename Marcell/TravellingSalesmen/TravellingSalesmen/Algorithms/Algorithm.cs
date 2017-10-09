@@ -4,24 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TravellingSalesmen
+namespace TravellingSalesmen.Algorithms
 {
-    abstract class Algorithm
+    public abstract class Algorithm
     {
-        public enum DRAWING_MODE { GRAPH, MIN_SPANNING_TREE };
+        public enum DRAWING_MODE { GRAPH, MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET };
+        public enum DRAWING_COLOR { RED,GREEN,BLUE };
         protected CompleteGraph graph;
         protected AgentManager agentManager;
         protected DRAWING_MODE actualDrawingMode;
 
+        protected List<Edge> edgesToHighlight;
+        protected List<Vertex> verticesToHighlight;
+
         public CompleteGraph Graph { get => graph; set => graph = value; }
         public AgentManager AgentManager { get => agentManager; set => agentManager = value; }
         public DRAWING_MODE ActualDrawingMode { get => actualDrawingMode;}
+        public List<Edge> EdgesToHighlight { get => edgesToHighlight;}
+        public List<Vertex> VerticesToHighlight { get => verticesToHighlight; }
 
         public Algorithm(CompleteGraph graph,AgentManager agentManager)
         {
             this.graph = graph;
             this.agentManager = agentManager;
             actualDrawingMode = DRAWING_MODE.GRAPH;
+
+            edgesToHighlight = new List<Edge>();
+            verticesToHighlight = new List<Vertex>();
         }
 
         public string GetName()

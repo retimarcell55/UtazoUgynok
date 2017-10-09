@@ -9,22 +9,12 @@ namespace TravellingSalesmen
     [Serializable]
     public class CompleteGraph : Graph
     {
-        public override List<Vertex> Vertices
-        {
-            get => vertices;
-        }
-        public override List<Edge> Edges
-        {
-            get => edges;
-        }
 
         public CompleteGraph(List<Vertex> vertices)
         {
-            this.Vertices = vertices;
+            this.vertices = vertices;
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
-            vertexCount = vertices.Count;
-            edgeCount = vertices.Count * vertices.Count;
-            Edges = new List<Edge>();
+            this.edges = new List<Edge>();
             for (int i = 0; i < vertices.Count; i++)
             {
                 for (int j = 0; j < vertices.Count; j++)
@@ -42,6 +32,23 @@ namespace TravellingSalesmen
                     AdjacencyMatrix[i, j] = distance;
                 }
             }
+            updateMapping();
+        }
+
+        public override void addEdge(Edge e)
+        {
+        }
+
+        public override void addVertex(Vertex v)
+        {
+        }
+
+        public override void removeEdge(int startId, int endId)
+        {
+        }
+
+        public override void removeVertex(int id)
+        {
         }
     }
 }

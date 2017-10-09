@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TravellingSalesmen.Algorithms;
 
 namespace TravellingSalesmen
 {
@@ -171,10 +172,24 @@ namespace TravellingSalesmen
             }
         }
 
-        public void HighLightEdges(List<Edge> edges)
+        public void HighLightEdges(List<Edge> edges, Algorithm.DRAWING_COLOR color)
         {
             Graphics graphics = visualizer.CreateGraphics();
-            Pen pen = new Pen(Color.FromArgb(125, 255, 0, 0), 7);
+            Pen pen = null;
+            switch (color)
+            {
+                case Algorithm.DRAWING_COLOR.RED:
+                    pen = new Pen(Color.FromArgb(125, 255, 0, 0), 7);
+                    break;
+                case Algorithm.DRAWING_COLOR.GREEN:
+                    pen = new Pen(Color.FromArgb(125, 0, 255, 0), 7);
+                    break;
+                case Algorithm.DRAWING_COLOR.BLUE:
+                    pen = new Pen(Color.FromArgb(125, 0, 0, 255), 7);
+                    break;
+                default:
+                    break;
+            }
             foreach (var edge in edges)
             {
                 graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
