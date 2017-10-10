@@ -12,7 +12,8 @@ namespace TravellingSalesmen.Algorithms
 
         public BruteForce(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
-            solutionInOrder = getMinHam(graph.Vertices, 1, graph.Vertices.Count);
+            solutionInOrder = MinWeightHamiltonCircle(graph.Vertices, 1, graph.Vertices.Count-1);
+            solutionInOrder.Remove(solutionInOrder[0]);
         }
 
         public override void NextTurn()
@@ -22,50 +23,87 @@ namespace TravellingSalesmen.Algorithms
                 int nextVertex = solutionInOrder[0].Id;
                 solutionInOrder.Remove(solutionInOrder[0]);
                 graph.Vertices.Single(item => item.Id == nextVertex).Used = true;
-                ((Edge)graph.Edges.Single(edge => (edge.StartVertex.Id == agentManager.Agents[i].ActualPosition && edge.EndVertex.Id == nextVertex)
+                /*Edge newEdge = */((Edge)graph.Edges.Single(edge => (edge.StartVertex.Id == agentManager.Agents[i].ActualPosition && edge.EndVertex.Id == nextVertex)
                                                     || (edge.EndVertex.Id == agentManager.Agents[i].ActualPosition && edge.StartVertex.Id == nextVertex))).Used = true;
+                /*if(newEdge == null)
+                {
+
+                }
+                else
+                {
+                    newEdge.Used = true;
+                }*/
                 agentManager.Agents[i].ActualPosition = nextVertex;
 
             }
         }
-        private List<Vertex> getMinHam(List<Vertex> list, int l, int r)
+
+        private List<Vertex> MinWeightHamiltonCircle(List<Vertex> list, int l, int r)
         {
-            List<Vertex> minhamcircle = new List<Vertex>();
+            return getMinHam(list, l, r)[0];
+        }
+
+        private List<List<Vertex>> getMinHam(List<Vertex> list, int l, int r)
+        {
+            List<List<Vertex>> minhamcircle = new List<List<Vertex>>();
             double minweight = 0;
             permute(list, l, r, minhamcircle, minweight);
 
             return minhamcircle;
         }
 
-        private void permute(List<Vertex> list, int l, int r, List<Vertex> minhamcircle, double minweight)
+        private void permute(List<Vertex> list, int l, int r, List<List<Vertex>> minhamcircle, double minweight)
         {
             if (l == r)
             {
-                if (minhamcircle.Count == 0)
+                List<Vertex> tmp = new List<Vertex>(list);
+                minhamcircle.Add(tmp);
+
+                if (minhamcircle.Count == 1)
                 {
-                    minhamcircle = list;
-                    for (int i = 1; i < list.Count; i++)
-                    {
-                        minweight += Math.Sqrt(Math.Pow(list[i].Position.X - list[i - 1].Position.X, 2) + Math.Pow(list[i].Position.Y - list[i - 1].Position.Y, 2));
-                    }
+
+
+
+
                 }
                 else
                 {
+                    for (int i = 0; i < minhamcircle[0].Count - 1; i++)
+                    {
+
+                        minweight += Math.Sqrt(Math.Pow(minhamcircle[0][i + 1].Position.X - minhamcircle[0][i].Position.X, 2) + Math.Pow(minhamcircle[0][i + 1].Position.Y - minhamcircle[0][i].Position.Y, 2));
+                    }
+                    minweight += Math.Sqrt(Math.Pow(minhamcircle[0][minhamcircle[0].Count - 1].Position.X - minhamcircle[0][0].Position.X, 2) + Math.Pow(minhamcircle[0][minhamcircle[0].Count - 1].Position.Y - minhamcircle[0][0].Position.Y, 2));
+
+                    Console.Write(minweight);
+                    Console.Write(" ");
                     double d = 0;
-                    for (int i = 1; i < list.Count; i++)
+                    for (int i = 0; i < minhamcircle[minhamcircle.Count - 1].Count - 1; i++)
                     {
-                        d += Math.Sqrt(Math.Pow(list[i].Position.X - list[i - 1].Position.X, 2) + Math.Pow(list[i].Position.Y - list[i - 1].Position.Y, 2));
+
+                        d += Math.Sqrt(Math.Pow(minhamcircle[1][i + 1].Position.X - minhamcircle[1][i].Position.X, 2) + Math.Pow(minhamcircle[1][i + 1].Position.Y - minhamcircle[1][i].Position.Y, 2));
                     }
-                    if (d < minweight)
+                    d += Math.Sqrt(Math.Pow(minhamcircle[1][minhamcircle[1].Count - 1].Position.X - minhamcircle[1][0].Position.X, 2) + Math.Pow(minhamcircle[1][minhamcircle[1].Count - 1].Position.Y - minhamcircle[1][0].Position.Y, 2));
+                    Console.WriteLine(d);
+                    if (d <= minweight)
                     {
-                        minhamcircle = list;
+                        minhamcircle.RemoveAt(0);
                     }
+                    else
+                    {
+                        minhamcircle.RemoveAt(1);
+                    }
+
+
+
+
                 }
+
 
             }
             else
             {
-                for (int i = l; i < r; i++)
+                for (int i = l; i <= r; i++)
                 {
                     list = swap(list, l, i);
                     permute(list, l + 1, r, minhamcircle, minweight);
@@ -77,8 +115,9 @@ namespace TravellingSalesmen.Algorithms
         private List<Vertex> swap(List<Vertex> a, int i, int j)
         {
             Vertex temp;
-            List<Vertex> list = new List<Vertex>(a);
-            temp = list[i];
+            List<Vertex> list;
+            list = a;
+            temp = a[i];
             list[i] = list[j];
             list[j] = temp;
             return list;
