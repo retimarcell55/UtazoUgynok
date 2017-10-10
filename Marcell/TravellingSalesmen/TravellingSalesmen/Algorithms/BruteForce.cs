@@ -12,7 +12,7 @@ namespace TravellingSalesmen.Algorithms
 
         public BruteForce(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
-            solutionInOrder = MinWeightHamiltonCircle(graph.Vertices, 1, graph.Vertices.Count-1);
+            solutionInOrder = MinWeightHamiltonCircle(graph.Vertices, 1, graph.Vertices.Count - 1);
             solutionInOrder.Remove(solutionInOrder[0]);
         }
 
@@ -23,16 +23,8 @@ namespace TravellingSalesmen.Algorithms
                 int nextVertex = solutionInOrder[0].Id;
                 solutionInOrder.Remove(solutionInOrder[0]);
                 graph.Vertices.Single(item => item.Id == nextVertex).Used = true;
-                /*Edge newEdge = */((Edge)graph.Edges.Single(edge => (edge.StartVertex.Id == agentManager.Agents[i].ActualPosition && edge.EndVertex.Id == nextVertex)
+                ((Edge)graph.Edges.Single(edge => (edge.StartVertex.Id == agentManager.Agents[i].ActualPosition && edge.EndVertex.Id == nextVertex)
                                                     || (edge.EndVertex.Id == agentManager.Agents[i].ActualPosition && edge.StartVertex.Id == nextVertex))).Used = true;
-                /*if(newEdge == null)
-                {
-
-                }
-                else
-                {
-                    newEdge.Used = true;
-                }*/
                 agentManager.Agents[i].ActualPosition = nextVertex;
 
             }

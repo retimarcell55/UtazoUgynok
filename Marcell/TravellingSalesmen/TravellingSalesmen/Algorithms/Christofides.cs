@@ -8,10 +8,11 @@ namespace TravellingSalesmen.Algorithms
 {
     class Christofides : Algorithm
     {
-        public enum STAGES { MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET };
+        public enum STAGES { MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET, HAMILTON };
         private STAGES actualStage;
         private Graph minimumSpanningTree = null;
         private List<Edge> independentMinimunEdges = null;
+        private List<Vertex> hamiltonVertices = null;
 
         public STAGES ActualStage { get => actualStage; set => actualStage = value; }
 
@@ -45,7 +46,7 @@ namespace TravellingSalesmen.Algorithms
 
                     foreach (var item in minimumSpanningTree.VertexIdAndEdges)
                     {
-                        if(item.Value.Count % 2 != 0)
+                        if (item.Value.Count % 2 != 0)
                         {
                             oddVertices.Add(graph.Vertices.Single(x => x.Id == item.Key));
                         }
@@ -54,27 +55,65 @@ namespace TravellingSalesmen.Algorithms
                     independentMinimunEdges = CalculateIndependentEdges(fromOddVertices);
                     edgesToHighlight = independentMinimunEdges;
                     actualDrawingMode = DRAWING_MODE.INDEPENDENT_EDGE_SET;
+                    actualStage = STAGES.HAMILTON;
+                    break;
+                case STAGES.HAMILTON:
+                    actualDrawingMode = DRAWING_MODE.INDEPENDENT_EDGE_SET;
+                    if (hamiltonVertices == null)
+                    {
+                        hamiltonVertices = CalculateHamiltonCircuit(minimumSpanningTree.Edges, independentMinimunEdges, graph, agentManager.Agents[0].StartPosition);
+                        hamiltonVertices.Remove(hamiltonVertices[0]);
+                    }
+                    actualDrawingMode = DRAWING_MODE.GRAPH;
+
+                    for (int i = 0; i < agentManager.Agents.Count; i++)
+                    {
+
+                        int nextVertex = hamiltonVertices[0].Id;
+                        hamiltonVertices.Remove(hamiltonVertices[0]);
+                        graph.Vertices.Single(item => item.Id == nextVertex).Used = true;
+                        ((Edge)graph.Edges.Single(edge => (edge.StartVertex.Id == agentManager.Agents[i].ActualPosition && edge.EndVertex.Id == nextVertex)
+                                                            || (edge.EndVertex.Id == agentManager.Agents[i].ActualPosition && edge.StartVertex.Id == nextVertex))).Used = true;
+                        agentManager.Agents[i].ActualPosition = nextVertex;
+                    }
                     break;
                 default:
                     break;
             }
         }
 
-        public override double getActualResult()
+        /*public override double getActualResult()
         {
             double result = 0;
-            if (actualStage == STAGES.MIN_SPANNING_TREE)
+            switch (actualStage)
             {
-
-                foreach (var edge in minimumSpanningTree.Edges)
-                {
-                    result += edge.Weight;
-
-                }
+                case STAGES.MIN_SPANNING_TREE:
+                    foreach (var edge in minimumSpanningTree.Edges)
+                    {
+                        result += edge.Weight;
+                    }
+                    break;
+                case STAGES.INDEPENDENT_EDGE_SET:
+                    foreach (var edge in independentMinimunEdges)
+                    {
+                        result += edge.Weight;
+                    }
+                    break;
+                case STAGES.HAMILTON:
+                    foreach (var edge in graph.Edges)
+                    {
+                        if (edge.Used)
+                        {
+                            result += edge.Weight;
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
 
             return Math.Round(result, 2);
-        }
+        }*/
 
         public Graph CreateMinimumSpanningTree(Graph g)
         {
@@ -292,6 +331,134 @@ namespace TravellingSalesmen.Algorithms
             if (g.Edges.FindAll(x => x.Used == false).Count != 0)
                 Result.Add(g.Edges.First(x => x.Used == false && x.Weight == g.Edges.FindAll(y => y.Used == false).Min(y => y.Weight)));
             return Result;
+        }
+
+        //http://www.geeksforgeeks.org/hierholzers-algorithm-directed-graph/
+        private List<Vertex> CalculateHamiltonCircuit(List<Edge> minSpanningTree, List<Edge> perfectMaching, Graph fullOriginalGraph, int startPointId)
+        {
+            foreach (Edge e in minSpanningTree)
+            {
+                e.Used = false;
+            }
+            foreach (Edge e in perfectMaching)
+            {
+                e.Used = false;
+            }
+            //eddig mindent kinulláztunk
+            List<Edge> combinedEdgeList = new List<Edge>();
+            combinedEdgeList.AddRange(minSpanningTree);
+            combinedEdgeList.AddRange(perfectMaching);
+
+            Graph g = new Graph();
+            foreach (var item in fullOriginalGraph.Vertices)
+            {
+                g.addVertex(item);
+            }
+            foreach (var item in fullOriginalGraph.Edges)
+            {
+                g.addEdge(item);
+            }
+            //nem értem teljesen még a dolgokat....
+
+
+            List<Edge> circuitEdges = new List<Edge>();                 //Az euler út éleinek sorrendje
+            List<Vertex> circuitVertices = new List<Vertex>();          //Az Euler kör csúcsainak a sorrendje
+
+            List<Vertex> currentPathVertices = new List<Vertex>();      //Egy pálya a csúcsokknak, addig megy egy úton amíg talál szabad élet
+            List<Edge> currentPathEdges = new List<Edge>();             //Egy pálya az éleknek, addig megy egy úton amíg talál szabad élet
+
+
+            //egy randol él hozzáadása (a csúcsokat is, mindkettővel együtt fogunk számolni)
+            foreach (Edge item in g.Edges)
+            {
+                if (item.EndVertex.Id == startPointId)
+                {
+                    item.Used = true;
+                    currentPathVertices.Add(item.EndVertex);      //a random él vége
+                    currentPathVertices.Add(item.StartVertex);    //egy random él eleje
+
+                    break;
+                }
+                else if (item.StartVertex.Id == startPointId)
+                {
+                    item.Used = true;
+                    currentPathVertices.Add(item.StartVertex);    //egy random él eleje
+                    currentPathVertices.Add(item.EndVertex);      //a random él vége
+                    break;
+                }
+            }
+
+
+            int usedEdgeCount = 1;  //mert egy már van
+            while (usedEdgeCount != combinedEdgeList.Count)
+            {
+                if (currentPathVertices[0].Equals(currentPathVertices.Last<Vertex>()))  //ha az első és az utolsó csúcs megegyezik a pályában (itt BIZTOS VAN használatlan él)
+                {
+                    while (true)
+                    {
+                        bool haveUnusedEdge = false;
+                        foreach (Edge e in g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id))
+                        {
+                            if (e.Used == false)
+                            {
+                                haveUnusedEdge = true;
+                                break;
+                            }
+                        }
+                        if (haveUnusedEdge)
+                        {
+                            break;      //kilép a while-ból, a currentPath utolsó tagjának van használatlan éle
+                        }
+                        else
+                        {
+                            circuitVertices.Add(currentPathVertices.Last<Vertex>());    //a körhöz adjuk a pálya utolsóját
+                            currentPathVertices.Remove(currentPathVertices.Last<Vertex>());     //elveszük a pályából az utolsót
+
+                        }
+                    }
+                }
+                else        //ha a pálya első és utolsó csúcsa nem egyezik meg
+                {
+                    foreach (Edge e in g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id))
+                    {
+                        if (e.StartVertex.Equals(currentPathVertices.Last<Vertex>()) && e.Used == false)    //ha egy használatlan élet találtunk
+                        {
+                            currentPathVertices.Add(e.EndVertex);
+                            e.Used = true;
+                            usedEdgeCount++;
+                            break;                          //kilépünk a foreachból, csak egy új élet kértünk
+                        }
+                        else if (e.EndVertex.Equals(currentPathVertices.Last<Vertex>()) && e.Used == false)
+                        {
+                            currentPathVertices.Add(e.StartVertex);
+                            e.Used = true;
+                            usedEdgeCount++;
+                            break;                           //kilépünk a foreachból, csak egy új élet kértünk
+                        }
+                    }
+                }
+            }
+
+            while (currentPathVertices.Count != 0)   //a végén a pályát fordított sorrendben hozzáadjuk a körhöz
+            {
+                circuitVertices.Add(currentPathVertices.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
+                currentPathVertices.Remove(currentPathVertices.Last<Vertex>());         //elveszük a pályából az utolsót
+            }
+
+
+
+            List<int> foundedIds = new List<int>();
+            List<Vertex> hamiltonVertices = new List<Vertex>();
+            foreach (var item in circuitVertices)
+            {
+                if (!foundedIds.Contains(item.Id))
+                {
+                    foundedIds.Add(item.Id);
+                    hamiltonVertices.Add(item);
+                }
+            }
+            //hamiltonVertices.Add(circuitVertices[0]);
+            return hamiltonVertices;
         }
     }
 }
