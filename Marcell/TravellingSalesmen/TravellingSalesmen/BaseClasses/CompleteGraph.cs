@@ -13,6 +13,10 @@ namespace TravellingSalesmen
         public CompleteGraph(List<Vertex> vertices)
         {
             this.vertices = vertices;
+            foreach (var item in vertices)
+            {
+                item.Used = false;
+            }
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
             this.edges = new List<Edge>();
             for (int i = 0; i < vertices.Count; i++)
