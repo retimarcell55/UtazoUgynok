@@ -11,6 +11,7 @@ namespace TravellingSalesmen.Algorithms
         public enum STAGES { MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET };
         private STAGES actualStage;
         private Graph minimumSpanningTree = null;
+        private List<Edge> independentMinimunEdges = null;
 
         public STAGES ActualStage { get => actualStage; set => actualStage = value; }
 
@@ -36,43 +37,23 @@ namespace TravellingSalesmen.Algorithms
                     }
                     minimumSpanningTree = CreateMinimumSpanningTree(graph);
                     edgesToHighlight = minimumSpanningTree.Edges;
-                    //actualStage = STAGES.INDEPENDENT_EDGE_SET;
+                    actualStage = STAGES.INDEPENDENT_EDGE_SET;
                     break;
                 case STAGES.INDEPENDENT_EDGE_SET:
-                    Dictionary<int, int> vertexAndOccurence = new Dictionary<int, int>();
-                    foreach (var item in minimumSpanningTree.Edges)
-                    {
-                        if(vertexAndOccurence.ContainsKey(item.StartVertex.Id))
-                        {
-                            vertexAndOccurence[item.StartVertex.Id]++;
-                        }
-                        else
-                        {
-                            vertexAndOccurence.Add(item.StartVertex.Id, 1);
-                        }
-
-                        if (vertexAndOccurence.ContainsKey(item.EndVertex.Id))
-                        {
-                            vertexAndOccurence[item.StartVertex.Id]++;
-                        }
-                        else
-                        {
-                            vertexAndOccurence.Add(item.EndVertex.Id, 1);
-                        }
-                    }
 
                     List<Vertex> oddVertices = new List<Vertex>();
 
-                    foreach (var item in vertexAndOccurence)
+                    foreach (var item in minimumSpanningTree.VertexIdAndEdges)
                     {
-                        if(item.Value % 2 != 0)
+                        if(item.Value.Count % 2 != 0)
                         {
                             oddVertices.Add(graph.Vertices.Single(x => x.Id == item.Key));
                         }
                     }
                     CompleteGraph fromOddVertices = new CompleteGraph(oddVertices);
-                    CalculateIndependentEdges(fromOddVertices);//TODO
-
+                    independentMinimunEdges = CalculateIndependentEdges(fromOddVertices);
+                    edgesToHighlight = independentMinimunEdges;
+                    actualDrawingMode = DRAWING_MODE.INDEPENDENT_EDGE_SET;
                     break;
                 default:
                     break;
@@ -99,7 +80,15 @@ namespace TravellingSalesmen.Algorithms
         {
             #region inicializálások
             //inizializálások:
-            Graph originalGraph = g;                            //az eredeti gráf másolata
+            Graph originalGraph = new Graph();
+            foreach (var item in graph.Vertices)
+            {
+                originalGraph.addVertex(item);
+            }
+            foreach (var item in graph.Edges)
+            {
+                originalGraph.addEdge(item);
+            }
             List<Vertex> treeVertices = new List<Vertex>();     //a fa csúcsai (semmiből építkezünk)
             List<Vertex> nonTreeVertices = new List<Vertex>(); //azok a csúcsok melyek nem a fában vannak
             nonTreeVertices = originalGraph.Vertices;           //az összes egyelőre
@@ -210,9 +199,99 @@ namespace TravellingSalesmen.Algorithms
             }
         };
 
-        private List<Edge> CalculateIndependentEdges(Graph g)
+        static public List<Edge> CalculateIndependentEdges(Graph g)
         {
-            throw new NotImplementedException();
+            g.Edges.OrderBy(x => x.Weight);
+            foreach (Vertex item in g.Vertices)
+                g.VertexIdAndEdges[item.Id].OrderBy(x => x.Weight);
+
+
+            //Itt Keszitjuk el magat a megoldast
+            List<EdgeLeavCost> ELC = new List<EdgeLeavCost>();
+            List<Edge> NeighboursOnStart = new List<Edge>();
+            List<Edge> NeighboursOnEnd = new List<Edge>();
+            List<Edge> Result = new List<Edge>();
+            Edge[] Neighbours = new Edge[2];
+            double Cost;
+            double MinW;
+            while (g.Vertices.FindAll(x => x.Used == false).Count > 3)
+            {
+                //ELC feltoltese a naluk kisebb sulyuaktol fuggetlen elekkel, es a hozzajuk tartozo tavozasi koltseggel
+                ELC.RemoveAll(x => x.e.Used == true);
+                foreach (Edge iteme in g.Edges)
+                {
+                    if (iteme.Used == false)
+                        if (iteme.Weight == g.VertexIdAndEdges[iteme.StartVertex.Id].Where(x => x.Used == false).Min(x => x.Weight) && iteme.Weight == g.VertexIdAndEdges[iteme.EndVertex.Id].Where(x => x.Used == false).Min(x => x.Weight))
+                        {
+                            Console.WriteLine(Result.Count + "Yolo" + iteme.Id);
+                            Cost = 0;
+                            iteme.StartVertex.Used = true;
+                            iteme.EndVertex.Used = true;
+                            g.VertexIdAndEdges[iteme.StartVertex.Id].ForEach(x => x.Used = true);
+                            g.VertexIdAndEdges[iteme.EndVertex.Id].ForEach(x => x.Used = true);
+                            foreach (Vertex itemv in g.Vertices)
+                            {
+                                if (itemv.Used == false)
+                                    Cost += g.VertexIdAndEdges[itemv.Id].First(x => x.Used == false).Weight - g.VertexIdAndEdges[itemv.Id][0].Weight;
+                            }
+                            ELC.Add(new EdgeLeavCost(iteme, Cost));
+                            iteme.StartVertex.Used = false;
+                            iteme.EndVertex.Used = false;
+                            g.VertexIdAndEdges[iteme.StartVertex.Id].FindAll(x => x.EndVertex.Used == false && x.StartVertex.Used == false).ForEach(x => x.Used = false);
+                            g.VertexIdAndEdges[iteme.EndVertex.Id].FindAll(x => x.EndVertex.Used == false && x.StartVertex.Used == false).ForEach(x => x.Used = false);
+                        }
+                }
+
+                //Kikeressuk a legoptimalisabb kezdo elet
+                ELC.OrderBy(x => x.e.Weight);
+                ELC.OrderBy(x => x.LeavCost);
+
+                //Leellenorizzuk, hogy van e jobb megoldas
+                MinW = ELC.Max(x => x.e.Weight) * 2;
+                NeighboursOnStart = g.VertexIdAndEdges[ELC[0].e.StartVertex.Id].FindAll(x => x.Used = false);
+                NeighboursOnEnd = g.VertexIdAndEdges[ELC[0].e.EndVertex.Id].FindAll(x => x.Used = false);
+                foreach (Edge itemE in NeighboursOnEnd)
+                {
+                    foreach (Edge itemS in NeighboursOnStart)
+                    {
+                        if (itemE.StartVertex.Id != itemS.StartVertex.Id && itemE.EndVertex.Id != itemS.StartVertex.Id &&
+                            itemE.StartVertex.Id != itemS.EndVertex.Id && itemE.EndVertex.Id != itemS.EndVertex.Id &&
+                            itemE.Weight + itemS.Weight <= MinW)
+                        {
+                            MinW = itemE.Weight + itemS.Weight;
+                            Neighbours[0] = itemS;
+                            Neighbours[1] = itemE;
+                        }
+
+                    }
+                }
+                //Ellenorzes kiertekelese es El Kivalasztasa, Eredmenylistaba illesztese, Az eredeti graf egyszerusitese
+                if (MinW < ELC[0].e.Weight + g.Edges.FindAll(x => x.Used == false && !(NeighboursOnEnd.Contains(x) || NeighboursOnStart.Contains(x))).Min(x => x.Weight))
+                {
+                    Result.Add(Neighbours[0]);
+                    Result.Add(Neighbours[1]);
+                    Neighbours[0].StartVertex.Used = true;
+                    Neighbours[1].StartVertex.Used = true;
+                    Neighbours[0].EndVertex.Used = true;
+                    Neighbours[1].EndVertex.Used = true;
+                    g.VertexIdAndEdges[Neighbours[0].EndVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[Neighbours[0].StartVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[Neighbours[1].EndVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[Neighbours[1].StartVertex.Id].ForEach(x => x.Used = true);
+                }
+                else
+                {
+                    Result.Add(ELC[0].e);
+                    ELC[0].e.EndVertex.Used = true;
+                    ELC[0].e.StartVertex.Used = true;
+                    g.VertexIdAndEdges[ELC[0].e.EndVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[ELC[0].e.StartVertex.Id].ForEach(x => x.Used = true);
+                }
+            }
+            //ha maradt egy el, azt
+            if (g.Edges.FindAll(x => x.Used == false).Count != 0)
+                Result.Add(g.Edges.First(x => x.Used == false && x.Weight == g.Edges.FindAll(y => y.Used == false).Min(y => y.Weight)));
+            return Result;
         }
     }
 }
