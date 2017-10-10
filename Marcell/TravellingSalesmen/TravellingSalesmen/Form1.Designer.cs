@@ -176,6 +176,7 @@
             this.AlgorithmComboBox.FormattingEnabled = true;
             this.AlgorithmComboBox.Items.AddRange(new object[] {
             "RandomSearch",
+            "BruteForce",
             "Christofides"});
             this.AlgorithmComboBox.Location = new System.Drawing.Point(17, 160);
             this.AlgorithmComboBox.Name = "AlgorithmComboBox";

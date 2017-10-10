@@ -27,3 +27,4 @@ C:\Users\mreti\Desktop\TestRepo\UtazoUgynok\Marcell\TravellingSalesmen\Travellin
 C:\Users\mreti\Desktop\TestRepo\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.csproj.CoreCompileInputs.cache
 C:\Users\mreti\Desktop\TestRepo\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.exe
 C:\Users\mreti\Desktop\TestRepo\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.pdb
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.csprojResolveAssemblyReference.cache

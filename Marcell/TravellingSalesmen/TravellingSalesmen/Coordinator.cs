@@ -53,6 +53,9 @@ namespace TravellingSalesmen
                             mainForm.DrawGraph(configuration.Graph, configuration.AgentManager);
                             break;
                         case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
+                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.BLUE);
+                            break;
+                        case Algorithm.DRAWING_MODE.INDEPENDENT_EDGE_SET:
                             mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.RED);
                             break;
                         default:

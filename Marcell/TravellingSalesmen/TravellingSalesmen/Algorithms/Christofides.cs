@@ -36,7 +36,7 @@ namespace TravellingSalesmen.Algorithms
                     }
                     minimumSpanningTree = CreateMinimumSpanningTree(graph);
                     edgesToHighlight = minimumSpanningTree.Edges;
-                    actualStage = STAGES.INDEPENDENT_EDGE_SET;
+                    //actualStage = STAGES.INDEPENDENT_EDGE_SET;
                     break;
                 case STAGES.INDEPENDENT_EDGE_SET:
                     Dictionary<int, int> vertexAndOccurence = new Dictionary<int, int>();

@@ -71,6 +71,9 @@ namespace TravellingSalesmen
                 case "RandomSearch":
                     coordinator.Algorithm = new RandomSearch(coordinator.Configuration.Graph, coordinator.Configuration.AgentManager);
                     break;
+                case "BruteForce":
+                    coordinator.Algorithm = new BruteForce(coordinator.Configuration.Graph, coordinator.Configuration.AgentManager);
+                    break;
                 case "Christofides":
                     coordinator.Algorithm = new Christofides(coordinator.Configuration.Graph, coordinator.Configuration.AgentManager);
                     break;
