@@ -10,9 +10,9 @@ namespace Algo
         static void Main(string[] args)
         {
             Graph g = new Graph();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 6; i++)
             {
-                g.Vertices.Add(new Vertex(i, new Coordinate(i % 50, i % 2)));
+                g.Vertices.Add(new Vertex(i, new Coordinate(i % 3, i % 2)));
             }
             Random rnd = new Random();
 
@@ -22,7 +22,7 @@ namespace Algo
                 {
                     if (item1.Id < item2.Id)
                     {
-                        g.Edges.Add(new Edge(item1, item2, false, rnd.Next(1, 101)));
+                        g.Edges.Add(new Edge(item1, item2, false, rnd.Next(1, 7)));
                     }
                 }
             }
