@@ -10,9 +10,9 @@ namespace Algo
         static void Main(string[] args)
         {
             Graph g = new Graph();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
-                g.Vertices.Add(new Vertex(i, new Coordinate(i % 500, i % 2)));
+                g.Vertices.Add(new Vertex(i, new Coordinate(i % 50, i % 2)));
             }
             Random rnd = new Random();
 
@@ -22,7 +22,7 @@ namespace Algo
                 {
                     if (item1.Id < item2.Id)
                     {
-                        g.Edges.Add(new Edge(item1, item2, false, rnd.Next(1, 1001)));
+                        g.Edges.Add(new Edge(item1, item2, false, rnd.Next(1, 101)));
                     }
                 }
             }
@@ -74,6 +74,7 @@ namespace Algo
             double MinW;
             while (g.Vertices.FindAll(x => x.Used == false).Count > 3)
             {
+                Console.WriteLine(Result.Count + "Yolo");
                 //ELC feltoltese a naluk kisebb sulyuaktol fuggetlen elekkel, es a hozzajuk tartozo tavozasi koltseggel
                 ELC.RemoveAll(x => x.e.Used == true);
                 foreach (Edge iteme in g.Edges)
@@ -81,7 +82,6 @@ namespace Algo
                     if (iteme.Used == false)
                         if (iteme.Weight == g.VertexIdAndEdges[iteme.StartVertex.Id].Where(x => x.Used == false).Min(x => x.Weight) && iteme.Weight == g.VertexIdAndEdges[iteme.EndVertex.Id].Where(x => x.Used == false).Min(x => x.Weight))
                         {
-                            Console.WriteLine(Result.Count+"Yolo" + iteme.Id);
                             Cost = 0;
                             iteme.StartVertex.Used = true;
                             iteme.EndVertex.Used = true;
