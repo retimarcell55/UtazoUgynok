@@ -11,7 +11,7 @@ namespace TravellingSalesmen
 {
     class FileManager
     {
-        private const string BASE_FOLDER_LOCATION = @"Configurations";
+        private const string BASE_FOLDER_LOCATION = @"..\..\..\Configurations";
 
         public FileManager()
         {
