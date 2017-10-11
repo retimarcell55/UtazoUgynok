@@ -13,6 +13,7 @@ namespace TravellingSalesmen.Algorithms
         private Graph minimumSpanningTree = null;
         private List<Edge> independentMinimunEdges = null;
         private List<Vertex> hamiltonVertices = null;
+        private Random rnd = new Random();
 
         public STAGES ActualStage { get => actualStage; set => actualStage = value; }
 
@@ -63,6 +64,18 @@ namespace TravellingSalesmen.Algorithms
                     {
                         hamiltonVertices = CalculateHamiltonCircuit(minimumSpanningTree.Edges, independentMinimunEdges, graph, agentManager.Agents[0].StartPosition);
                         hamiltonVertices.Remove(hamiltonVertices[0]);
+                        foreach (var item in graph.Edges)
+                        {
+                            item.Used = false;
+                        }
+                        foreach (var item in graph.Vertices)
+                        {
+                            item.Used = false;
+                        }
+                        foreach (var item in agentManager.Agents)
+                        {
+                            graph.Vertices.Single(x => x.Id == item.StartPosition).Used = true;
+                        }
                     }
                     actualDrawingMode = DRAWING_MODE.GRAPH;
 
@@ -358,6 +371,11 @@ namespace TravellingSalesmen.Algorithms
             {
                 g.addEdge(item);
             }
+
+            foreach (var item in combinedEdgeList)
+            {
+                item.Used = false;
+            }
             //nem értem teljesen még a dolgokat....
 
 
@@ -369,11 +387,13 @@ namespace TravellingSalesmen.Algorithms
 
 
             //egy randol él hozzáadása (a csúcsokat is, mindkettővel együtt fogunk számolni)
-            foreach (Edge item in g.Edges)
+            foreach (Edge item in combinedEdgeList)
             {
                 if (item.EndVertex.Id == startPointId)
                 {
                     item.Used = true;
+                    combinedEdgeList.Single(x => (x.StartVertex.Id == item.StartVertex.Id && x.EndVertex.Id == item.EndVertex.Id) ||
+                                (x.EndVertex.Id == item.StartVertex.Id && x.StartVertex.Id == item.EndVertex.Id)).Used = true;
                     currentPathVertices.Add(item.EndVertex);      //a random él vége
                     currentPathVertices.Add(item.StartVertex);    //egy random él eleje
 
@@ -382,6 +402,8 @@ namespace TravellingSalesmen.Algorithms
                 else if (item.StartVertex.Id == startPointId)
                 {
                     item.Used = true;
+                    combinedEdgeList.Single(x => (x.StartVertex.Id == item.StartVertex.Id && x.EndVertex.Id == item.EndVertex.Id) ||
+                                (x.EndVertex.Id == item.StartVertex.Id && x.StartVertex.Id == item.EndVertex.Id)).Used = true;
                     currentPathVertices.Add(item.StartVertex);    //egy random él eleje
                     currentPathVertices.Add(item.EndVertex);      //a random él vége
                     break;
@@ -390,6 +412,7 @@ namespace TravellingSalesmen.Algorithms
 
 
             int usedEdgeCount = 1;  //mert egy már van
+            List<Edge> freeableEdges = new List<Edge>();
             while (usedEdgeCount != combinedEdgeList.Count)
             {
                 if (currentPathVertices[0].Equals(currentPathVertices.Last<Vertex>()))  //ha az első és az utolsó csúcs megegyezik a pályában (itt BIZTOS VAN használatlan él)
@@ -397,7 +420,7 @@ namespace TravellingSalesmen.Algorithms
                     while (true)
                     {
                         bool haveUnusedEdge = false;
-                        foreach (Edge e in g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id))
+                        foreach (Edge e in combinedEdgeList.Where(x => x.StartVertex.Id == currentPathVertices.Last<Vertex>().Id || x.EndVertex.Id == currentPathVertices.Last<Vertex>().Id))/*g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id*/
                         {
                             if (e.Used == false)
                             {
@@ -411,45 +434,62 @@ namespace TravellingSalesmen.Algorithms
                         }
                         else
                         {
-                            circuitVertices.Add(currentPathVertices.Last<Vertex>());    //a körhöz adjuk a pálya utolsóját
-                            currentPathVertices.Remove(currentPathVertices.Last<Vertex>());     //elveszük a pályából az utolsót
+                            Vertex last = currentPathVertices.Last<Vertex>();
+                            circuitVertices.Add(last);    //a körhöz adjuk a pálya utolsóját
+                            currentPathVertices.RemoveAt(currentPathVertices.Count - 1);     //elveszük a pályából az utolsót 
+                            Vertex beforelast = currentPathVertices.Last<Vertex>();
 
+                            freeableEdges.Add(combinedEdgeList.Single(x => (x.StartVertex.Id == last.Id && x.EndVertex.Id == beforelast.Id) || (x.EndVertex.Id == last.Id && x.StartVertex.Id == beforelast.Id)));
+
+                            usedEdgeCount--;
                         }
                     }
                 }
                 else        //ha a pálya első és utolsó csúcsa nem egyezik meg
                 {
-                    foreach (Edge e in combinedEdgeList.Where(x => x.StartVertex.Id == currentPathVertices.Last<Vertex>().Id || x.EndVertex.Id == currentPathVertices.Last<Vertex>().Id))/*g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id*/
+                    foreach (Edge e in combinedEdgeList.Where(x => x.StartVertex.Id == currentPathVertices.Last<Vertex>().Id || x.EndVertex.Id == currentPathVertices.Last<Vertex>().Id).OrderBy(item => rnd.Next()))/*g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id*/
                     {
                         if (e.StartVertex.Equals(currentPathVertices.Last<Vertex>()) && e.Used == false)    //ha egy használatlan élet találtunk
                         {
-                            currentPathVertices.Add(e.EndVertex);
                             e.Used = true;
+                            currentPathVertices.Add(e.EndVertex);
+                            
                             usedEdgeCount++;
+                            foreach (var item in freeableEdges)
+                            {
+                                item.Used = false;
+                            }
+                            freeableEdges.Clear();
                             break;                          //kilépünk a foreachból, csak egy új élet kértünk
                         }
                         else if (e.EndVertex.Equals(currentPathVertices.Last<Vertex>()) && e.Used == false)
                         {
-                            currentPathVertices.Add(e.StartVertex);
                             e.Used = true;
+                            currentPathVertices.Add(e.StartVertex);
+                           
                             usedEdgeCount++;
+                            foreach (var item in freeableEdges)
+                            {
+                                item.Used = false;
+                            }
+                            freeableEdges.Clear();
                             break;                           //kilépünk a foreachból, csak egy új élet kértünk
                         }
                     }
                 }
             }
 
-            while (currentPathVertices.Count != 0)   //a végén a pályát fordított sorrendben hozzáadjuk a körhöz
+           /* while (currentPathVertices.Count != 0)   //a végén a pályát fordított sorrendben hozzáadjuk a körhöz
             {
                 circuitVertices.Add(currentPathVertices.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
                 currentPathVertices.Remove(currentPathVertices.Last<Vertex>());         //elveszük a pályából az utolsót
-            }
+            }*/
 
 
 
             List<int> foundedIds = new List<int>();
             List<Vertex> hamiltonVertices = new List<Vertex>();
-            foreach (var item in circuitVertices)
+            foreach (var item in currentPathVertices)
             {
                 if (!foundedIds.Contains(item.Id))
                 {
