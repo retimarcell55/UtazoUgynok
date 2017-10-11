@@ -349,44 +349,21 @@ namespace TravellingSalesmen.Algorithms
         //http://www.geeksforgeeks.org/hierholzers-algorithm-directed-graph/
         private List<Vertex> CalculateHamiltonCircuit(List<Edge> minSpanningTree, List<Edge> perfectMaching, Graph fullOriginalGraph, int startPointId)
         {
-            foreach (Edge e in minSpanningTree)
-            {
-                e.Used = false;
-            }
-            foreach (Edge e in perfectMaching)
-            {
-                e.Used = false;
-            }
             //eddig mindent kinulláztunk
             List<Edge> combinedEdgeList = new List<Edge>();
             combinedEdgeList.AddRange(minSpanningTree);
             combinedEdgeList.AddRange(perfectMaching);
 
-            Graph g = new Graph();
-            foreach (var item in fullOriginalGraph.Vertices)
-            {
-                g.addVertex(item);
-            }
-            foreach (var item in fullOriginalGraph.Edges)
-            {
-                g.addEdge(item);
-            }
-
             foreach (var item in combinedEdgeList)
             {
                 item.Used = false;
             }
-            //nem értem teljesen még a dolgokat....
-
-
-            List<Edge> circuitEdges = new List<Edge>();                 //Az euler út éleinek sorrendje
-            List<Vertex> circuitVertices = new List<Vertex>();          //Az Euler kör csúcsainak a sorrendje
 
             List<Vertex> currentPathVertices = new List<Vertex>();      //Egy pálya a csúcsokknak, addig megy egy úton amíg talál szabad élet
             List<Edge> currentPathEdges = new List<Edge>();             //Egy pálya az éleknek, addig megy egy úton amíg talál szabad élet
 
 
-            //egy randol él hozzáadása (a csúcsokat is, mindkettővel együtt fogunk számolni)
+            //egy random él hozzáadása (a csúcsokat is, mindkettővel együtt fogunk számolni)
             foreach (Edge item in combinedEdgeList)
             {
                 if (item.EndVertex.Id == startPointId)
@@ -435,12 +412,10 @@ namespace TravellingSalesmen.Algorithms
                         else
                         {
                             Vertex last = currentPathVertices.Last<Vertex>();
-                            circuitVertices.Add(last);    //a körhöz adjuk a pálya utolsóját
                             currentPathVertices.RemoveAt(currentPathVertices.Count - 1);     //elveszük a pályából az utolsót 
                             Vertex beforelast = currentPathVertices.Last<Vertex>();
-
-                            freeableEdges.Add(combinedEdgeList.Single(x => (x.StartVertex.Id == last.Id && x.EndVertex.Id == beforelast.Id) || (x.EndVertex.Id == last.Id && x.StartVertex.Id == beforelast.Id)));
-
+                            Edge edgetoAdd = combinedEdgeList.Where(x => (x.StartVertex.Id == last.Id && x.EndVertex.Id == beforelast.Id) || (x.EndVertex.Id == last.Id && x.StartVertex.Id == beforelast.Id)).ToList()[0];
+                            freeableEdges.Add(edgetoAdd);
                             usedEdgeCount--;
                         }
                     }
@@ -478,15 +453,6 @@ namespace TravellingSalesmen.Algorithms
                     }
                 }
             }
-
-           /* while (currentPathVertices.Count != 0)   //a végén a pályát fordított sorrendben hozzáadjuk a körhöz
-            {
-                circuitVertices.Add(currentPathVertices.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
-                currentPathVertices.Remove(currentPathVertices.Last<Vertex>());         //elveszük a pályából az utolsót
-            }*/
-
-
-
             List<int> foundedIds = new List<int>();
             List<Vertex> hamiltonVertices = new List<Vertex>();
             foreach (var item in currentPathVertices)
@@ -497,7 +463,6 @@ namespace TravellingSalesmen.Algorithms
                     hamiltonVertices.Add(item);
                 }
             }
-            //hamiltonVertices.Add(circuitVertices[0]);
             return hamiltonVertices;
         }
     }
