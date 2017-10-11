@@ -419,7 +419,7 @@ namespace TravellingSalesmen.Algorithms
                 }
                 else        //ha a pálya első és utolsó csúcsa nem egyezik meg
                 {
-                    foreach (Edge e in g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id))
+                    foreach (Edge e in combinedEdgeList.Where(x => x.StartVertex.Id == currentPathVertices.Last<Vertex>().Id || x.EndVertex.Id == currentPathVertices.Last<Vertex>().Id))/*g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id*/
                     {
                         if (e.StartVertex.Equals(currentPathVertices.Last<Vertex>()) && e.Used == false)    //ha egy használatlan élet találtunk
                         {
