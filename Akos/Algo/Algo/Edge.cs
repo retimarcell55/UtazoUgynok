@@ -9,15 +9,14 @@ namespace Algo
     [Serializable]
     public class Edge
     {
-        private static int idCounter = 0;
-
+        private static int IdCounter=0;
+        private int id;
         private Vertex startVertex;
         private Vertex endVertex;
-        private int id;
         private bool used;
         private double weight;
 
-        public int Id { get => id; set => id = value; }
+        public int Id { get => id; }
         public bool Used { get => used; set => used = value; }
         public double Weight { get => weight; set => weight = value; }
         public Vertex StartVertex { get => startVertex; set => startVertex = value; }
@@ -30,7 +29,8 @@ namespace Algo
             this.endVertex = endVertex;
             this.used = used;
             this.weight = weight;
-            this.id = idCounter++;
+            id = IdCounter;
+            IdCounter++;
         }
 
     }

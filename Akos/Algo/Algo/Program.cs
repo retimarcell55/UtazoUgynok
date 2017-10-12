@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Algo
 {
@@ -10,124 +9,148 @@ namespace Algo
     {
         static void Main(string[] args)
         {
+            Graph g = new Graph();
+            for (int i = 0; i < 6; i++)
+            {
+                g.Vertices.Add(new Vertex(i, new Coordinate(i % 3, i % 2)));
+            }
+            Random rnd = new Random();
 
+            foreach (Vertex item1 in g.Vertices)
+            {
+                foreach (Vertex item2 in g.Vertices)
+                {
+                    if (item1.Id < item2.Id)
+                    {
+                        g.Edges.Add(new Edge(item1, item2, false, rnd.Next(1, 7)));
+                    }
+                }
+            }
+            foreach (Edge item in g.Edges)
+            {
+                Console.WriteLine("(" + item.StartVertex.Id + ";" + item.EndVertex.Id + "):" + item.Id + "=" + item.Weight);
+            }
+            foreach (Vertex itemv in g.Vertices)
+            {
+                g.VertexIdAndEdges.Add(itemv.Id,new List<Edge>());
+                foreach (Edge iteme in g.Edges)
+                {
+                    if (iteme.StartVertex.Id == itemv.Id || iteme.EndVertex.Id == itemv.Id)
+                        g.VertexIdAndEdges[itemv.Id].Add(iteme);
+                }
+            }
+            List<Edge> result = CalculateIndependentEdges(g);
+            foreach (Edge item in result)
+            {
+                Console.WriteLine("(" + item.StartVertex.Id + ";" + item.EndVertex.Id + "):" + item.Id + "=" + item.Weight);
+            }
             Console.ReadKey();
         }
 
-
-
-        public Graph CereateCompleteGraphFromOddDegreeVertices(Graph g)
+        struct EdgeLeavCost
         {
-            Graph originalGraph = g;
-            List<Edge> newGraphEdges = new List<Edge>();
-            List<Vertex> newGraphVertices = new List<Vertex>();
-            foreach (Vertex v in originalGraph.Vertices)
+            public Edge e;
+            public double LeavCost;
+            public EdgeLeavCost(Edge ed, double Lc)
             {
-                int degree = 0;
-                foreach (Edge e in originalGraph.Edges) //megszámolja a fokszámokat
+                e = ed;
+                LeavCost = Lc;
+            }
+        };
+        static public List<Edge> CalculateIndependentEdges(Graph g)
+        {
+            g.Edges.OrderBy(x => x.Weight);
+            foreach (Vertex item in g.Vertices)
+                g.VertexIdAndEdges[item.Id].OrderBy(x => x.Weight);
+
+
+            //Itt Keszitjuk el magat a megoldast
+            List<EdgeLeavCost> ELC = new List<EdgeLeavCost>();
+            List<Edge> NeighboursOnStart = new List<Edge>();
+            List<Edge> NeighboursOnEnd = new List<Edge>();
+            List<Edge> Result = new List<Edge>();
+            Edge[] Neighbours = new Edge[2];
+            double Cost;
+            double MinW;
+            while (g.Vertices.FindAll(x => x.Used == false).Count > 3)
+            {
+                Console.WriteLine(Result.Count + "Yolo");
+                //ELC feltoltese a naluk kisebb sulyuaktol fuggetlen elekkel, es a hozzajuk tartozo tavozasi koltseggel
+                ELC.RemoveAll(x => x.e.Used == true);
+                foreach (Edge iteme in g.Edges)
                 {
-                    if (e.StartVertex.Equals(v))
-                        degree++;
-                    if (e.EndVertex.Equals(v))
-                        degree++;
+                    if (iteme.Used == false)
+                        if (iteme.Weight == g.VertexIdAndEdges[iteme.StartVertex.Id].Where(x => x.Used == false).Min(x => x.Weight) && iteme.Weight == g.VertexIdAndEdges[iteme.EndVertex.Id].Where(x => x.Used == false).Min(x => x.Weight))
+                        {
+                            Cost = 0;
+                            iteme.StartVertex.Used = true;
+                            iteme.EndVertex.Used = true;
+                            g.VertexIdAndEdges[iteme.StartVertex.Id].ForEach(x => x.Used = true);
+                            g.VertexIdAndEdges[iteme.EndVertex.Id].ForEach(x => x.Used = true);
+                            foreach (Vertex itemv in g.Vertices)
+                            {
+                                if (itemv.Used == false)
+                                    Cost += g.VertexIdAndEdges[itemv.Id].First(x => x.Used == false).Weight - g.VertexIdAndEdges[itemv.Id][0].Weight;
+                            }
+                            ELC.Add(new EdgeLeavCost(iteme, Cost));
+                            iteme.StartVertex.Used = false;
+                            iteme.EndVertex.Used = false;
+                            g.VertexIdAndEdges[iteme.StartVertex.Id].FindAll(x => x.EndVertex.Used == false && x.StartVertex.Used == false).ForEach(x => x.Used = false);
+                            g.VertexIdAndEdges[iteme.EndVertex.Id].FindAll(x => x.EndVertex.Used == false && x.StartVertex.Used == false).ForEach(x => x.Used = false);
+                        }
                 }
 
-                if(degree % 2 != 0)         //páratlan fokszámú
+                //Kikeressuk a legoptimalisabb kezdo elet
+                ELC.OrderBy(x => x.e.Weight);
+                ELC.OrderBy(x => x.LeavCost);
+
+                //Leellenorizzuk, hogy van e jobb megoldas
+                MinW = ELC.Max(x => x.e.Weight) * 2;
+                NeighboursOnStart = g.VertexIdAndEdges[ELC[0].e.StartVertex.Id].FindAll(x => x.Used = false);
+                NeighboursOnEnd = g.VertexIdAndEdges[ELC[0].e.EndVertex.Id].FindAll(x => x.Used = false);
+                foreach (Edge itemE in NeighboursOnEnd)
                 {
-                    newGraphVertices.Add(v);
-                    v.Used = true;          //Ha beletettük akkor használt
+                    foreach (Edge itemS in NeighboursOnStart)
+                    {
+                        if (itemE.StartVertex.Id != itemS.StartVertex.Id && itemE.EndVertex.Id != itemS.StartVertex.Id &&
+                            itemE.StartVertex.Id != itemS.EndVertex.Id && itemE.EndVertex.Id != itemS.EndVertex.Id &&
+                            itemE.Weight + itemS.Weight <= MinW)
+                        {
+                            MinW = itemE.Weight + itemS.Weight;
+                            Neighbours[0] = itemS;
+                            Neighbours[1] = itemE;
+                        }
+
+                    }
+                }
+                //Ellenorzes kiertekelese es El Kivalasztasa, Eredmenylistaba illesztese, Az eredeti graf egyszerusitese
+                if (MinW < ELC[0].e.Weight + g.Edges.FindAll(x => x.Used == false && !(NeighboursOnEnd.Contains(x) || NeighboursOnStart.Contains(x))).Min(x => x.Weight))
+                {
+                    Result.Add(Neighbours[0]);
+                    Result.Add(Neighbours[1]);
+                    Neighbours[0].StartVertex.Used = true;
+                    Neighbours[1].StartVertex.Used = true;
+                    Neighbours[0].EndVertex.Used = true;
+                    Neighbours[1].EndVertex.Used = true;
+                    g.VertexIdAndEdges[Neighbours[0].EndVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[Neighbours[0].StartVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[Neighbours[1].EndVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[Neighbours[1].StartVertex.Id].ForEach(x => x.Used = true);
                 }
                 else
                 {
-                    v.Used = false;         //h nem tettük bele akkor legyen nem használt
+                    Result.Add(ELC[0].e);
+                    ELC[0].e.EndVertex.Used = true;
+                    ELC[0].e.StartVertex.Used = true;
+                    g.VertexIdAndEdges[ELC[0].e.EndVertex.Id].ForEach(x => x.Used = true);
+                    g.VertexIdAndEdges[ELC[0].e.StartVertex.Id].ForEach(x => x.Used = true);
                 }
             }
-            foreach (Edge e in originalGraph.Edges) //ha az él két oldalán használt csúcs van akkor kell nekünk
-            {
-                if(e.StartVertex.Used && e.EndVertex.Used)
-                {
-                    newGraphEdges.Add(e);
-                }
-            }
-            Graph newGraph = new Graph();
-            newGraph.Vertices = newGraphVertices;
-            newGraph.Edges = newGraphEdges;
-            return newGraph;
+            //ha maradt egy el, azt
+            if (g.Edges.FindAll(x => x.Used == false).Count != 0)
+                Result.Add(g.Edges.First(x => x.Used == false && x.Weight == g.Edges.FindAll(y => y.Used == false).Min(y => y.Weight)));
+            return Result;
         }
 
-        //http://www.geeksforgeeks.org/hierholzers-algorithm-directed-graph/
-        public List<Vertex> CalculateEulerianCycle(Graph g)
-        {
-            Graph originalGraph = g;
-            foreach (Edge e in originalGraph.Edges)
-            {
-                e.Used = false;
-            }
-
-            //List<Edge> eulerianCircuit = new List<Edge>();  //At euler út éleinek sorrendje
-            List<Vertex> currentPath = new List<Vertex>();  //Egy pálya, addig megy egy úton amíg talál szabad élet
-            List<Vertex> circuit = new List<Vertex>();      //Az Euler kör csúcsainak a sorrendje
-            List<Edge> unusedEdges = originalGraph.Edges;    //A használatlan csúcsok
-
-            currentPath.Add(originalGraph.Edges[0].StartVertex);    //random edge's start- and endvertex
-            currentPath.Add(originalGraph.Edges[0].EndVertex);      //random edge's start- and endvertex
-            unusedEdges.Remove(originalGraph.Edges[0]);              //kivesszük a használatlanok közül
-
-            while (unusedEdges.Count != 0)
-            {
-                if (currentPath[0].Equals(currentPath.Last<Vertex>()) )  //ha az első és az utolsó csúcs megegyezik, itt BIZTOS VAN használatlan csúcs
-                {
-                    while(true)
-                    {
-                        bool haveUnusedEdge = false;
-                        foreach (Edge e in unusedEdges)
-                        {
-                            if (e.StartVertex.Equals(currentPath.Last<Vertex>()) || e.EndVertex.Equals(currentPath.Last<Vertex>()))
-                            {
-                                haveUnusedEdge = true;
-                                break;                  //kilép a foreachból
-                            }
-                        }
-                        if(haveUnusedEdge)
-                        {
-                            break;      //kilép a while-ból, a currentPath utolsó tagjának van használatlan éle
-                        }
-                        else
-                        {
-                            circuit.Add(currentPath.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
-                            currentPath.RemoveAt(currentPath.Count - 1);    //elveszük a pályából az utolsót
-                        }
-                    }
-                }
-                else        //ha a pálya első és utolsó csúcsa nem egyezik meg
-                {
-                    foreach (Edge e in unusedEdges)
-                    {
-                        if (e.StartVertex.Equals(currentPath.Last<Vertex>()) && e.Used == false)
-                        {
-                            currentPath.Add(e.EndVertex);
-                            unusedEdges.Remove(e);           //kiszedjük az élet a használatanok közül
-                            break;                          //kilépünk a foreachból, csak egy új élet kértünk
-                        }
-                        else if (e.EndVertex.Equals(currentPath.Last<Vertex>()) && e.Used == false)
-                        {
-                            currentPath.Add(e.StartVertex);
-                            unusedEdges.Remove(e);           //kiszedjük az élet a használatanok közül
-                            break;                          //kilépünk a foreachból, csak egy új élet kértünk
-                        }
-                    }
-                }
-            }
-            while(currentPath.Count != 0)
-            {
-                circuit.Add(currentPath.Last<Vertex>());        //a körhöz adjuk a pálya utolsóját
-                currentPath.RemoveAt(currentPath.Count - 1);    //elveszük a pályából az utolsót
-            }
-
-            return circuit;   //ennek SZÁMÍT a sorrendje, mert azt bejárva megkapjukaz euler kört
-        }
-
-
-        
     }
 }

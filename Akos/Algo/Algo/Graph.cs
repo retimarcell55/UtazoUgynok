@@ -9,48 +9,25 @@ namespace Algo
     [Serializable]
     public class Graph
     {
-        protected int vertexCount;
-        protected int edgeCount;
         protected double[,] adjacencyMatrix;
         protected List<Vertex> vertices;
         protected List<Edge> edges;
+        protected Dictionary<int, List<Edge>> vertexIdAndEdges;
 
-        //Átírom hogy lehessen settere !!!!
-        public virtual int VertexCount { set => vertexCount = value; get => vertexCount; }
-        public virtual int EdgeCount { set => edgeCount = value; get => edgeCount;}
-        public virtual double[,] AdjacencyMatrix { get => adjacencyMatrix;}
-        public virtual List<Vertex> Vertices
-        {
-            get => vertices;
-            set
-            {
-                vertices = value;
-                vertexCount = vertices.Count;
-                BuildAdjacencyMatrix();
-            }
-        }
-        public virtual List<Edge> Edges
-        {
-            get => edges;
-            set
-            {
-                edges = value;
-                edgeCount = edges.Count;
-                BuildAdjacencyMatrix();
-            }
-        }
+        public double[,] AdjacencyMatrix { get => adjacencyMatrix;}
+        public Dictionary<int, List<Edge>> VertexIdAndEdges { get => vertexIdAndEdges; set => vertexIdAndEdges = value; }
+        public  List<Vertex> Vertices{ get => vertices; }
+        public List<Edge> Edges { get => edges; }
 
         public Graph()
         {
-            this.Vertices = new List<Vertex>();
+            this.vertices = new List<Vertex>();
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
-            vertexCount = vertices.Count;
-            edgeCount = vertices.Count * vertices.Count;
             edges = new List<Edge>();
+            vertexIdAndEdges = new Dictionary<int, List<Edge>>();
         }
-        
-        //TODO: public legyen, ez a függvény az éllistából és a csúcslistából képes legyen mártixot építeni (frissíteni) !!
-        public void BuildAdjacencyMatrix() 
+
+        private void BuildAdjacencyMatrix()
         {
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
             for (int i = 0; i < vertices.Count; i++)
@@ -68,35 +45,75 @@ namespace Algo
             }
         }
 
-        //TODO: egy public függvény ami mátrixból csinál (frissíti) él - és csúcslistát
-        public void BuildEdgesAndVertices()
+        protected List<Edge> getEdgesByVertex(Vertex v)
         {
-            //a mátrixból felépítjük a listákat és frissítjük
-            Edges.Clear();
-            foreach (Vertex v in vertices)
+            List<Edge> list = new List<Edge>();
+            foreach (var item in edges)
             {
-                v.Edges.Clear();
-            }
-            EdgeCount = 0;
-            for(int i = 0; i < vertexCount; i++)
-            {
-                for(int j = 0; j < vertexCount; j++)
+                if(item.StartVertex.Id == v.Id || item.EndVertex.Id == v.Id)
                 {
-                    if(adjacencyMatrix[i,j] != -1)
-                    {
-                        Edge e = new Edge(vertices[i], vertices[j], false, adjacencyMatrix[i, j]);
-                        e.StartVertex.Edges.Add(e);
-                        e.EndVertex.Edges.Add(e);
-                        Edges.Add(e);
-                        EdgeCount++;
-                    }
+                    list.Add(item);
                 }
             }
+            return list;
         }
-        
-        
 
+        public virtual void addVertex(Vertex v)
+        {
+            if(!vertices.Any(item => item.Id == v.Id))
+            {
+                vertices.Add(v);
+            }
+            updateMapping();
+            BuildAdjacencyMatrix();
+        }
 
+        public virtual void removeVertex(int id)
+        {
+            if(vertices.Any(item => item.Id == id))
+            {
+                edges.RemoveAll(item => ((item.StartVertex.Id == id) || (item.EndVertex.Id == id)));
+                vertices.Remove((Vertex)vertices.Where(item2 => item2.Id == id));
+            }
+            updateMapping();
+            BuildAdjacencyMatrix();
+        }
 
+        public virtual void addEdge(Edge e)
+        {
+            if (!edges.Any(item => e.StartVertex == item.StartVertex && e.EndVertex == item.EndVertex))
+            {
+                if(vertices.Any(item => item.Id == e.StartVertex.Id) && vertices.Any(item => item.Id == e.EndVertex.Id))
+                {
+                    edges.Add(e);
+                }   
+            }
+            updateMapping();
+            BuildAdjacencyMatrix();
+        }
+
+        public virtual void removeEdge(int startId, int endId)
+        {
+            if (edges.Any(item => startId == item.StartVertex.Id && endId == item.EndVertex.Id))
+            {
+                edges.Remove((Edge)edges.Where(item => startId == item.StartVertex.Id && endId == item.EndVertex.Id));
+            }
+            updateMapping();
+            BuildAdjacencyMatrix();
+        }
+
+        protected void updateMapping()
+        {
+            vertexIdAndEdges = new Dictionary<int, List<Edge>>();
+            foreach (var item in vertices)
+            {
+                vertexIdAndEdges.Add(item.Id, edges.Where(item2 => ((item2.StartVertex.Id == item.Id) || (item2.EndVertex.Id == item.Id))).ToList());
+            }
+        }
+
+        public List<Edge> getEdgesByVertex(int id)
+        {
+            return vertexIdAndEdges[id];
+        }
     }
 }
