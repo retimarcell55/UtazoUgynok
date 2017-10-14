@@ -91,27 +91,47 @@ namespace ConsoleApplication1
         }
         static void Main(string[] args)
         {
-            /* Program a = new Program();
-             Graph g = new Graph();
+            
+            
             Vertex a = new Vertex(1, new Coordinate(1, 1));
             Vertex b = new Vertex(2, new Coordinate(7, 7));
             Vertex c = new Vertex(3, new Coordinate(2, 2));
             Vertex d = new Vertex(4, new Coordinate(3, 2));
-            Vertex e = new Vertex(4, new Coordinate(1, 2));
+            Vertex e = new Vertex(5, new Coordinate(1, 2));
+            Vertex f = new Vertex(6, new Coordinate(4, 3));
+            Vertex g = new Vertex(7, new Coordinate(8, 2));
+            Vertex h = new Vertex(8, new Coordinate(4, 4));
+
             List<Vertex> l = new List<Vertex>();
             l.Add(a);
             l.Add(b);
             l.Add(c);
             l.Add(d);
             l.Add(e);
-            Program p = new Program();
+           /* l.Add(f);
+            l.Add(g);
+            l.Add(h);*/
 
-            List<Vertex> vl=p.MinWeightHamiltonCircle(l, 0, l.Count - 1);
+
+            /*List<Vertex> vl=p.MinWeightHamiltonCircle(l, 0, l.Count - 1);
             foreach (var item in vl)
             {
                 Console.WriteLine(item.Id);
             }
             */
+           
+            Mtsp p = new Mtsp();
+            // p.MultiTravel(chars, 3);
+            List<List<Vertex>> result = new List<List<Vertex>>();
+            result=p.MultiTravel(2,l.Count,l,1,l.Count-1);
+            foreach (var item in result)
+            {
+                foreach (var i in item)
+                {
+                    Console.Write(i.Id+ " ");
+                }
+                Console.WriteLine();
+            }
             Console.ReadKey();
         }
     }

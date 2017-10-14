@@ -8,8 +8,10 @@ namespace ConsoleApplication1
 {
     class Mtsp
     {
-        public List<List<Vertex>> MultiTravel(int numberoftravelers, int size, List<Vertex> list, int l, int r, List<List<Vertex>> hamcircles)
+        public List<List<Vertex>> MultiTravel(int numberoftravelers, int size, List<Vertex> list, int l, int r)
         {
+            List<List<Vertex>> hamcircles = new List<List<Vertex>>();
+            permute(list, l, r, hamcircles);
             List<List<Vertex>> optimal=new List<List<Vertex>>();
             int[] travelers = new int[numberoftravelers];
             for (int i = 0; i < numberoftravelers; i++)
@@ -20,6 +22,7 @@ namespace ConsoleApplication1
             int total = (int)Math.Pow(numberoftravelers, size);
 
             int[] snapshot = new int[size];
+ 
             while (total-- > 0)
             {
                 for (int i = 0; i < size; i++)
@@ -27,11 +30,11 @@ namespace ConsoleApplication1
                     snapshot[i] = travelers[indexes[i]];
                 }
                 //A két permutáció találkozása
-                permute(list,l,r,hamcircles);
                 List<List<Vertex>> tmp = new List<List<Vertex>>();
                 //Végig az összes hamkörön
                 for (int i = 0; i < hamcircles.Count; i++)
                 {
+                    tmp.Clear();
                     //Szétoszom a pontokat az utazók között
                     for (int j = 1; j <= numberoftravelers; j++)
                     {
@@ -49,12 +52,13 @@ namespace ConsoleApplication1
                                 }
                                 
                             }
-                            tmp.Add(rout);
+                            
                         }
+                        tmp.Add(rout);
                     }
                     if(optimal.Count==0)
                     {
-                        optimal = new List<List<Vertex>>(tmp);
+                         optimal = new List<List<Vertex>>(tmp);
                     }
                     else
                     {
