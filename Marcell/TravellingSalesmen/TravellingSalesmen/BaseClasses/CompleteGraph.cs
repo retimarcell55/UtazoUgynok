@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace TravellingSalesmen
 {
     [Serializable]
-    public class CompleteGraph : Graph
+    public class CompleteGraph : AbstractGraph
     {
-
         public CompleteGraph(List<Vertex> vertices)
         {
             this.vertices = vertices;
@@ -41,18 +40,22 @@ namespace TravellingSalesmen
 
         public override void addEdge(Edge e)
         {
+
         }
 
         public override void addVertex(Vertex v)
         {
+
         }
 
         public override void removeEdge(int startId, int endId)
         {
+
         }
 
         public override void removeVertex(int id)
         {
+
         }
     }
 }

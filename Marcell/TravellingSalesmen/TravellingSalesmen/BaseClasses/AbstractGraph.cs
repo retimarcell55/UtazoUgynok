@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 namespace TravellingSalesmen
 {
     [Serializable]
-    public class Graph
+    public class AbstractGraph
     {
         protected double[,] adjacencyMatrix;
         protected List<Vertex> vertices;
         protected List<Edge> edges;
         protected Dictionary<int, List<Edge>> vertexIdAndEdges;
 
-        public double[,] AdjacencyMatrix { get => adjacencyMatrix;}
-        public Dictionary<int, List<Edge>> VertexIdAndEdges { get => vertexIdAndEdges; set => vertexIdAndEdges = value; }
-        public  List<Vertex> Vertices{ get => vertices; }
+        public double[,] AdjacencyMatrix { get => adjacencyMatrix; }
+        public Dictionary<int, List<Edge>> VertexIdAndEdges { get => vertexIdAndEdges; }
+        public List<Vertex> Vertices { get => vertices; }
         public List<Edge> Edges { get => edges; }
 
-        public Graph()
+        public AbstractGraph()
         {
             this.vertices = new List<Vertex>();
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
@@ -27,7 +27,7 @@ namespace TravellingSalesmen
             vertexIdAndEdges = new Dictionary<int, List<Edge>>();
         }
 
-        private void BuildAdjacencyMatrix()
+        protected void BuildAdjacencyMatrix()
         {
             adjacencyMatrix = new double[vertices.Count, vertices.Count];
             for (int i = 0; i < vertices.Count; i++)
@@ -45,24 +45,11 @@ namespace TravellingSalesmen
             }
         }
 
-        protected List<Edge> getEdgesByVertex(Vertex v)
-        {
-            List<Edge> list = new List<Edge>();
-            foreach (var item in edges)
-            {
-                if(item.StartVertex.Id == v.Id || item.EndVertex.Id == v.Id)
-                {
-                    list.Add(item);
-                }
-            }
-            return list;
-        }
-
         public virtual void addVertex(Vertex v)
         {
-            if(!vertices.Any(item => item.Id == v.Id))
+            if (!vertices.Any(item => item.Id == v.Id))
             {
-                vertices.Add(v);
+                vertices.Add(new Vertex(v.Id,v.Position));
             }
             updateMapping();
             BuildAdjacencyMatrix();
@@ -70,7 +57,7 @@ namespace TravellingSalesmen
 
         public virtual void removeVertex(int id)
         {
-            if(vertices.Any(item => item.Id == id))
+            if (vertices.Any(item => item.Id == id))
             {
                 edges.RemoveAll(item => ((item.StartVertex.Id == id) || (item.EndVertex.Id == id)));
                 vertices.Remove((Vertex)vertices.Where(item2 => item2.Id == id));
@@ -81,12 +68,9 @@ namespace TravellingSalesmen
 
         public virtual void addEdge(Edge e)
         {
-            if (!edges.Any(item => e.StartVertex == item.StartVertex && e.EndVertex == item.EndVertex))
+            if (vertices.Any(item => item.Id == e.StartVertex.Id) && vertices.Any(item => item.Id == e.EndVertex.Id))
             {
-                if(vertices.Any(item => item.Id == e.StartVertex.Id) && vertices.Any(item => item.Id == e.EndVertex.Id))
-                {
-                    edges.Add(e);
-                }   
+                edges.Add(new Edge(e.StartVertex,e.EndVertex,false,e.Weight));
             }
             updateMapping();
             BuildAdjacencyMatrix();
@@ -96,7 +80,7 @@ namespace TravellingSalesmen
         {
             if (edges.Any(item => startId == item.StartVertex.Id && endId == item.EndVertex.Id))
             {
-                edges.Remove((Edge)edges.Where(item => startId == item.StartVertex.Id && endId == item.EndVertex.Id));
+                edges.Remove(edges.Where(item => startId == item.StartVertex.Id && endId == item.EndVertex.Id).ToList()[0]);
             }
             updateMapping();
             BuildAdjacencyMatrix();
@@ -115,5 +99,6 @@ namespace TravellingSalesmen
         {
             return vertexIdAndEdges[id];
         }
+
     }
 }

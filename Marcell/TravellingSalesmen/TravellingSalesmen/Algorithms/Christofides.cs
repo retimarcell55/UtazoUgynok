@@ -10,7 +10,7 @@ namespace TravellingSalesmen.Algorithms
     {
         public enum STAGES { MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET, HAMILTON };
         private STAGES actualStage;
-        private Graph minimumSpanningTree = null;
+        private SimpleGraph minimumSpanningTree = null;
         private List<Edge> independentMinimunEdges = null;
         private List<Vertex> hamiltonVertices = null;
         private Random rnd = new Random();
@@ -28,16 +28,8 @@ namespace TravellingSalesmen.Algorithms
             switch (actualStage)
             {
                 case STAGES.MIN_SPANNING_TREE:
-                    Graph tmp = new Graph();
-                    foreach (var item in graph.Vertices)
-                    {
-                        tmp.addVertex(item);
-                    }
-                    foreach (var item in graph.Edges)
-                    {
-                        tmp.addEdge(item);
-                    }
-                    minimumSpanningTree = CreateMinimumSpanningTree(graph);
+                    CompleteGraph tmp = new CompleteGraph(graph.Vertices);
+                    minimumSpanningTree = CreateMinimumSpanningTree(tmp);
                     edgesToHighlight = minimumSpanningTree.Edges;
                     actualStage = STAGES.INDEPENDENT_EDGE_SET;
                     break;
@@ -128,22 +120,14 @@ namespace TravellingSalesmen.Algorithms
             return Math.Round(result, 2);
         }*/
 
-        public Graph CreateMinimumSpanningTree(Graph g)
+        public SimpleGraph CreateMinimumSpanningTree(CompleteGraph g)
         {
             #region inicializálások
             //inizializálások:
-            Graph originalGraph = new Graph();
-            foreach (var item in graph.Vertices)
-            {
-                originalGraph.addVertex(item);
-            }
-            foreach (var item in graph.Edges)
-            {
-                originalGraph.addEdge(item);
-            }
+            SimpleGraph originalGraph = new SimpleGraph(g.Vertices,g.Edges);
+
             List<Vertex> treeVertices = new List<Vertex>();     //a fa csúcsai (semmiből építkezünk)
-            List<Vertex> nonTreeVertices = new List<Vertex>(); //azok a csúcsok melyek nem a fában vannak
-            nonTreeVertices = originalGraph.Vertices;           //az összes egyelőre
+            List<Vertex> nonTreeVertices = new List<Vertex>(originalGraph.Vertices); //azok a csúcsok melyek nem a fában vannak        //az összes egyelőre
             List<Edge> treeEdges = new List<Edge>();            //az éllista
 
             List<Edge> intermediateEdges = new List<Edge>();    //azok az élek melyek fa és nemfa csúcsok között mennek
@@ -166,12 +150,12 @@ namespace TravellingSalesmen.Algorithms
                 treeEdges.Add(min);
                 foreach (Vertex v in treeVertices)
                 {
-                    if (min.StartVertex.Equals(v))
+                    if (min.StartVertex.Id == v.Id)
                     {
                         MoveVertex(min.EndVertex);
                         break;
                     }
-                    if (min.EndVertex.Equals(v))
+                    if (min.EndVertex.Id == v.Id)
                     {
                         MoveVertex(min.StartVertex);
                         break;
@@ -187,7 +171,7 @@ namespace TravellingSalesmen.Algorithms
             {
                 if (nonTreeVertices.Count > 0)
                 {
-                    nonTreeVertices.Remove(v);
+                    nonTreeVertices.Remove(nonTreeVertices.Single(x => x.Id == v.Id));
                     treeVertices.Add(v);
                 }
             };
@@ -202,7 +186,7 @@ namespace TravellingSalesmen.Algorithms
                     {
                         foreach (Edge e in originalGraph.Edges)
                         {
-                            if ((e.StartVertex.Equals(treeV) && e.EndVertex.Equals(v)) || (e.StartVertex.Equals(v) && e.EndVertex.Equals(treeV)))
+                            if ((e.StartVertex.Id == treeV.Id && e.EndVertex.Id == v.Id) || (e.StartVertex.Id == v.Id && e.EndVertex.Id == treeV.Id))
                             {
                                 intermediateEdges.Add(e);
                             }
@@ -227,7 +211,7 @@ namespace TravellingSalesmen.Algorithms
             };
             #endregion
 
-            Graph minimumSpanningTree = new Graph();
+            SimpleGraph minimumSpanningTree = new SimpleGraph();
             foreach (var item in treeVertices)
             {
                 minimumSpanningTree.addVertex(item);
@@ -251,7 +235,7 @@ namespace TravellingSalesmen.Algorithms
             }
         };
 
-        static public List<Edge> CalculateIndependentEdges(Graph g)
+        static public List<Edge> CalculateIndependentEdges(CompleteGraph g)
         {
             g.Edges.OrderBy(x => x.Weight);
             foreach (Vertex item in g.Vertices)
@@ -347,7 +331,7 @@ namespace TravellingSalesmen.Algorithms
         }
 
         //http://www.geeksforgeeks.org/hierholzers-algorithm-directed-graph/
-        private List<Vertex> CalculateHamiltonCircuit(List<Edge> minSpanningTree, List<Edge> perfectMaching, Graph fullOriginalGraph, int startPointId)
+        private List<Vertex> CalculateHamiltonCircuit(List<Edge> minSpanningTree, List<Edge> perfectMaching, CompleteGraph fullOriginalGraph, int startPointId)
         {
             //eddig mindent kinulláztunk
             List<Edge> combinedEdgeList = new List<Edge>();

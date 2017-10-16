@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\BruteForce.cs" />
     <Compile Include="Algorithms\Christofides.cs" />
+    <Compile Include="BaseClasses\AbstractGraph.cs" />
     <Compile Include="BaseClasses\Agent.cs" />
     <Compile Include="BaseClasses\AgentManager.cs" />
     <Compile Include="Algorithms\Algorithm.cs" />
@@ -62,7 +63,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="BaseClasses\Graph.cs" />
+    <Compile Include="BaseClasses\SimpleGraph.cs" />
     <Compile Include="Algorithms\RandomSearch.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

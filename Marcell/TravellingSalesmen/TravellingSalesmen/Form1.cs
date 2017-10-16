@@ -64,18 +64,18 @@ namespace TravellingSalesmen
         private void RunAlgorithm_Click(object sender, EventArgs e)
         {
             ActualResult.Text = string.Empty;
-            coordinator.Configuration = new FileManager().loadConfiguration(ConfigurationsComboBox.SelectedItem.ToString());
+            Configuration conf = new FileManager().loadConfiguration(ConfigurationsComboBox.SelectedItem.ToString());
 
             switch (AlgorithmComboBox.SelectedItem.ToString())
             {
                 case "RandomSearch":
-                    coordinator.Algorithm = new RandomSearch(coordinator.Configuration.Graph, coordinator.Configuration.AgentManager);
+                    coordinator.Algorithm = new RandomSearch(conf.Graph, conf.AgentManager);
                     break;
                 case "BruteForce":
-                    coordinator.Algorithm = new BruteForce(coordinator.Configuration.Graph, coordinator.Configuration.AgentManager);
+                    coordinator.Algorithm = new BruteForce(conf.Graph, conf.AgentManager);
                     break;
                 case "Christofides":
-                    coordinator.Algorithm = new Christofides(coordinator.Configuration.Graph, coordinator.Configuration.AgentManager);
+                    coordinator.Algorithm = new Christofides(conf.Graph, conf.AgentManager);
                     break;
             }
 
@@ -123,7 +123,7 @@ namespace TravellingSalesmen
             ConfigurationName.Text = string.Empty;
         }
 
-        public void DrawGraph(Graph graph, AgentManager agentManager)
+        public void DrawGraph(CompleteGraph graph, AgentManager agentManager)
         {
 
             Graphics graphics = visualizer.CreateGraphics();
