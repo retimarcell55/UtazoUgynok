@@ -108,20 +108,20 @@ namespace ConsoleApplication1
             l.Add(c);
             l.Add(d);
             l.Add(e);
-           /* l.Add(f);
-            l.Add(g);
-            l.Add(h);*/
+            l.Add(f);
+             /*l.Add(g);
+             l.Add(h);*/
+            /*
+            Program p = new Program();
 
-
-            /*List<Vertex> vl=p.MinWeightHamiltonCircle(l, 0, l.Count - 1);
+            List<Vertex> vl=p.MinWeightHamiltonCircle(l, 1, l.Count - 1);
             foreach (var item in vl)
             {
                 Console.WriteLine(item.Id);
-            }
-            */
+            }*/
+            
            
             Mtsp p = new Mtsp();
-            // p.MultiTravel(chars, 3);
             List<List<Vertex>> result = new List<List<Vertex>>();
             result=p.MultiTravel(2,l.Count,l,1,l.Count-1);
             foreach (var item in result)

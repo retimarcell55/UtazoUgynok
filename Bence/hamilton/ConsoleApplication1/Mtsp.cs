@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,10 @@ namespace ConsoleApplication1
     {
         public List<List<Vertex>> MultiTravel(int numberoftravelers, int size, List<Vertex> list, int l, int r)
         {
+            double finalweight = 0;
             List<List<Vertex>> hamcircles = new List<List<Vertex>>();
             permute(list, l, r, hamcircles);
-            List<List<Vertex>> optimal=new List<List<Vertex>>();
+            List<List<Vertex>> optimal = new List<List<Vertex>>();
             int[] travelers = new int[numberoftravelers];
             for (int i = 0; i < numberoftravelers; i++)
             {
@@ -22,7 +24,7 @@ namespace ConsoleApplication1
             int total = (int)Math.Pow(numberoftravelers, size);
 
             int[] snapshot = new int[size];
- 
+
             while (total-- > 0)
             {
                 for (int i = 0; i < size; i++)
@@ -44,21 +46,21 @@ namespace ConsoleApplication1
                         //külön listába az egyes utak
                         for (int k = 0; k < snapshot.Length; k++)
                         {
-                            if(snapshot[k]==j)
+                            if (snapshot[k] == j)
                             {
-                                if(hamcircles[i][0]!=hamcircles[i][k])
+                                if (hamcircles[i][0] != hamcircles[i][k])
                                 {
                                     rout.Add(hamcircles[i][k]);
                                 }
-                                
+
                             }
-                            
+
                         }
                         tmp.Add(rout);
                     }
-                    if(optimal.Count==0)
+                    if (optimal.Count == 0)
                     {
-                         optimal = new List<List<Vertex>>(tmp);
+                        optimal = new List<List<Vertex>>(tmp);
                     }
                     else
                     {
@@ -66,12 +68,13 @@ namespace ConsoleApplication1
                         double tmpWeight = 0;
                         for (int j = 0; j < optimal.Count; j++)
                         {
-                            optimalWeight+=SumWeight(optimal[j]);
-                            tmpWeight+=SumWeight(tmp[j]);
+                            optimalWeight += SumWeight(optimal[j]);
+                            tmpWeight += SumWeight(tmp[j]);
                         }
-                        if(optimalWeight>tmpWeight)
+                        if (optimalWeight >= tmpWeight)
                         {
-                            optimal = tmp;
+                            optimal =new List<List<Vertex>>(tmp);
+                            finalweight = tmpWeight;
                         }
                     }
 
@@ -105,11 +108,11 @@ namespace ConsoleApplication1
         public double SumWeight(List<Vertex> l)
         {
             double sumweight = 0;
-            for (int i = 0; i < l.Count-1; i++)
+            for (int i = 0; i < l.Count - 1; i++)
             {
                 sumweight += Math.Sqrt(Math.Pow(l[i + 1].Position.X - l[i].Position.X, 2) + Math.Pow(l[i + 1].Position.Y - l[i].Position.Y, 2));
             }
-            sumweight += Math.Sqrt(Math.Pow(l[l.Count-1].Position.X - l[0].Position.X, 2) + Math.Pow(l[l.Count - 1].Position.Y - l[0].Position.Y, 2));
+            sumweight += Math.Sqrt(Math.Pow(l[l.Count - 1].Position.X - l[0].Position.X, 2) + Math.Pow(l[l.Count - 1].Position.Y - l[0].Position.Y, 2));
 
             return sumweight;
         }
