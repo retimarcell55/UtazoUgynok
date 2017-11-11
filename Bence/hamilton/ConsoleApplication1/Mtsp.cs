@@ -11,7 +11,7 @@ namespace ConsoleApplication1
     {
         public List<List<Vertex>> MultiTravel(int numberoftravelers, int size, List<Vertex> list, int l, int r)
         {
-            double finalweight = 0;
+           
             List<List<Vertex>> hamcircles = new List<List<Vertex>>();
             permute(list, l, r, hamcircles);
             List<List<Vertex>> optimal = new List<List<Vertex>>();
@@ -21,6 +21,7 @@ namespace ConsoleApplication1
                 travelers[i] = i + 1;
             }
             int[] indexes = new int[size];
+          
             int total = (int)Math.Pow(numberoftravelers, size);
 
             int[] snapshot = new int[size];
@@ -29,8 +30,11 @@ namespace ConsoleApplication1
             {
                 for (int i = 0; i < size; i++)
                 {
+                    
                     snapshot[i] = travelers[indexes[i]];
+                   // Console.Write(snapshot[i] + " ");
                 }
+                //Console.WriteLine();
                 //A két permutáció találkozása
                 List<List<Vertex>> tmp = new List<List<Vertex>>();
                 //Végig az összes hamkörön
@@ -46,16 +50,46 @@ namespace ConsoleApplication1
                         //külön listába az egyes utak
                         for (int k = 0; k < snapshot.Length; k++)
                         {
+                            //Console.Write(snapshot[k]+ " ");
                             if (snapshot[k] == j)
                             {
-                                if (hamcircles[i][0] != hamcircles[i][k])
+                                if (hamcircles[i][0].Id != hamcircles[i][k].Id)
                                 {
+                                    
                                     rout.Add(hamcircles[i][k]);
+                                    
                                 }
 
                             }
 
                         }
+                        int []pr= new int[] { 2, 2, 1, 1, 2, 2, 1, 1 };
+                        int jo = 0;
+                        for(int a=0;a<8;a++)
+                        {
+                            if(pr[a]==snapshot[a])
+                            {
+                               jo++;
+                            }
+                        }
+                        if(jo==8 && i==5)
+                        {
+                            //Kiirom az aktális gráf bejárást (2szer fogja, mert 2 route lesz)
+                            for (int hm = 0; hm < hamcircles[5].Count; hm++)
+                            {
+                                Console.Write(hamcircles[5][hm].Id + " ");
+                            }
+                            Console.WriteLine();
+                            ///Kiirom a két routeot
+                            for (int rci = 0; rci < rout.Count; rci++)
+                            {
+                                Console.Write(rout[rci].Id+ " ");
+                            }
+                            Console.WriteLine();
+                        }
+
+
+
                         tmp.Add(rout);
                     }
                     if (optimal.Count == 0)
@@ -64,6 +98,7 @@ namespace ConsoleApplication1
                     }
                     else
                     {
+
                         double optimalWeight = 0;
                         double tmpWeight = 0;
                         for (int j = 0; j < optimal.Count; j++)
@@ -73,8 +108,9 @@ namespace ConsoleApplication1
                         }
                         if (optimalWeight >= tmpWeight)
                         {
+                            optimal.Clear();
                             optimal =new List<List<Vertex>>(tmp);
-                            finalweight = tmpWeight;
+                            
                         }
                     }
 
@@ -93,7 +129,9 @@ namespace ConsoleApplication1
                     }
                 }
             }
+            
             return optimal;
+            
         }
         public void Kiir(int[] snapshot)
         {

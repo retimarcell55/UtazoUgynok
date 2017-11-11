@@ -109,8 +109,8 @@ namespace ConsoleApplication1
             l.Add(d);
             l.Add(e);
             l.Add(f);
-             /*l.Add(g);
-             l.Add(h);*/
+            l.Add(g);
+            l.Add(h);
             /*
             Program p = new Program();
 
@@ -120,10 +120,11 @@ namespace ConsoleApplication1
                 Console.WriteLine(item.Id);
             }*/
             
-           
+          
             Mtsp p = new Mtsp();
             List<List<Vertex>> result = new List<List<Vertex>>();
             result=p.MultiTravel(2,l.Count,l,1,l.Count-1);
+            Console.WriteLine("Vegeredmeny:");
             foreach (var item in result)
             {
                 foreach (var i in item)
