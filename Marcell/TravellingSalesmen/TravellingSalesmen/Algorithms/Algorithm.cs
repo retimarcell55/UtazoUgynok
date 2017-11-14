@@ -57,7 +57,7 @@ namespace TravellingSalesmen.Algorithms
 
         abstract public void NextTurn();
 
-        public bool hasNonVisitedVertexLeft()
+        public virtual bool hasNonVisitedVertexLeft()
         {
             if(graph.Vertices.Exists(vertex => !vertex.Used))
             {
