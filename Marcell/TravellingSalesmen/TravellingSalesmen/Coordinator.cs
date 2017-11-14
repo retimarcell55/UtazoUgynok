@@ -9,6 +9,7 @@ namespace TravellingSalesmen
 {
     class Coordinator
     {
+        public static Random rnd = new Random();
         private Algorithm algorithm;
         private bool algorithmStarted;
         private MainForm mainForm;
@@ -34,7 +35,13 @@ namespace TravellingSalesmen
             algorithm.Initialize();
 
             mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
-
+            switch (algorithm.ActualDrawingMode)
+            {
+                case Algorithm.DRAWING_MODE.MORE_AGENT_CIRCLES:
+                    mainForm.MoreCirclesToHighlight(algorithm.MoreAgentCirclesToHighlight);
+                    mainForm.UpdateResult(algorithm.getActualResult().ToString());
+                    break;
+            }
             algorithmStarted = true;
         }
 
@@ -42,7 +49,7 @@ namespace TravellingSalesmen
         {
             if (algorithmStarted)
             {
-                if (algorithm.hasNonVisitedVertexLeft())
+                if (algorithm.hasAlgorithmNextMove())
                 {
                     algorithm.NextTurn();
                     switch (algorithm.ActualDrawingMode)
@@ -55,6 +62,10 @@ namespace TravellingSalesmen
                             break;
                         case Algorithm.DRAWING_MODE.INDEPENDENT_EDGE_SET:
                             mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.RED);
+                            break;
+                        case Algorithm.DRAWING_MODE.MORE_AGENT_CIRCLES:
+                            mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
+                            mainForm.MoreCirclesToHighlight(algorithm.MoreAgentCirclesToHighlight);
                             break;
                         default:
                             break;
@@ -73,7 +84,7 @@ namespace TravellingSalesmen
         {
             if (algorithmStarted)
             {
-                while (algorithm.hasNonVisitedVertexLeft())
+                while (algorithm.hasAlgorithmNextMove())
                 {
                     algorithm.NextTurn();
                     mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);

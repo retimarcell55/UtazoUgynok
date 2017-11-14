@@ -77,6 +77,9 @@ namespace TravellingSalesmen
                 case "Christofides":
                     coordinator.Algorithm = new Christofides(conf.Graph, conf.AgentManager);
                     break;
+                case "GeneticAlgorithm":
+                    coordinator.Algorithm = new GeneticAlgorithm(conf.Graph, conf.AgentManager);
+                    break;
             }
 
             Restart.Enabled = true;
@@ -197,6 +200,22 @@ namespace TravellingSalesmen
             {
                 graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
             }
+        }
+
+
+        internal void MoreCirclesToHighlight(List<List<Edge>> moreAgentCirclesToHighlight)
+        {
+            Graphics graphics = visualizer.CreateGraphics();
+            foreach (var item in moreAgentCirclesToHighlight)
+            {
+                Color randomColor = Color.FromArgb(Coordinator.rnd.Next(256), Coordinator.rnd.Next(256), Coordinator.rnd.Next(256));
+                Pen pen = new Pen(randomColor,7);
+                foreach (var edge in item)
+                {
+                    graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
+                }
+            }
+            
         }
 
         public void UpdateResult(string result)
