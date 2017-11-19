@@ -119,11 +119,30 @@ namespace ConsoleApplication1
             {
                 Console.WriteLine(item.Id);
             }*/
-            
-          
+
+            Vertex a1 = new Vertex(1, new Coordinate(1000, 13000));
+            Vertex b1 = new Vertex(2, new Coordinate(6000, 13000));
+            Vertex c1 = new Vertex(3, new Coordinate(2800, 17666));
+            Vertex d1 = new Vertex(4, new Coordinate(1000, 1000));
+            Vertex e1 = new Vertex(5, new Coordinate(2500, 16000));
+            Vertex f1 = new Vertex(6, new Coordinate(3000, 17000));
+            Vertex g1 = new Vertex(7, new Coordinate(2000, 15000));
+            Vertex h1 = new Vertex(8, new Coordinate(1000, 15000));
+
+            List<Vertex> negyes = new List<Vertex>();
+            negyes.Add(a1);
+            negyes.Add(b1);
+            negyes.Add(c1);
+            negyes.Add(d1);
+            negyes.Add(e1);
+            negyes.Add(f1);
+            negyes.Add(g1);
+            negyes.Add(h1);
+
+
             Mtsp p = new Mtsp();
             List<List<Vertex>> result = new List<List<Vertex>>();
-            result=p.MultiTravel(2,l.Count,l,1,l.Count-1);
+            result=p.MultiTravel(2,negyes.Count,negyes,1,negyes.Count-1);
             Console.WriteLine("Vegeredmeny:");
             foreach (var item in result)
             {
