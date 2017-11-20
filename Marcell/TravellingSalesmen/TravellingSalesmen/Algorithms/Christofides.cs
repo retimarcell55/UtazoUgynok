@@ -13,7 +13,6 @@ namespace TravellingSalesmen.Algorithms
         private SimpleGraph minimumSpanningTree = null;
         private List<Edge> independentMinimunEdges = null;
         private List<Vertex> hamiltonVertices = null;
-        private Random rnd = new Random();
 
         public STAGES ActualStage { get => actualStage; set => actualStage = value; }
 
@@ -406,7 +405,7 @@ namespace TravellingSalesmen.Algorithms
                 }
                 else        //ha a pálya első és utolsó csúcsa nem egyezik meg
                 {
-                    foreach (Edge e in combinedEdgeList.Where(x => x.StartVertex.Id == currentPathVertices.Last<Vertex>().Id || x.EndVertex.Id == currentPathVertices.Last<Vertex>().Id).OrderBy(item => rnd.Next()))/*g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id*/
+                    foreach (Edge e in combinedEdgeList.Where(x => x.StartVertex.Id == currentPathVertices.Last<Vertex>().Id || x.EndVertex.Id == currentPathVertices.Last<Vertex>().Id).OrderBy(item => Coordinator.rnd.Next()))/*g.getEdgesByVertex(currentPathVertices.Last<Vertex>().Id*/
                     {
                         if (e.StartVertex.Equals(currentPathVertices.Last<Vertex>()) && e.Used == false)    //ha egy használatlan élet találtunk
                         {

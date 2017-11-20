@@ -8,7 +8,7 @@ namespace TravellingSalesmen.Algorithms
 {
     public abstract class Algorithm
     {
-        public enum DRAWING_MODE { GRAPH, MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET };
+        public enum DRAWING_MODE { GRAPH, MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET, MORE_AGENT_CIRCLES };
         public enum DRAWING_COLOR { RED,GREEN,BLUE };
         protected CompleteGraph graph;
         protected AgentManager agentManager;
@@ -16,12 +16,14 @@ namespace TravellingSalesmen.Algorithms
 
         protected List<Edge> edgesToHighlight;
         protected List<Vertex> verticesToHighlight;
+        protected List<List<Edge>> moreAgentCirclesToHighlight;
 
         public CompleteGraph Graph { get => graph; set => graph = value; }
         public AgentManager AgentManager { get => agentManager; set => agentManager = value; }
         public DRAWING_MODE ActualDrawingMode { get => actualDrawingMode;}
         public List<Edge> EdgesToHighlight { get => edgesToHighlight;}
         public List<Vertex> VerticesToHighlight { get => verticesToHighlight; }
+        public List<List<Edge>> MoreAgentCirclesToHighlight { get => moreAgentCirclesToHighlight;}
 
         public Algorithm(CompleteGraph graph,AgentManager agentManager)
         {
@@ -31,6 +33,7 @@ namespace TravellingSalesmen.Algorithms
 
             edgesToHighlight = new List<Edge>();
             verticesToHighlight = new List<Vertex>();
+            moreAgentCirclesToHighlight = new List<List<Edge>>();
         }
 
         public string GetName()
@@ -57,7 +60,7 @@ namespace TravellingSalesmen.Algorithms
 
         abstract public void NextTurn();
 
-        public bool hasNonVisitedVertexLeft()
+        public virtual bool hasAlgorithmNextMove()
         {
             if(graph.Vertices.Exists(vertex => !vertex.Used))
             {

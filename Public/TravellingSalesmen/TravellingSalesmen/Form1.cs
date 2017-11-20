@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TravellingSalesmen.Algorithms;
 
 namespace TravellingSalesmen
 {
@@ -31,7 +32,7 @@ namespace TravellingSalesmen
 
             FileManager fm = new FileManager();
 
-            Graph graph = fm.readGraphFromFile(VertexCoordPath.Text);
+            CompleteGraph graph = fm.readGraphFromFile(VertexCoordPath.Text);
             AgentManager agentManager = fm.readAgentsFromFile(AgentPath.Text);
 
             Configuration conf = new Configuration(ConfigurationName.Text, graph, agentManager);
@@ -63,12 +64,21 @@ namespace TravellingSalesmen
         private void RunAlgorithm_Click(object sender, EventArgs e)
         {
             ActualResult.Text = string.Empty;
-            coordinator.Configuration = new FileManager().loadConfiguration(ConfigurationsComboBox.SelectedItem.ToString());
+            Configuration conf = new FileManager().loadConfiguration(ConfigurationsComboBox.SelectedItem.ToString());
 
             switch (AlgorithmComboBox.SelectedItem.ToString())
             {
                 case "RandomSearch":
-                    coordinator.Algorithm = new RandomSearch(coordinator.Configuration.Graph, coordinator.Configuration.AgentManager);
+                    coordinator.Algorithm = new RandomSearch(conf.Graph, conf.AgentManager);
+                    break;
+                case "BruteForce":
+                    coordinator.Algorithm = new BruteForce(conf.Graph, conf.AgentManager);
+                    break;
+                case "Christofides":
+                    coordinator.Algorithm = new Christofides(conf.Graph, conf.AgentManager);
+                    break;
+                case "GeneticAlgorithm":
+                    coordinator.Algorithm = new GeneticAlgorithm(conf.Graph, conf.AgentManager);
                     break;
             }
 
@@ -116,7 +126,7 @@ namespace TravellingSalesmen
             ConfigurationName.Text = string.Empty;
         }
 
-        public void DrawGraph(Graph graph, AgentManager agentManager)
+        public void DrawGraph(CompleteGraph graph, AgentManager agentManager)
         {
 
             Graphics graphics = visualizer.CreateGraphics();
@@ -166,6 +176,46 @@ namespace TravellingSalesmen
                 graphics.DrawString(drawString, drawFont, drawBrush, (edge.StartVertex.Position.X + edge.EndVertex.Position.X) / 2, (edge.StartVertex.Position.Y + edge.EndVertex.Position.Y) / 2, drawFormat);
 
             }
+        }
+
+        public void HighLightEdges(List<Edge> edges, Algorithm.DRAWING_COLOR color)
+        {
+            Graphics graphics = visualizer.CreateGraphics();
+            Pen pen = null;
+            switch (color)
+            {
+                case Algorithm.DRAWING_COLOR.RED:
+                    pen = new Pen(Color.FromArgb(125, 255, 0, 0), 7);
+                    break;
+                case Algorithm.DRAWING_COLOR.GREEN:
+                    pen = new Pen(Color.FromArgb(125, 0, 255, 0), 7);
+                    break;
+                case Algorithm.DRAWING_COLOR.BLUE:
+                    pen = new Pen(Color.FromArgb(125, 0, 0, 255), 7);
+                    break;
+                default:
+                    break;
+            }
+            foreach (var edge in edges)
+            {
+                graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
+            }
+        }
+
+
+        internal void MoreCirclesToHighlight(List<List<Edge>> moreAgentCirclesToHighlight)
+        {
+            Graphics graphics = visualizer.CreateGraphics();
+            foreach (var item in moreAgentCirclesToHighlight)
+            {
+                Color randomColor = Color.FromArgb(Coordinator.rnd.Next(256), Coordinator.rnd.Next(256), Coordinator.rnd.Next(256));
+                Pen pen = new Pen(randomColor,7);
+                foreach (var edge in item)
+                {
+                    graphics.DrawLine(pen, new Point(edge.StartVertex.Position.X, edge.StartVertex.Position.Y), new Point(edge.EndVertex.Position.X, edge.EndVertex.Position.Y));
+                }
+            }
+            
         }
 
         public void UpdateResult(string result)

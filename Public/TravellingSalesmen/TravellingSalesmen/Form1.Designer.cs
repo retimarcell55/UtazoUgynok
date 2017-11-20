@@ -175,7 +175,10 @@
             // 
             this.AlgorithmComboBox.FormattingEnabled = true;
             this.AlgorithmComboBox.Items.AddRange(new object[] {
-            "RandomSearch"});
+            "RandomSearch",
+            "BruteForce",
+            "Christofides",
+            "GeneticAlgorithm"});
             this.AlgorithmComboBox.Location = new System.Drawing.Point(17, 160);
             this.AlgorithmComboBox.Name = "AlgorithmComboBox";
             this.AlgorithmComboBox.Size = new System.Drawing.Size(229, 21);

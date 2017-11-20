@@ -20,7 +20,7 @@ namespace TravellingSalesmen
 
         public AgentManager(List<Agent> agents)
         {
-            this.agents = agents;
+            this.agents = new List<Agent>(agents);
         }
     }
 }

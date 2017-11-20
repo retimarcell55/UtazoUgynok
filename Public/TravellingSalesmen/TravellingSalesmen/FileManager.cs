@@ -11,14 +11,14 @@ namespace TravellingSalesmen
 {
     class FileManager
     {
-        private const string BASE_FOLDER_LOCATION = @"Configurations";
+        private const string BASE_FOLDER_LOCATION = @"..\..\..\Configurations";
 
         public FileManager()
         {
 
         }
 
-        public Graph readGraphFromFile(String path)
+        public CompleteGraph readGraphFromFile(String path)
         {
             int lines = File.ReadAllLines(path).Length;
             List<Vertex> vertices = new List<Vertex>();
@@ -32,7 +32,7 @@ namespace TravellingSalesmen
                 }
             }
 
-            return new Graph(vertices);
+            return new CompleteGraph(vertices);
         }
 
         public AgentManager readAgentsFromFile(String path)
