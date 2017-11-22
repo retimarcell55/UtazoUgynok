@@ -83,6 +83,7 @@ namespace TravellingSalesmen
 
         public void runAlgorithmThrough()
         {
+            int sleepTime = 500;
 #if TEST
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
@@ -97,7 +98,7 @@ namespace TravellingSalesmen
                     mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
                     mainForm.UpdateResult(algorithm.getActualResult().ToString());
 
-                    System.Threading.Thread.Sleep(500);
+                    System.Threading.Thread.Sleep(sleepTime);
 #if TEST
                     counter++;
 #endif
@@ -109,7 +110,7 @@ namespace TravellingSalesmen
                 TimeSpan ts = stopWatch.Elapsed;
                 
                 //write
-                writeTestOutput(algorithm, ts, counter);    
+                writeTestOutput(algorithm, ts, counter, sleepTime/1000);    
 #endif
 
             }
@@ -117,7 +118,7 @@ namespace TravellingSalesmen
         }
 
 
-        public static void writeTestOutput(Algorithm algo, TimeSpan time, int counter)
+        public static void writeTestOutput(Algorithm algo, TimeSpan time, int counter, double sleepperoid)
         {
             string[] str = algo.getInfos();
             
@@ -158,7 +159,7 @@ namespace TravellingSalesmen
             //write
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(path, true))
             {
-                file.WriteLine(prevnum + ". run:\tWeight: " + finalResult + "\tTime: " + (time.TotalSeconds - (counter * 0.5)));
+                file.WriteLine(prevnum + ". run:\tWeight: " + finalResult + "\tTime: " + (time.TotalSeconds - (counter * sleepperoid)));
             }
 
         }

@@ -9,12 +9,15 @@ namespace TravellingSalesmen.Algorithms
     class GeneticAlgorithm : Algorithm
     {
         //Number of generations
-        private const int GENERATIONS = 100;
+        private const int GENERATIONS = 200;
 
         //CAN BE DIVIDED BY 4!!
         private int POPULATION_SIZE;
 
-        private const double MUTATION_PROBABILITY = 0.8;
+        private bool FIRST_CHILD_MUTATE = false;
+        private bool SECEND_CHILD_MUTATE = true;
+        private double MUTATION_PROBABILITY = 0.5;
+        private double WEAK_PARENT_RATE = 0.025;
 
         private int startCity;
         private int numberOfCities;
@@ -25,7 +28,7 @@ namespace TravellingSalesmen.Algorithms
 
         public GeneticAlgorithm(CompleteGraph graph, AgentManager agentManager)
             : base(graph, agentManager) {
-            POPULATION_SIZE=3000;
+            POPULATION_SIZE= 4*(graph.Vertices.Count/2) * (graph.Vertices.Count / 2) * (graph.Vertices.Count / 2);
             startCity = agentManager.Agents[0].StartPosition;
             numberOfCities = graph.Vertices.Count;
             numberOfSalesmen = agentManager.Agents.Count;
@@ -71,6 +74,7 @@ namespace TravellingSalesmen.Algorithms
 
         private void GenerateInitialPopulation()
         {
+            population.Clear();
             for (int i = 0; i < POPULATION_SIZE; i++)
             {
                 Chromosome newChromosome = GenerateChromosome();
@@ -78,22 +82,21 @@ namespace TravellingSalesmen.Algorithms
             }
         }
 
-        private Chromosome GenerateChromosome()
+        private Chromosome GenerateChromosome() 
         {
             Chromosome chromosome = new Chromosome();
 
             //addCitiesinRandomOrder
-
+            List<int> unUsed = new List<int>();
+            for (int i = 0; i < numberOfCities; i++)
+                if (i != startCity)
+                    unUsed.Add(i);
+                
             for (int i = 0; i < numberOfCities-1; i++)
             {
-                while (true)
-                {
-                    int randomCity = Coordinator.rnd.Next(0, numberOfCities);
-                    if (!(chromosome.Cities.Contains(randomCity) || randomCity == startCity))
-                        chromosome.Cities.Add(randomCity);
-                    else if (chromosome.Cities.Count == numberOfCities - 1)
-                        break;
-                }
+                int randomCity = Coordinator.rnd.Next(0, numberOfCities-i-1);
+                chromosome.Cities.Add(unUsed[randomCity]);
+                unUsed.RemoveAt(randomCity);
             }
 
             //Add salesmen in random cuts
@@ -104,7 +107,8 @@ namespace TravellingSalesmen.Algorithms
             chromosome.Salesmen = new List<int>();
             for (int i = 0; i < numberOfSalesmen - 1; i++)
             {
-                int randomPathLength = Coordinator.rnd.Next(1, numberOfCities - (numberOfSalesmen - chromosome.Salesmen.Count) - chromosome.Salesmen.Sum()+1);
+                //int randomPathLength = Coordinator.rnd.Next(numberOfCities/ numberOfSalesmen / numberOfSalesmen, numberOfCities - chromosome.Salesmen.Sum()-(numberOfCities / numberOfSalesmen / numberOfSalesmen* (numberOfSalesmen-chromosome.Salesmen.Count-1)));
+                int randomPathLength = Coordinator.rnd.Next(1, numberOfCities - chromosome.Salesmen.Sum()-(1* (numberOfSalesmen-chromosome.Salesmen.Count-1)));
                 chromosome.Salesmen.Add(randomPathLength);
             }
             chromosome.Salesmen.Add(numberOfCities-chromosome.Salesmen.Sum()-1);
@@ -143,9 +147,12 @@ namespace TravellingSalesmen.Algorithms
 
         private void MakeNewPopulation()
         {
+            int fistOnesToDieCount = (int)(POPULATION_SIZE / 2 * (1 - WEAK_PARENT_RATE));
             //Remove worst half of the population
-            population.RemoveRange((POPULATION_SIZE / 2), (POPULATION_SIZE / 2));
-
+            population.RemoveRange(POPULATION_SIZE-fistOnesToDieCount, fistOnesToDieCount);
+            int protectedsCount = fistOnesToDieCount;
+            while (population.Count > POPULATION_SIZE / 2)
+                population.RemoveAt(protectedsCount + Coordinator.rnd.Next(0, population.Count- protectedsCount-1));
             //Selection + Crossover
             //RandomSelection
             List<int> numbers0toPopSize = new List<int>();
@@ -154,33 +161,93 @@ namespace TravellingSalesmen.Algorithms
                 numbers0toPopSize.Add(i);
             }
 
+            int tmp;
             //Select parents randomly, once every chromosome
             while (numbers0toPopSize.Count != 0)
             {
-                int parent1 = Coordinator.rnd.Next(0, population.Count);
-                int parent2 = Coordinator.rnd.Next(0, population.Count);
-                if (parent1 != parent2 && numbers0toPopSize.Contains(parent1) && numbers0toPopSize.Contains(parent2))
-                {
-                    numbers0toPopSize.Remove(parent1);
-                    numbers0toPopSize.Remove(parent2);
-                    Chromosome child1 = Crossover(population[parent1], population[parent2]);
-                    /*if (Coordinator.rnd.NextDouble() > MUTATION_PROBABILITY)
-                    {
-                        Mutate(child1);
-                    }*/
-                    population.Add(child1);
-
-                    Chromosome child2 = Crossover(population[parent2], population[parent1]);
-                    if (Coordinator.rnd.NextDouble() > MUTATION_PROBABILITY)
-                    {
-                        Mutate(child2);
-                    }
-                    population.Add(child2);
+                int parent1 = Coordinator.rnd.Next(0, numbers0toPopSize.Count-1);
+                int parent2 = Coordinator.rnd.Next(0, numbers0toPopSize.Count-2);
+                if (parent1 <= parent2)
+                    parent2 = (parent2 + 1) % numbers0toPopSize.Count;
+                if (parent1 < parent2) {
+                    tmp = parent1;
+                    parent1 = parent2;
+                    parent2 = tmp;
                 }
+
+                Chromosome[] children = new Chromosome[2];
+                children[0]=Crossover(population[numbers0toPopSize[parent1]], population[numbers0toPopSize[parent2]]);
+                children[1] = Crossover(population[numbers0toPopSize[parent2]], population[numbers0toPopSize[parent1]]);
+                if (Coordinator.rnd.NextDouble() > MUTATION_PROBABILITY && FIRST_CHILD_MUTATE)
+                    Mutate(children[0]);
+                if (Coordinator.rnd.NextDouble() > MUTATION_PROBABILITY && SECEND_CHILD_MUTATE)
+                    Mutate(children[1]);
+                population.Add(children[0]);
+                population.Add(children[1]);
+                numbers0toPopSize.RemoveAt(parent1);
+                numbers0toPopSize.RemoveAt(parent2);
             }
         }
 
         private Chromosome Crossover(Chromosome mother, Chromosome father)
+        {
+            Chromosome child = new Chromosome();
+            child.Salesmen = new List<int>(mother.Salesmen);
+
+            //Is the Gene Fixed? We can Know it from here
+            bool[] Fixed = new bool[numberOfCities - 1];
+            for (int i = 0; i < numberOfCities - 1; i++)
+                Fixed[i] = false;
+
+            //Value of chosen Cities in the mainParents order
+            List<int> chosenOnes = new List<int>();
+            chosenOnes = new List<int>(mother.Cities);
+
+            //Value of unChosen Cities in the secendParents order
+            List<int> unChosenOnes = new List<int>();
+            unChosenOnes = new List<int>(father.Cities);
+
+            //select Unchosen and chosen Ones
+            int indexOfChosen=0;
+            int jump = 1;
+            int chosen;
+            for (int i = 0; i < numberOfCities / 2; i++)
+            {
+                if (i % jump == 0)
+                {
+                    indexOfChosen = Coordinator.rnd.Next(0, unChosenOnes.Count - 1);
+                    jump = Coordinator.rnd.Next(1, numberOfCities/7+1);
+                }
+                else
+                    indexOfChosen = indexOfChosen % (unChosenOnes.Count - 1);
+                chosen = unChosenOnes[indexOfChosen];
+                Fixed[mother.Cities.IndexOf(chosen)] = true;
+                unChosenOnes.Remove(chosen);
+            }
+
+            //select Chosen Ones
+            for (int i = 0; i < unChosenOnes.Count; i++)
+                chosenOnes.Remove(unChosenOnes[i]);
+
+            //Build Children's 
+            for (int i = 0; i < numberOfCities-1; i++)
+                if (Fixed[i])
+                {
+                    child.Cities.Add(chosenOnes[0]);
+                    chosenOnes.RemoveAt(0);
+                }
+                else
+                {
+                    child.Cities.Add(unChosenOnes[0]);
+                    unChosenOnes.RemoveAt(0);
+                }
+
+            child.Fitness=GenerateFitnessForChromosome(child);
+            return child;
+
+        }
+        
+        /*private Chromosome Crossover(Chromosome mother, Chromosome father)
         {
             Chromosome child = new Chromosome();
 
@@ -242,17 +309,15 @@ namespace TravellingSalesmen.Algorithms
 
             return child;
 
-        }
+        }*/
 
         private void Mutate(Chromosome chromosome)
         {
             //select two random alleles
-            int index1 = Coordinator.rnd.Next(0, numberOfCities-1);
-            int index2 = Coordinator.rnd.Next(0, numberOfCities-1);
-            while (index1 == index2)
-            {
-                index2 = Coordinator.rnd.Next(0, numberOfCities-1);
-            }
+            int index1 = Coordinator.rnd.Next(0, numberOfCities-2);
+            int index2 = Coordinator.rnd.Next(0, numberOfCities-3);
+            if (index1 <= index2)
+                index2 = (index2 + 1) % (numberOfCities - 1);
 
             //swap two alleles
             int tmp = chromosome.Cities[index1];
@@ -263,10 +328,10 @@ namespace TravellingSalesmen.Algorithms
             if (Coordinator.rnd.Next(2) == 1)
             {
                 //Reverse two alleles
-                int index3 = Coordinator.rnd.Next(0, numberOfCities - 2);
+                int index3 = Coordinator.rnd.Next(0, numberOfCities - 1);
                 tmp = chromosome.Cities[index3];
-                chromosome.Cities[index3] = chromosome.Cities[index3 + 1];
-                chromosome.Cities[index3 + 1] = tmp;
+                chromosome.Cities[index3] = chromosome.Cities[(index3 + 1)%(numberOfCities-1)];
+                chromosome.Cities[(index3 + 1) % (numberOfCities - 1)] = tmp;
             }
 
             chromosome.Fitness = GenerateFitnessForChromosome(chromosome);
