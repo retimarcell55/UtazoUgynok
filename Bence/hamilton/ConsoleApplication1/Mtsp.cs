@@ -9,9 +9,9 @@ namespace ConsoleApplication1
 {
     class Mtsp
     {
-        public List<List<Vertex>> MultiTravel(Coordinate startpos,int numberoftravelers, int size, List<Vertex> list, int l, int r)
+        public List<List<Vertex>> MultiTravel(int index,int numberoftravelers, int size, List<Vertex> list, int l, int r)
         {
-            kezdopont(list,startpos);
+            kezdopont(list,index);
             List<List<Vertex>> hamcircles = new List<List<Vertex>>();
             permute(list, l, r, hamcircles);
 
@@ -208,19 +208,19 @@ namespace ConsoleApplication1
             }
             return longestroute;
         }
-        public void kezdopont(List<Vertex> l, Coordinate c)
+        public void kezdopont(List<Vertex> l, int idx)
         {
             Vertex tmp=null;
-            int idx=0;
+            int ind=0;
             for(int i=0;i<l.Count;i++)
             {
-                if (l[i].Position.X == c.X && l[i].Position.Y == c.Y)
+                if (l[i].Id==idx)
                 {
                     tmp =(l[i]);
-                    idx = i;
+                    ind = i;
                 }
             }
-            l.RemoveAt(idx);
+            l.RemoveAt(ind);
             l.Insert(0,tmp); 
         }
         private void permute(List<Vertex> list, int l, int r, List<List<Vertex>> hamcircles)

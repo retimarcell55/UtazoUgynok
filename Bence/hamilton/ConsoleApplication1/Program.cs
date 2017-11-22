@@ -146,7 +146,7 @@ namespace ConsoleApplication1
 
             Mtsp p = new Mtsp();
             List<List<Vertex>> result = new List<List<Vertex>>();
-            result=p.MultiTravel(new Coordinate(1000, 15000), 2,negyes.Count,negyes,1,negyes.Count-1);
+            result=p.MultiTravel(6, 2,negyes.Count,negyes,1,negyes.Count-1);
             Console.WriteLine("Vegeredmeny:");
             foreach (var item in result)
             {
