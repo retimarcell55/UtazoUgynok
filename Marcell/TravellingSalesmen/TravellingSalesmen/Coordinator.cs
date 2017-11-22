@@ -87,7 +87,24 @@ namespace TravellingSalesmen
                 while (algorithm.hasAlgorithmNextMove())
                 {
                     algorithm.NextTurn();
-                    mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
+                    switch (algorithm.ActualDrawingMode)
+                    {
+                        case Algorithm.DRAWING_MODE.GRAPH:
+                            mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
+                            break;
+                        case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
+                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.BLUE);
+                            break;
+                        case Algorithm.DRAWING_MODE.INDEPENDENT_EDGE_SET:
+                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.RED);
+                            break;
+                        case Algorithm.DRAWING_MODE.MORE_AGENT_CIRCLES:
+                            mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
+                            mainForm.MoreCirclesToHighlight(algorithm.MoreAgentCirclesToHighlight);
+                            break;
+                        default:
+                            break;
+                    }
                     mainForm.UpdateResult(algorithm.getActualResult().ToString());
 
                     System.Threading.Thread.Sleep(500);
