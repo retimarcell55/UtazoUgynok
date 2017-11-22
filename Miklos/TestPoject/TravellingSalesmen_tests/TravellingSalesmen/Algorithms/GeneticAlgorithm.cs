@@ -9,36 +9,13 @@ namespace TravellingSalesmen.Algorithms
 {
     class GeneticAlgorithm : Algorithm
     {
-
-        static int generationsNumber = 100;
+//tesztelésnél átírni ezeket lehet------------------------------
+        static int generationsNumber = 10;
         static int populationSize = 3000;//CAN BE DIVIDED BY 4!!
         static double mutationProbability = 0.8;
         static int firstchildMutationTrue = 1;
         static int secondchildMutationTrue = 0;
-
-        public void readTest(String filename)
-        {
-            const string BASE_FOLDER_LOCATION = @"..\..\..\Tests";
-            try
-            {
-                using (StreamReader sr = new StreamReader(BASE_FOLDER_LOCATION + filename + ".txt"))
-                {
-                    String[] data = sr.ReadLine().Split(' ');
-                    generationsNumber = int.Parse(data[0]);
-                    populationSize = int.Parse(data[1]);
-                    mutationProbability = double.Parse(data[2]);
-                    firstchildMutationTrue = int.Parse(data[3]);
-                    secondchildMutationTrue = int.Parse(data[4]);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("The file could not be read:");
-                Console.WriteLine(e.Message);
-            }
-        }
-        
-
+//idáig módosíthatsz csak !!!-----------------------------------
 
         //Number of generations
         private int GENERATIONS = generationsNumber;
