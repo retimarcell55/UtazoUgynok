@@ -130,6 +130,8 @@ namespace ConsoleApplication1
             Vertex h1 = new Vertex(8, new Coordinate(1000, 15000));
 
             List<Vertex> negyes = new List<Vertex>();
+           
+            
             negyes.Add(a1);
             negyes.Add(b1);
             negyes.Add(c1);
@@ -140,9 +142,11 @@ namespace ConsoleApplication1
             negyes.Add(h1);
 
 
+            
+
             Mtsp p = new Mtsp();
             List<List<Vertex>> result = new List<List<Vertex>>();
-            result=p.MultiTravel(2,negyes.Count,negyes,1,negyes.Count-1);
+            result=p.MultiTravel(new Coordinate(1000, 15000), 2,negyes.Count,negyes,1,negyes.Count-1);
             Console.WriteLine("Vegeredmeny:");
             foreach (var item in result)
             {
