@@ -1,0 +1,2 @@
+1. run:	Weight: 1246,18	Time: 8,0658755
+2. run:	Weight: 1668,02	Time: 8E-07
