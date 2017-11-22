@@ -1,19 +1,17 @@
 Hogyan tesztelj :
-1.	Legyen beírva a Project/Properties.. alatt
-	a Conditional compilation symbols -hoz az hogy "TEST"
-2.	GeneticAlgorithm osztályon belül lehet módosítani
+1.	GeneticAlgorithm osztályon belül lehet módosítani
 	5 értéket:
 		generationsNumber
 		populationSize (4gyel osztható)
 		mutationProbability
 		firstchildmutationTrue
 		secondchildMutationTrue
-3.	Hogy gyorsabb legyen átírhatod a Thread.Sleep idejét
+2.	Hogy gyorsabb legyen átírhatod a Thread.Sleep idejét
 	a Coordinator osztály 87es sorjában a sleepTime-ot
 	(RunAlgoritmhThrough függvény elsõ sora)3
-4.	Futtass egy GA algot egy GA conffal
-5.	Zárd be, csináld újra a 2es és 4es pontokat
-6.	Az eredmény a Tests mappában lesz található
+3.	Futtass egy GA algot egy GA conffal
+4.	Zárd be, csináld újra a 2es és 4es pontokat
+5.	Az eredmény a Tests mappában lesz található
 
 --------------
 Megjegyzés:
