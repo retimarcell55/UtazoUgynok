@@ -13,7 +13,7 @@ namespace TravellingSalesmen.Algorithms
         public BruteForce(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
             solutionEdges = new List<List<Edge>>();
-            List<List<Vertex>> solutionInOrder = MultiTravel(AgentManager.Agents.Count, graph.Vertices.Count, graph.Vertices, 1, graph.Vertices.Count - 1);
+            List<List<Vertex>> solutionInOrder = MultiTravel(AgentManager.Agents[0].StartPosition,AgentManager.Agents.Count, graph.Vertices.Count, graph.Vertices, 1, graph.Vertices.Count - 1);
             actualDrawingMode = DRAWING_MODE.MORE_AGENT_CIRCLES;
 
             foreach (var item in solutionInOrder)
@@ -60,16 +60,11 @@ namespace TravellingSalesmen.Algorithms
             return true;
         }
 
-        public List<List<Vertex>> MultiTravel(int numberoftravelers, int size, List<Vertex> list, int l, int r)
+        public List<List<Vertex>> MultiTravel(int index, int numberoftravelers, int size, List<Vertex> list, int l, int r)
         {
-            List<Vertex> tmpList = new List<Vertex>(list);
-            //Agent 0 starting position!!
-            Vertex start = tmpList.Single(v => v.Id == agentManager.Agents[0].StartPosition);
-            tmpList.Remove(start);
-            tmpList.Insert(0, start);
-
+            kezdopont(list, index);
             List<List<Vertex>> hamcircles = new List<List<Vertex>>();
-            permute(tmpList, l, r, hamcircles);
+            permute(list, l, r, hamcircles);
 
             List<List<Vertex>> optimal = new List<List<Vertex>>();
             int[] travelers = new int[numberoftravelers];
@@ -112,13 +107,52 @@ namespace TravellingSalesmen.Algorithms
                             {
                                 if (hamcircles[i][0].Id != hamcircles[i][k].Id)
                                 {
+
                                     rout.Add(hamcircles[i][k]);
+
                                 }
 
                             }
+
                         }
+                        /*int []pr= new int[] { 2, 2, 1, 1, 2, 2, 1, 1 };
+                        int jo = 0;
+                        for(int a=0;a<8;a++)
+                        {
+                            if(pr[a]==snapshot[a])
+                            {
+                               jo++;
+                            }
+                        }
+                        if(jo==8 && i==5)
+                        {
+                            //Kiirom az aktális gráf bejárást (2szer fogja, mert 2 route lesz)
+                            for (int hm = 0; hm < hamcircles[5].Count; hm++)
+                            {
+                                Console.Write(hamcircles[5][hm].Id + " ");
+                            }
+                            Console.WriteLine();
+                            ///Kiirom a két routeot
+                            for (int rci = 0; rci < rout.Count; rci++)
+                            {
+                                Console.Write(rout[rci].Id+ " ");
+                            }
+                            Console.WriteLine();
+                        }*/
+
                         tmp.Add(rout);
                     }
+                    /*if (tmp[0].Count > 1 && tmp[1].Count > 1)
+                    {
+                        foreach (var item in tmp)
+                        {
+                            foreach (var tem in item)
+                            {
+                                Console.Write(tem.Id + " ");
+                            }
+                            Console.WriteLine();
+                        }
+                    }*/
 
                     if (optimal.Count == 0)
                     {
@@ -140,6 +174,32 @@ namespace TravellingSalesmen.Algorithms
 
                             tmpWeight += SumWeight(tmp[j]);
                         }
+                        if (tmpWeight < 15)
+                        {
+                            /*
+                            foreach (var item in tmp)
+                            {
+                                foreach (var tem in item)
+                                {
+                                    Console.Write(tem.Id + " ");
+                                }
+                                Console.WriteLine();
+                            }*/
+                            /* for (int kk = 0; kk < size; kk++)
+                             {
+                                 Console.Write(snapshot[kk] + " ");
+                             }
+                             Console.WriteLine();*/
+
+                        }
+
+                        /* if (optimalWeight >= tmpWeight)
+                         {
+                            Console.WriteLine(tmpWeight);
+                             optimal.Clear();
+                             optimal =new List<List<Vertex>>(tmp);
+
+                         }*/
                         if (LongestRoute(tmp) < LongestRoute(optimal))
                         {
                             optimal.Clear();
@@ -166,7 +226,16 @@ namespace TravellingSalesmen.Algorithms
             return optimal;
 
         }
+        public void Kiir(int[] snapshot)
+        {
+            for (int i = 0; i < snapshot.Length; i++)
+            {
+                Console.Write(snapshot[i]);
 
+            }
+            Console.WriteLine();
+
+        }
         public double SumWeight(List<Vertex> l)
         {
             double sumweight = 0;
@@ -178,7 +247,6 @@ namespace TravellingSalesmen.Algorithms
 
             return sumweight;
         }
-
         public double LongestRoute(List<List<Vertex>> l)
         {
             double longestroute = 0;
@@ -191,7 +259,21 @@ namespace TravellingSalesmen.Algorithms
             }
             return longestroute;
         }
-
+        public void kezdopont(List<Vertex> l, int idx)
+        {
+            Vertex tmp = null;
+            int ind = 0;
+            for (int i = 0; i < l.Count; i++)
+            {
+                if (l[i].Id == idx)
+                {
+                    tmp = (l[i]);
+                    ind = i;
+                }
+            }
+            l.RemoveAt(ind);
+            l.Insert(0, tmp);
+        }
         private void permute(List<Vertex> list, int l, int r, List<List<Vertex>> hamcircles)
         {
             if (l == r)
@@ -209,7 +291,6 @@ namespace TravellingSalesmen.Algorithms
                 }
             }
         }
-
         public List<Vertex> swap(List<Vertex> a, int i, int j)
         {
             Vertex temp;
