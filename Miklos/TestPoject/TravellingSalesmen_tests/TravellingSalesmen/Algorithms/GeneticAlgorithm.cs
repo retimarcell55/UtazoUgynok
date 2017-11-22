@@ -10,11 +10,11 @@ namespace TravellingSalesmen.Algorithms
     class GeneticAlgorithm : Algorithm
     {
 //tesztelésnél átírni ezeket lehet------------------------------
-        static int generationsNumber = 10;
+        static int generationsNumber = 100;
         static int populationSize = 3000;//CAN BE DIVIDED BY 4!!
-        static double mutationProbability = 0.8;
+        static double mutationProbability = 0.5;
         static int firstchildMutationTrue = 1;
-        static int secondchildMutationTrue = 0;
+        static int secondchildMutationTrue = 1;
 //idáig módosíthatsz csak !!!-----------------------------------
 
         //Number of generations
