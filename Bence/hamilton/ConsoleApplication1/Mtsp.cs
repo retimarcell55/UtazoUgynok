@@ -9,11 +9,12 @@ namespace ConsoleApplication1
 {
     class Mtsp
     {
-        public List<List<Vertex>> MultiTravel(int numberoftravelers, int size, List<Vertex> list, int l, int r)
+        public List<List<Vertex>> MultiTravel(Coordinate startpos,int numberoftravelers, int size, List<Vertex> list, int l, int r)
         {
-           
+            kezdopont(list,startpos);
             List<List<Vertex>> hamcircles = new List<List<Vertex>>();
             permute(list, l, r, hamcircles);
+
             List<List<Vertex>> optimal = new List<List<Vertex>>();
             int[] travelers = new int[numberoftravelers];
             for (int i = 0; i < numberoftravelers; i++)
@@ -32,7 +33,7 @@ namespace ConsoleApplication1
                 {
                     
                     snapshot[i] = travelers[indexes[i]];
-                   // Console.Write(snapshot[i] + " ");
+                    //Console.Write(snapshot[i] + " ");
                 }
                 //Console.WriteLine();
                 //A két permutáció találkozása
@@ -59,11 +60,11 @@ namespace ConsoleApplication1
                                     rout.Add(hamcircles[i][k]);
                                     
                                 }
-
+                                
                             }
 
                         }
-                        int []pr= new int[] { 2, 2, 1, 1, 2, 2, 1, 1 };
+                        /*int []pr= new int[] { 2, 2, 1, 1, 2, 2, 1, 1 };
                         int jo = 0;
                         for(int a=0;a<8;a++)
                         {
@@ -86,14 +87,25 @@ namespace ConsoleApplication1
                                 Console.Write(rout[rci].Id+ " ");
                             }
                             Console.WriteLine();
-                        }
-
-
+                        }*/
 
                         tmp.Add(rout);
                     }
+                    /*if (tmp[0].Count > 1 && tmp[1].Count > 1)
+                    {
+                        foreach (var item in tmp)
+                        {
+                            foreach (var tem in item)
+                            {
+                                Console.Write(tem.Id + " ");
+                            }
+                            Console.WriteLine();
+                        }
+                    }*/
+
                     if (optimal.Count == 0)
                     {
+                        
                         optimal = new List<List<Vertex>>(tmp);
                     }
                     else
@@ -104,13 +116,43 @@ namespace ConsoleApplication1
                         for (int j = 0; j < optimal.Count; j++)
                         {
                             optimalWeight += SumWeight(optimal[j]);
+                            //tmpWeight += SumWeight(tmp[j]);
+                        }
+                        for (int j = 0; j < tmp.Count; j++)
+                        {
+                            
                             tmpWeight += SumWeight(tmp[j]);
                         }
-                        if (optimalWeight >= tmpWeight)
+                        if (tmpWeight<15)
                         {
+                            /*
+                            foreach (var item in tmp)
+                            {
+                                foreach (var tem in item)
+                                {
+                                    Console.Write(tem.Id + " ");
+                                }
+                                Console.WriteLine();
+                            }*/
+                           /* for (int kk = 0; kk < size; kk++)
+                            {
+                                Console.Write(snapshot[kk] + " ");
+                            }
+                            Console.WriteLine();*/
+
+                        }
+
+                       /* if (optimalWeight >= tmpWeight)
+                        {
+                           Console.WriteLine(tmpWeight);
                             optimal.Clear();
                             optimal =new List<List<Vertex>>(tmp);
                             
+                        }*/
+                        if(LongestRoute(tmp)<LongestRoute(optimal))
+                        {
+                            optimal.Clear();
+                            optimal = new List<List<Vertex>>(tmp);
                         }
                     }
 
@@ -150,9 +192,36 @@ namespace ConsoleApplication1
             {
                 sumweight += Math.Sqrt(Math.Pow(l[i + 1].Position.X - l[i].Position.X, 2) + Math.Pow(l[i + 1].Position.Y - l[i].Position.Y, 2));
             }
-            sumweight += Math.Sqrt(Math.Pow(l[l.Count - 1].Position.X - l[0].Position.X, 2) + Math.Pow(l[l.Count - 1].Position.Y - l[0].Position.Y, 2));
+            //sumweight += Math.Sqrt(Math.Pow(l[l.Count - 1].Position.X - l[0].Position.X, 2) + Math.Pow(l[l.Count - 1].Position.Y - l[0].Position.Y, 2));
 
             return sumweight;
+        }
+        public double LongestRoute(List<List<Vertex>> l)
+        {
+            double longestroute = 0;
+            foreach (var item in l)
+            {
+                if(SumWeight(item)>longestroute)
+                {
+                    longestroute = SumWeight(item);
+                }
+            }
+            return longestroute;
+        }
+        public void kezdopont(List<Vertex> l, Coordinate c)
+        {
+            Vertex tmp=null;
+            int idx=0;
+            for(int i=0;i<l.Count;i++)
+            {
+                if (l[i].Position.X == c.X && l[i].Position.Y == c.Y)
+                {
+                    tmp =(l[i]);
+                    idx = i;
+                }
+            }
+            l.RemoveAt(idx);
+            l.Insert(0,tmp); 
         }
         private void permute(List<Vertex> list, int l, int r, List<List<Vertex>> hamcircles)
         {
