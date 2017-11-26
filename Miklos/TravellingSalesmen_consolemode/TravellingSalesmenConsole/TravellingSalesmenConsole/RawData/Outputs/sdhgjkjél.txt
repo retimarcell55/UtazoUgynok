@@ -1,0 +1,2 @@
+Algorithm name	Graph filename	Agents filename	Result	Run time
+BruteForce	graph	agents	1293,77	0

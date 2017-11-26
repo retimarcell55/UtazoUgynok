@@ -1,0 +1,21 @@
+Algorithm name	Graph filename	Agents filename	Generation number	Populatiom number	Mutation probability	Weakparent rate	First childmutate	Second child mutate	Result	Run time
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	978,54	47--35,9697
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	953,5	16--22,4439
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	941,72	16--23,3169
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	953,5	15--17,6866
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	942,35	16--17,8116
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	978,35	15--14,9252
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	827,22	16--18,1811
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	964,2	15--14,5847
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	900,42	32--17,3171
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	913,15	15--14,3232
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	953,5	16--17,4579
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	984,72	31--17,6068
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	975,77	16--15,3041
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	953,5	15--18,999
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	872	16--15,7265
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	966,98	15--16,8017
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	953,5	16--14,7387
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	962,45	15--16,5384
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	953,5	16--15,6894
+Genetic	graph2	agents5	500	7000	0,24	0,024	True	True	947,32	15--17,1473

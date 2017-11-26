@@ -1,0 +1,11 @@
+Algorithm name	Graph filename	Agents filename	Result	Run time
+Cristofides	graph400_1	agents	0	2,2865
+Cristofides	graph400_1	agents	0	1,3094
+Cristofides	graph400_1	agents	0	1,2795
+Cristofides	graph400_1	agents	0	1,2808
+Cristofides	graph400_1	agents	0	1,3188
+Cristofides	graph400_1	agents	0	1,3243
+Cristofides	graph400_1	agents	0	1,3248
+Cristofides	graph400_1	agents	0	1,1293
+Cristofides	graph400_1	agents	0	1,2987
+Cristofides	graph400_1	agents	0	1,2249
