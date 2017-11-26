@@ -351,6 +351,10 @@ namespace TravellingSalesmen.Algorithms
         //Pick a section within one tour and a section within another and exchange their locations.These sections are selected to ensure that no route ends up with less than 1 or more than(p − 1) nodes on it
         private List<List<int>> InterrouteSwitching(List<List<int>> neighbor)
         {
+            if(neighbor.Count <= 1)
+            {
+                return neighbor;
+            }
             int tour = Coordinator.rnd.Next(0, agentManager.Agents.Count);
             int tour2;
             do
@@ -395,6 +399,10 @@ namespace TravellingSalesmen.Algorithms
         //Pick a section within one tour and put it at the end of another tour. This section and the receiving route are selected to ensure that no route ends up with less than 1 or more than(p − 1) nodes on it.
         private List<List<int>> InterrouteTransfer(List<List<int>> neighbor)
         {
+            if (neighbor.Count <= 1)
+            {
+                return neighbor;
+            }
             int tour = Coordinator.rnd.Next(0, agentManager.Agents.Count);
             int tour2;
             do
