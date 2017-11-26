@@ -80,6 +80,9 @@ namespace TravellingSalesmen
                 case "GeneticAlgorithm":
                     coordinator.Algorithm = new GeneticAlgorithm(conf.Graph, conf.AgentManager);
                     break;
+                case "GreedySearch":
+                    coordinator.Algorithm = new GreedySearch(conf.Graph, conf.AgentManager);
+                    break;
             }
 
             Restart.Enabled = true;

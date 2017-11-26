@@ -35,13 +35,7 @@ namespace TravellingSalesmen
             algorithm.Initialize();
 
             mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
-            switch (algorithm.ActualDrawingMode)
-            {
-                case Algorithm.DRAWING_MODE.MORE_AGENT_CIRCLES:
-                    mainForm.MoreCirclesToHighlight(algorithm.MoreAgentCirclesToHighlight);
-                    mainForm.UpdateResult(algorithm.getActualResult().ToString());
-                    break;
-            }
+            Draw();
             algorithmStarted = true;
         }
 
@@ -52,26 +46,7 @@ namespace TravellingSalesmen
                 if (algorithm.hasAlgorithmNextMove())
                 {
                     algorithm.NextTurn();
-                    switch (algorithm.ActualDrawingMode)
-                    {
-                        case Algorithm.DRAWING_MODE.GRAPH:
-                            mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
-                            break;
-                        case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
-                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.BLUE);
-                            break;
-                        case Algorithm.DRAWING_MODE.INDEPENDENT_EDGE_SET:
-                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.RED);
-                            break;
-                        case Algorithm.DRAWING_MODE.MORE_AGENT_CIRCLES:
-                            mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
-                            mainForm.MoreCirclesToHighlight(algorithm.MoreAgentCirclesToHighlight);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    mainForm.UpdateResult(algorithm.getActualResult().ToString());
+                    Draw();
                 }
                 else
                 {
@@ -87,30 +62,35 @@ namespace TravellingSalesmen
                 while (algorithm.hasAlgorithmNextMove())
                 {
                     algorithm.NextTurn();
-                    switch (algorithm.ActualDrawingMode)
-                    {
-                        case Algorithm.DRAWING_MODE.GRAPH:
-                            mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
-                            break;
-                        case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
-                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.BLUE);
-                            break;
-                        case Algorithm.DRAWING_MODE.INDEPENDENT_EDGE_SET:
-                            mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.RED);
-                            break;
-                        case Algorithm.DRAWING_MODE.MORE_AGENT_CIRCLES:
-                            mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
-                            mainForm.MoreCirclesToHighlight(algorithm.MoreAgentCirclesToHighlight);
-                            break;
-                        default:
-                            break;
-                    }
-                    mainForm.UpdateResult(algorithm.getActualResult().ToString());
-
+                    Draw();
                     System.Threading.Thread.Sleep(500);
                 }
                 algorithmStarted = false;
             }
+        }
+
+        private void Draw()
+        {
+            switch (algorithm.ActualDrawingMode)
+            {
+                case Algorithm.DRAWING_MODE.GRAPH:
+                    mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
+                    break;
+                case Algorithm.DRAWING_MODE.MIN_SPANNING_TREE:
+                    mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.BLUE);
+                    break;
+                case Algorithm.DRAWING_MODE.INDEPENDENT_EDGE_SET:
+                    mainForm.HighLightEdges(algorithm.EdgesToHighlight, Algorithm.DRAWING_COLOR.RED);
+                    break;
+                case Algorithm.DRAWING_MODE.MORE_AGENT_CIRCLES:
+                    mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
+                    mainForm.MoreCirclesToHighlight(algorithm.MoreAgentCirclesToHighlight);
+                    break;
+                default:
+                    break;
+            }
+
+            mainForm.UpdateResult(algorithm.getActualResult().ToString());
         }
     }
 }
