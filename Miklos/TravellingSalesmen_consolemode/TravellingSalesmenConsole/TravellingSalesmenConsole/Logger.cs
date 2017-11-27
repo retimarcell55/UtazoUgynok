@@ -13,8 +13,10 @@ namespace TravellingSalesmenConsole
         protected string algoName;
         protected string graphFileName;
         protected string agentFileName;
-        protected int runNumber;
+        protected int algorithmRunNumber;
         protected string outputFileName;
+
+        string[] interval = { null, null };
         //GA extras
         protected int GA_generationsNumber;
         protected int GA_populationNumber;
@@ -25,12 +27,13 @@ namespace TravellingSalesmenConsole
         protected bool GA_secondChildMutate;
         protected enum GA_ParameterToInterval {GenerationNumber, PopulationNumber, MutationProbability, WeakParentRate, FirstChildMutate, SecondChildMutate, Nothing};
         GA_ParameterToInterval GA_intervalEnum = new GA_ParameterToInterval();
-        string[] interval = { null, null };
         int GA_intDoubleOrBool = -1; //0=nothing, 1=int, 2=double, 3=bool  (to the interval type)
-        //
         //GS extras
-
-
+        protected int GS_patienceParameter;
+        protected int GS_numberOfRuns;
+        protected int GS_maxRouteLengthPerAgent;
+        protected enum GS_ParameterToInterval { PatienceParameter, NumberOfRuns, MaxRouteLengthPerAgent, Nothing};
+        GS_ParameterToInterval GS_intervalEnum = new GS_ParameterToInterval();
         //......................
 
         public string AlgoName { get => algoName; set => algoName = value; }
@@ -43,12 +46,13 @@ namespace TravellingSalesmenConsole
         public void AskUser()
         {
             const string BASE_FOLDER_LOCATION = @"..\..\RawData";
-            string readedDatas = null;  //ezt írja ki minden clear után
+            string readedDatas = null;  //to write after clear
             string str;
             int numberInt;
             double numberDouble;
             bool isOk;
 
+#region read files from folders
             string[] fileArrayGraphsFullName = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Graphs");
             string[] fileArrayGraphs = new string[fileArrayGraphsFullName.Length];
             for (int i = 0; i < fileArrayGraphsFullName.Length; i++)
@@ -58,50 +62,102 @@ namespace TravellingSalesmenConsole
                 fileArrayGraphs[i] = temp2[0];
             }
             
-            string[] fileArrayAgentsFullName = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Agents");
-            string[] fileArrayAgents = new string[fileArrayAgentsFullName.Length];
-            for (int i = 0; i < fileArrayAgentsFullName.Length; i++)
+            string[] fileArrayAgentsFullName_multi = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Agents\MultiAgents");
+            string[] fileArrayAgents_multi = new string[fileArrayAgentsFullName_multi.Length];
+            for (int i = 0; i < fileArrayAgentsFullName_multi.Length; i++)
             {
-                string[] temp = fileArrayAgentsFullName[i].Split('\\');
+                string[] temp = fileArrayAgentsFullName_multi[i].Split('\\');
                 string[] temp2 = temp[temp.Length - 1].Split('.');
-                fileArrayAgents[i] = temp2[0];
+                fileArrayAgents_multi[i] = temp2[0];
             }
 
-            string[] fileArrayOutputsFullName = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Outputs");
-            string[] fileArrayOutputs = new string[fileArrayOutputsFullName.Length];
-            for (int i = 0; i < fileArrayOutputsFullName.Length; i++)
+            string[] fileArrayAgentsFullName_single = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Agents\SingleAgent");
+            string[] fileArrayAgents_single = new string[fileArrayAgentsFullName_single.Length];
+            for (int i = 0; i < fileArrayAgentsFullName_single.Length; i++)
             {
-                string[] temp = fileArrayOutputsFullName[i].Split('\\');
+                string[] temp = fileArrayAgentsFullName_single[i].Split('\\');
                 string[] temp2 = temp[temp.Length - 1].Split('.');
-                fileArrayOutputs[i] = temp2[0];
+                fileArrayAgents_single[i] = temp2[0];
             }
 
-            //kész
+            string[] fileArrayOutputsFullName_genetic = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Outputs\Genetic");
+            string[] fileArrayOutputs_genetic = new string[fileArrayOutputsFullName_genetic.Length];
+            for (int i = 0; i < fileArrayOutputsFullName_genetic.Length; i++)
+            {
+                string[] temp = fileArrayOutputsFullName_genetic[i].Split('\\');
+                string[] temp2 = temp[temp.Length - 1].Split('.');
+                fileArrayOutputs_genetic[i] = temp2[0];
+            }
+            string[] fileArrayOutputsFullName_greedy = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Outputs\GreedySearch");
+            string[] fileArrayOutputs_greedy = new string[fileArrayOutputsFullName_greedy.Length];
+            for (int i = 0; i < fileArrayOutputsFullName_greedy.Length; i++)
+            {
+                string[] temp = fileArrayOutputsFullName_greedy[i].Split('\\');
+                string[] temp2 = temp[temp.Length - 1].Split('.');
+                fileArrayOutputs_greedy[i] = temp2[0];
+            }
+            string[] fileArrayOutputsFullName_christofides = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Outputs\Christofides");
+            string[] fileArrayOutputs_christofides = new string[fileArrayOutputsFullName_christofides.Length];
+            for (int i = 0; i < fileArrayOutputsFullName_christofides.Length; i++)
+            {
+                string[] temp = fileArrayOutputsFullName_christofides[i].Split('\\');
+                string[] temp2 = temp[temp.Length - 1].Split('.');
+                fileArrayOutputs_christofides[i] = temp2[0];
+            }
+            string[] fileArrayOutputsFullName_bruteSingle = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Outputs\BruteForceSingleAgent");
+            string[] fileArrayOutputs_bruteSingle = new string[fileArrayOutputsFullName_bruteSingle.Length];
+            for (int i = 0; i < fileArrayOutputsFullName_bruteSingle.Length; i++)
+            {
+                string[] temp = fileArrayOutputsFullName_bruteSingle[i].Split('\\');
+                string[] temp2 = temp[temp.Length - 1].Split('.');
+                fileArrayOutputs_bruteSingle[i] = temp2[0];
+            }
+            string[] fileArrayOutputsFullName_bruteMulti = Directory.GetFiles(BASE_FOLDER_LOCATION + @"\Outputs\BruteForceMultiAgents");
+            string[] fileArrayOutputs_bruteMulti = new string[fileArrayOutputsFullName_bruteMulti.Length];
+            for (int i = 0; i < fileArrayOutputsFullName_bruteMulti.Length; i++)
+            {
+                string[] temp = fileArrayOutputsFullName_bruteMulti[i].Split('\\');
+                string[] temp2 = temp[temp.Length - 1].Split('.');
+                fileArrayOutputs_bruteMulti[i] = temp2[0];
+            }
+#endregion
+
+            
 #region read Algo name
             isOk = false;
             Console.Clear();
             while (!isOk)
             {
-                Console.WriteLine("Choose one algorithm:\n\t1 BruteForce\n\t2 Christofides\n\t3 Genetic\n\t4 GreedySearch\n\n");
+                Console.WriteLine("Choose one algorithm:\n" +
+                    "\t1 BruteForceSingleAgent\n" +
+                    "\t2 BruteForceMultiAgent\n" +
+                    "\t3 Christofides\n" +
+                    "\t4 Genetic\n" +
+                    "\t5 GreedySearch\n\n");
                 str = Console.ReadLine();
                 switch (str)
                 {
                     case "1":
-                        algoName = "BruteForce";
-                        readedDatas += "Algorithm: BruteForce\n";
+                        algoName = "BruteForceSingleAgent";
+                        readedDatas += "Algorithm: BruteForceSingleAgent\n";
                         isOk = true;
                         break;
                     case "2":
-                        algoName = "Cristofides";
-                        readedDatas += "Algorithm: Cristofides\n";
+                        algoName = "BruteForceMultiAgent";
+                        readedDatas += "Algorithm: BruteForceMultiAgent\n";
                         isOk = true;
                         break;
                     case "3":
+                        algoName = "Christofides";
+                        readedDatas += "Algorithm: Christofides\n";
+                        isOk = true;
+                        break;
+                    case "4":
                         algoName = "Genetic";
                         readedDatas += "Algorithm: Genetic\n";
                         isOk = true;
                         break;
-                    case "4":
+                    case "5":
                         algoName = "GreedySearch";
                         readedDatas += "Algorithm: GreedySearch\n";
                         isOk = true;
@@ -115,7 +171,7 @@ namespace TravellingSalesmenConsole
             }
 #endregion
 
-            //kész
+            
 #region read Graph name
             isOk = false;
             Console.Clear();
@@ -148,46 +204,80 @@ namespace TravellingSalesmenConsole
             }
 #endregion
 
-            //kész
+            
 #region read Agents name
             isOk = false;
             Console.Clear();
             Console.WriteLine(readedDatas);
             while (!isOk)
             {
-                Console.WriteLine("Type tha agents file name:\n");
-                for (int i = 0; i < fileArrayAgents.Length; i++)
+                if(algoName == "BruteForceSingleAgent" || algoName == "Christofides")   //SingleAgents
                 {
-                    Console.WriteLine(fileArrayAgents[i]);
-                }
-                Console.WriteLine("-----");
-                str = Console.ReadLine();
-                foreach (string row in fileArrayAgents)
-                {
-                    if (row == str)
+                    Console.WriteLine("Type the agents file name:\n");
+                    for (int i = 0; i < fileArrayAgents_single.Length; i++)
                     {
-                        agentFileName = str;
-                        readedDatas += "Agents: " + str + "\n";
-                        isOk = true;
-                        break;
+                        Console.WriteLine(fileArrayAgents_single[i]);
+                    }
+                    Console.WriteLine("-----");
+                    str = Console.ReadLine();
+                    foreach (string row in fileArrayAgents_single)
+                    {
+                        if (row == str)
+                        {
+                            agentFileName = @"SingleAgent\" + str;
+                            readedDatas += "Agents: " + str + "\n";
+                            isOk = true;
+                            break;
+                        }
+                    }
+                    if (!isOk)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(readedDatas);
+                        Console.WriteLine("Wrong arnswer !\nType it again!\n");
                     }
                 }
-                if (!isOk)
+                else //MultiAgents
                 {
-                    Console.Clear();
-                    Console.WriteLine(readedDatas);
-                    Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                    Console.WriteLine("Type the agents file name:\n");
+                    for (int i = 0; i < fileArrayAgents_multi.Length; i++)
+                    {
+                        Console.WriteLine(fileArrayAgents_multi[i]);
+                    }
+                    Console.WriteLine("-----");
+                    str = Console.ReadLine();
+                    foreach (string row in fileArrayAgents_multi)
+                    {
+                        if (row == str)
+                        {
+                            agentFileName = @"MultiAgents\" + str;
+                            readedDatas += "Agents: " + str + "\n";
+                            isOk = true;
+                            break;
+                        }
+                    }
+                    if (!isOk)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(readedDatas);
+                        Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                    }
                 }
+
+                
             }
             #endregion
             //kész
 #region read Extras
             switch (algoName)
             { 
-                case "BruteForce":
+                case "BruteForceSingleAgent":
                     //nincs semmijen extra
                     break;
-                case "Cristofides":
+                case "BruteForceMultiAgents":
+                    //nincs semmijen extra
+                    break;
+                case "Christofides":
                     //nincs semmilyen extra
                     break;
                 case "Genetic":
@@ -526,11 +616,163 @@ namespace TravellingSalesmenConsole
 
                     break;
                 case "GreedySearch":
-                    //todo greedy paraméterei beolvasás
+#region read Patience paramter
+                    isOk = false;
+                    Console.Clear();
+                    Console.WriteLine(readedDatas);
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the patience parameter.");
+                        str = Console.ReadLine();
+
+                        if (Int32.TryParse(str, out numberInt))
+                        {
+                            /* Yes input could be parsed and we can now use number in this code block 
+                                scope */
+                           GS_patienceParameter = int.Parse(str);
+                            readedDatas += "Patience parameter: " + GS_patienceParameter + "\n";
+                            isOk = true;
+                        }
+                        else
+                        {
+                            /* No, input could not be parsed to an integer */
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                        }
+                    }
+                    #endregion
+
+#region read Number of run
+                    isOk = false;
+                    Console.Clear();
+                    Console.WriteLine(readedDatas);
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the number of runs.");
+                        str = Console.ReadLine();
+
+                        if (Int32.TryParse(str, out numberInt))
+                        {
+                            /* Yes input could be parsed and we can now use number in this code block 
+                                scope */
+                            GS_numberOfRuns = int.Parse(str);
+                            readedDatas += "Number of Runs: " + GS_numberOfRuns + "\n";
+                            isOk = true;
+                        }
+                        else
+                        {
+                            /* No, input could not be parsed to an integer */
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                        }
+                    }
+                    #endregion
+
+#region read Max Route Length Per Agent
+                    isOk = false;
+                    Console.Clear();
+                    Console.WriteLine(readedDatas);
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the max route length per agent.");
+                        str = Console.ReadLine();
+
+                        if (Int32.TryParse(str, out numberInt))
+                        {
+                            /* Yes input could be parsed and we can now use number in this code block 
+                                scope */
+                            GS_maxRouteLengthPerAgent = int.Parse(str);
+                            readedDatas += "Max route length per agent: " + GS_maxRouteLengthPerAgent + "\n";
+                            isOk = true;
+                        }
+                        else
+                        {
+                            /* No, input could not be parsed to an integer */
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                        }
+                    }
+                    #endregion
+
+#region read interval in greedy
+                    isOk = false;
+                    Console.Clear();
+                    Console.WriteLine(readedDatas);
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the number of that parameter what you would like to run from...  ...to.:\n\n" +
+                                            "1 PatienceParameter\n" +
+                                            "2 NumberOfRuns\n" +
+                                            "3 MaxLengthPerAgent\n" +
+                                            "or type: 'nothing' if you dont want to run any parameter !");
+                        str = Console.ReadLine();
+                        str = str.ToUpper();
+                        switch (str)
+                        {
+                            case "1":
+                                GS_intervalEnum = GS_ParameterToInterval.PatienceParameter;
+                                isOk = true;
+                                break;
+                            case "2":
+                                GS_intervalEnum = GS_ParameterToInterval.NumberOfRuns;
+                                isOk = true;
+                                break;
+                            case "3":
+                                GS_intervalEnum = GS_ParameterToInterval.MaxRouteLengthPerAgent;
+                                isOk = true;
+                                GA_intDoubleOrBool = 2;
+                                break;
+                            case "NOTHING":
+                                GS_intervalEnum = GS_ParameterToInterval.Nothing;
+                                isOk = true;
+                                GA_intDoubleOrBool = 0;
+                                break;
+                            default:
+                                Console.Clear();
+                                Console.WriteLine(readedDatas);
+                                Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                                isOk = false;
+                                break;
+                        }
+                    }
+
+                    isOk = false;
+                    Console.Clear();
+                    Console.WriteLine(readedDatas);
+                    while (!isOk)
+                    {
+
+                        Console.WriteLine("Type the interval minimum and maximum in this form: 423-653\n");
+                        str = Console.ReadLine();
+                        string[] str2 = str.Split('-');
+                        if (Int32.TryParse(str2[0], out numberInt) && (Int32.TryParse(str2[1], out numberInt)))
+                        {
+                            /* Yes input could be parsed and we can now use number in this code block 
+                               scope */
+                            interval[0] = str2[0];
+                            interval[1] = str2[1];
+                            readedDatas += GS_intervalEnum.ToString() + " will run form " + interval[0] + " to " + interval[1] + "\n";
+                            isOk = true;
+                        }
+                        else
+                        {
+                            /* No, input could not be parsed to an integer */
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                        }
+                    }
+
+#endregion
+
                     break;
+
             }
 
-            #endregion
+#endregion
 
 #region read Run number
             isOk = false;
@@ -544,8 +786,8 @@ namespace TravellingSalesmenConsole
                 {
                     /* Yes input could be parsed and we can now use number in this code block 
                        scope */
-                    runNumber = int.Parse(str);
-                    readedDatas += "Run number: " + runNumber + "\n";
+                    algorithmRunNumber = int.Parse(str);
+                    readedDatas += "Run number: " + algorithmRunNumber + "\n";
                     isOk = true;
                 }
                 else
@@ -562,32 +804,146 @@ namespace TravellingSalesmenConsole
             isOk = false;
             Console.Clear();
             Console.WriteLine(readedDatas);
-            while (!isOk)
+
+            switch (algoName)
             {
-                Console.WriteLine("Type the output file name:\n");
-                str = Console.ReadLine();
-                isOk = true;
-                foreach (string row in fileArrayOutputs)
-                {
-                    if (row == str)
+                case "BruteForceSingleAgent":
+                    while (!isOk)
                     {
-                        isOk = false;
+                        Console.WriteLine("Type the output file name:\n");
+                        str = Console.ReadLine();
+                        isOk = true;
+                        foreach (string row in fileArrayOutputsFullName_bruteSingle)
+                        {
+                            if (row == str)
+                            {
+                                isOk = false;
+                            }
+                        }
+                        if (!isOk)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("This filename is already exists\nType again !\n");
+                        }
+                        else
+                        {
+                            outputFileName = @"BruteForceSingleAgent\" + str;
+                            readedDatas += "Output file name: " + outputFileName + "\n";
+                            isOk = true;
+                        }
                     }
-                }
-                if (!isOk)
-                {
-                    Console.Clear();
-                    Console.WriteLine(readedDatas);
-                    Console.WriteLine("This filename is already exists\nType again !\n");
-                }
-                else
-                {
-                    outputFileName = str;
-                    readedDatas += "Graph: " + outputFileName + "\n";
-                    isOk = true;
-                }
+                    break;
+                case "BruteForceMultiAgents":
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the output file name:\n");
+                        str = Console.ReadLine();
+                        isOk = true;
+                        foreach (string row in fileArrayOutputsFullName_bruteMulti)
+                        {
+                            if (row == str)
+                            {
+                                isOk = false;
+                            }
+                        }
+                        if (!isOk)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("This filename is already exists\nType again !\n");
+                        }
+                        else
+                        {
+                            outputFileName = @"BruteForceultiAgents\" + str;
+                            readedDatas += "Output file name: " + outputFileName + "\n";
+                            isOk = true;
+                        }
+                    }
+                    break;
+                case "Christofides":
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the output file name:\n");
+                        str = Console.ReadLine();
+                        isOk = true;
+                        foreach (string row in fileArrayOutputsFullName_christofides)
+                        {
+                            if (row == str)
+                            {
+                                isOk = false;
+                            }
+                        }
+                        if (!isOk)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("This filename is already exists\nType again !\n");
+                        }
+                        else
+                        {
+                            outputFileName = @"Christofides\" + str;
+                            readedDatas += "Output file name: " + outputFileName + "\n";
+                            isOk = true;
+                        }
+                    }
+                    break;
+                case "Genetic":
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the output file name:\n");
+                        str = Console.ReadLine();
+                        isOk = true;
+                        foreach (string row in fileArrayOutputsFullName_genetic)
+                        {
+                            if (row == str)
+                            {
+                                isOk = false;
+                            }
+                        }
+                        if (!isOk)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("This filename is already exists\nType again !\n");
+                        }
+                        else
+                        {
+                            outputFileName = @"Genetic\" + str;
+                            readedDatas += "Output file name: " + outputFileName + "\n";
+                            isOk = true;
+                        }
+                    }
+                    break;
+                case "GreedySearch":
+                    while (!isOk)
+                    {
+                        Console.WriteLine("Type the output file name:\n");
+                        str = Console.ReadLine();
+                        isOk = true;
+                        foreach (string row in fileArrayOutputsFullName_greedy)
+                        {
+                            if (row == str)
+                            {
+                                isOk = false;
+                            }
+                        }
+                        if (!isOk)
+                        {
+                            Console.Clear();
+                            Console.WriteLine(readedDatas);
+                            Console.WriteLine("This filename is already exists\nType again !\n");
+                        }
+                        else
+                        {
+                            outputFileName = @"GreedySearch\" + str;
+                            readedDatas += "Output file name: " + outputFileName + "\n";
+                            isOk = true;
+                        }
+                    }
+                    break;
             }
-            #endregion
+#endregion
 
             
         }
@@ -602,6 +958,8 @@ namespace TravellingSalesmenConsole
             string graphPath = BASE_FOLDER_LOCATION + @"\Graphs\" + graphFileName + ".txt";
             string agentPath = BASE_FOLDER_LOCATION + @"\Agents\" + agentFileName + ".txt";
             Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            stopwatch.Stop();
             /*
             for(int i = 0; i <20; i++)
             {
@@ -615,18 +973,17 @@ namespace TravellingSalesmenConsole
 
             }*/
 
-
             CompleteGraph cg = readGraphFromFile(graphPath);
             AgentManager am = readAgentsFromFile(agentPath);
             using (StreamWriter sw = (File.Exists(outputPath)) ? File.AppendText(outputPath) : File.CreateText(outputPath));
             double result = 0;
-            if (algoName == "BruteForce")
+            if (algoName == "BruteForceSingleAgent" || algoName == "BruteForceMultiAgents")
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
                 {
                     file.WriteLine("Algorithm name" + "\t" + "Graph filename" + "\t" + "Agents filename" + "\t" + "Result" + "\t" + "Run time");
                 }
-                for (int i = 0; i < runNumber; i++)
+                for (int i = 0; i < algorithmRunNumber; i++)
                 {
                     stopwatch.Restart();
                     BruteForce bf = new BruteForce(cg, am);
@@ -642,16 +999,16 @@ namespace TravellingSalesmenConsole
                              + "\t" + result + "\t" + ts.TotalMilliseconds);
                     }
                     Console.Clear();
-                    Console.WriteLine("Algorithm is already {0}/{1} done.",i,runNumber);
+                    Console.WriteLine("Algorithm is already {0}/{1} done.",i,algorithmRunNumber);
                 }
             }
-            else if (algoName == "Cristofides")
+            else if (algoName == "Christofides")
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
                 {
                     file.WriteLine("Algorithm name" + "\t" + "Graph filename" + "\t" + "Agents filename" + "\t" + "Result" + "\t" + "Run time");
                 }
-                for (int i = 0; i < runNumber; i++)
+                for (int i = 0; i < algorithmRunNumber; i++)
                 {
                     stopwatch.Restart();
                     Christofides c = new Christofides(cg, am);
@@ -667,19 +1024,54 @@ namespace TravellingSalesmenConsole
                              + "\t" + result + "\t" + ts.TotalMilliseconds);
                     }
                     Console.Clear();
-                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, runNumber);
+                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, algorithmRunNumber);
                 }
             }
             else if (algoName == "GreedySearch")
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
                 {
-                    file.WriteLine("Algorithm name" + "\t" + "Graph filename" + "\t" + "Agents filename" + "\t" + "Result" + "\t" + "Run time");
+                    file.WriteLine("Algorithm name" + "\t" + "Graph filename" + "\t" + "Agents filename" + "\t" +
+                        "Patience parameter" + "\t" + "Number of runs" + "\t" + "Max route length per agent" + "\t" +
+                        "Result" + "\t" + "Run time");
                 }
-                for (int i = 0; i < runNumber; i++)
+                for (int i = 0; i < algorithmRunNumber; i++)
                 {
+                    double intervalStart = 0;
+                    double step = 0;
+                    if (interval[0] != null && interval[1] != null)
+                    {
+                            int k1 = Int32.Parse(interval[0]);
+                            intervalStart = k1;
+                            int k2 = Int32.Parse(interval[1]);
+                            int delta = Math.Abs(k1 - k2);
+                            step = delta / algorithmRunNumber;
+                    }
+
+                    GreedySearch gs = null;
+                    int intervalIntStart = (int)intervalStart;
+                    int stepInt = (int)step;
+                    
+                    switch (GS_intervalEnum.ToString())
+                    {
+                        case "PatienceParameter":
+                            GS_patienceParameter = (intervalIntStart + i * stepInt);
+                            gs = new GreedySearch(cg, am, GS_patienceParameter, GS_numberOfRuns, GS_maxRouteLengthPerAgent);
+                            break;
+                        case "NumberOfRuns":
+                            GS_numberOfRuns = (intervalIntStart + i * stepInt);
+                            gs = new GreedySearch(cg, am, GS_patienceParameter, GS_numberOfRuns, GS_maxRouteLengthPerAgent);
+                            break;
+                        case "MaxRouteLengthPerAgent":
+                            GS_maxRouteLengthPerAgent = (intervalIntStart + i * stepInt);
+                            gs = new GreedySearch(cg, am, GS_patienceParameter, GS_numberOfRuns, GS_maxRouteLengthPerAgent);
+                            break;
+                        case "Nothing":
+                            gs = new GreedySearch(cg, am, GS_patienceParameter, GS_numberOfRuns, GS_maxRouteLengthPerAgent);
+                            break;
+                    }
+                    
                     stopwatch.Restart();
-                    GreedySearch gs = new GreedySearch(cg, am);
                     coordinator.Algorithm = gs;
                     coordinator.startAlgorithm();
                     coordinator.runAlgorithmThrough();
@@ -689,15 +1081,16 @@ namespace TravellingSalesmenConsole
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
                     {
                         file.WriteLine(this.algoName + "\t" + this.graphFileName + "\t" + this.agentFileName
+                             + "\t" + GS_patienceParameter + "\t" + GS_numberOfRuns + "\t" + GS_maxRouteLengthPerAgent
                              + "\t" + result + "\t" + ts.TotalMilliseconds);
                     }
                     Console.Clear();
-                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, runNumber);
+                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, algorithmRunNumber);
                 }
             }
             else if (algoName == "Genetic")
             {
-                double intervalStart = 0; ;
+                double intervalStart = 0;
                 double step = 0;
                 if (interval[0] != null && interval[1] != null)
                 {
@@ -707,7 +1100,7 @@ namespace TravellingSalesmenConsole
                         intervalStart = k1;
                         int k2 = Int32.Parse(interval[1]);
                         int delta = Math.Abs(k1 - k2);
-                        step = delta / runNumber;
+                        step = delta / algorithmRunNumber;
                     }
                     else if (GA_intDoubleOrBool == 2)
                     {
@@ -715,7 +1108,7 @@ namespace TravellingSalesmenConsole
                         intervalStart = k1;
                         double k2 = Double.Parse(interval[1]);
                         double delta = Math.Abs(k1 - k2);
-                        step = delta / runNumber;
+                        step = delta / algorithmRunNumber;
                     }
                 }
                 else
@@ -730,7 +1123,7 @@ namespace TravellingSalesmenConsole
                         "Weakparent rate" + "\t" + "First childmutate" + "\t" + "Second child mutate" + "\t" +
                         "Result" + "\t" + "Run time");
                 }
-                for (int i = 0; i < runNumber; i++)
+                for (int i = 0; i < algorithmRunNumber; i++)
                 {
                     GeneticAlgorithm ga = null;
                     int intervalIntStart = (int)intervalStart;
@@ -763,7 +1156,7 @@ namespace TravellingSalesmenConsole
                                         GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             break;
                         case "FirstChildMutate":
-                            if (i < runNumber / 2)
+                            if (i < algorithmRunNumber / 2)
                             {
                                 GA_firstChildMutate = true;
                                 ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
@@ -779,7 +1172,7 @@ namespace TravellingSalesmenConsole
                             }
                             break;
                         case "SecondChildMutate":
-                            if (i < runNumber / 2)
+                            if (i < algorithmRunNumber / 2)
                             {
                                 GA_secondChildMutate = true;
                                 ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
@@ -818,7 +1211,7 @@ namespace TravellingSalesmenConsole
                              + "\t" + result + "\t" + ts.TotalMilliseconds);
                     }
                     Console.Clear();
-                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, runNumber);
+                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, algorithmRunNumber);
                 }
             }
         }

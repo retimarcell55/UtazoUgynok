@@ -9,8 +9,8 @@ namespace TravellingSalesmenConsole
     class GreedySearch : Algorithm
     {
 
-        private const int PATIENCE_PARAMETER = 50;
-        private const int NUMBER_OF_RUNS = 100;
+        private int PATIENCE_PARAMETER;
+        private int NUMBER_OF_RUNS;
         private int MAX_ROUTE_LENGTH_PER_AGENT;
 
         private List<List<int>> OverallBest;
@@ -18,12 +18,15 @@ namespace TravellingSalesmenConsole
         private int startVertex;
         private int runCounter;
 
-        public GreedySearch(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
+        public GreedySearch(CompleteGraph graph, AgentManager agentManager, int patienceParameter, int numberOfRuns, int maxRouteLengthPerAgent) : base(graph, agentManager)
         {
             OverallBest = new List<List<int>>();
             CurrentBest = new List<List<int>>();
             startVertex = agentManager.Agents[0].StartPosition;
             runCounter = 0;
+            PATIENCE_PARAMETER = patienceParameter;
+            NUMBER_OF_RUNS = numberOfRuns;
+            //MAX_ROUTE_LENGTH_PER_AGENT = maxRouteLengthPerAgent;
             MAX_ROUTE_LENGTH_PER_AGENT = graph.Vertices.Count;
         }
 
