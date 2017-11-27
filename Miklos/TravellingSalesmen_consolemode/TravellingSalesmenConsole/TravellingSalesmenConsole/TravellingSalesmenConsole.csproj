@@ -46,6 +46,7 @@
     <Compile Include="Algorithms\BruteForce.cs" />
     <Compile Include="Algorithms\Christofides.cs" />
     <Compile Include="Algorithms\GeneticAlgorithm.cs" />
+    <Compile Include="Algorithms\GreedySearch.cs" />
     <Compile Include="Algorithms\RandomSearch.cs" />
     <Compile Include="BasicClasses\AbstractGraph.cs" />
     <Compile Include="BasicClasses\Agent.cs" />

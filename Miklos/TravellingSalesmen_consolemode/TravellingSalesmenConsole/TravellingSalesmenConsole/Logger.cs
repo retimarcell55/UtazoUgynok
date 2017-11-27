@@ -13,19 +13,25 @@ namespace TravellingSalesmenConsole
         protected string algoName;
         protected string graphFileName;
         protected string agentFileName;
-        protected int generationsNumber;
-        protected int populationNumber;
-        protected bool populationDefault;
-        protected double mutationProbability;
-        protected double weakParentRate;
-        protected bool firstChildMutate;
-        protected bool secondChildMutate;
         protected int runNumber;
         protected string outputFileName;
-        protected enum ParameterToInterval {GenerationNumber, PopulationNumber, MutationProbability, WeakParentRate, FirstChildMutate, SecondChildMutate, Nothing};
-        ParameterToInterval intervalEnum = new ParameterToInterval();
+        //GA extras
+        protected int GA_generationsNumber;
+        protected int GA_populationNumber;
+        protected bool GA_populationDefault;
+        protected double GA_mutationProbability;
+        protected double GA_weakParentRate;
+        protected bool GA_firstChildMutate;
+        protected bool GA_secondChildMutate;
+        protected enum GA_ParameterToInterval {GenerationNumber, PopulationNumber, MutationProbability, WeakParentRate, FirstChildMutate, SecondChildMutate, Nothing};
+        GA_ParameterToInterval GA_intervalEnum = new GA_ParameterToInterval();
         string[] interval = { null, null };
-        int intDoubleOrBool = -1; //0=nothing, 1=int, 2=double, 3=bool  (to the interval type)
+        int GA_intDoubleOrBool = -1; //0=nothing, 1=int, 2=double, 3=bool  (to the interval type)
+        //
+        //GS extras
+
+
+        //......................
 
         public string AlgoName { get => algoName; set => algoName = value; }
         public string GraphFileName { get => graphFileName; set => graphFileName = value; }
@@ -76,8 +82,7 @@ namespace TravellingSalesmenConsole
             Console.Clear();
             while (!isOk)
             {
-                
-                Console.WriteLine("Choose one algorithm:\n\t1 BruteForce\n\t2 Christofides\n\t3 Genetic\n\n");
+                Console.WriteLine("Choose one algorithm:\n\t1 BruteForce\n\t2 Christofides\n\t3 Genetic\n\t4 GreedySearch\n\n");
                 str = Console.ReadLine();
                 switch (str)
                 {
@@ -94,6 +99,11 @@ namespace TravellingSalesmenConsole
                     case "3":
                         algoName = "Genetic";
                         readedDatas += "Algorithm: Genetic\n";
+                        isOk = true;
+                        break;
+                    case "4":
+                        algoName = "GreedySearch";
+                        readedDatas += "Algorithm: GreedySearch\n";
                         isOk = true;
                         break;
                     default:
@@ -195,8 +205,8 @@ namespace TravellingSalesmenConsole
                         {
                             /* Yes input could be parsed and we can now use number in this code block 
                                scope */
-                            generationsNumber = int.Parse(str);
-                            readedDatas += "Generations number: " + generationsNumber + "\n";
+                            GA_generationsNumber = int.Parse(str);
+                            readedDatas += "Generations number: " + GA_generationsNumber + "\n";
                             isOk = true;
                         }
                         else
@@ -220,19 +230,19 @@ namespace TravellingSalesmenConsole
 
                         if(str == "default" || str == "Default")
                         {
-                            populationDefault = true;
+                            GA_populationDefault = true;
                             readedDatas += "Population number: " + "Default" + "\n";
                             isOk = true;
                         }
                         else
                         {
-                            populationDefault = false;
+                            GA_populationDefault = false;
                             if (Int32.TryParse(str, out numberInt))
                             {
                                 /* Yes input could be parsed and we can now use number in this code block 
                                    scope */
-                                populationNumber = int.Parse(str);
-                                readedDatas += "Population number: " + populationNumber + "\n";
+                                GA_populationNumber = int.Parse(str);
+                                readedDatas += "Population number: " + GA_populationNumber + "\n";
                                 isOk = true;
                             }
                             else
@@ -260,8 +270,8 @@ namespace TravellingSalesmenConsole
                         {
                             /* Yes input could be parsed and we can now use number in this code block 
                                scope */
-                            mutationProbability = Double.Parse(str);
-                            readedDatas += "Mutation probability: " + mutationProbability + "\n";
+                            GA_mutationProbability = Double.Parse(str);
+                            readedDatas += "Mutation probability: " + GA_mutationProbability + "\n";
                             isOk = true;
                         }
                         else
@@ -288,8 +298,8 @@ namespace TravellingSalesmenConsole
                         {
                             /* Yes input could be parsed and we can now use number in this code block 
                                scope */
-                            weakParentRate = Double.Parse(str);
-                            readedDatas += "Weak parent rate: " + weakParentRate + "\n";
+                            GA_weakParentRate = Double.Parse(str);
+                            readedDatas += "Weak parent rate: " + GA_weakParentRate + "\n";
                             isOk = true;
                         }
                         else
@@ -309,18 +319,18 @@ namespace TravellingSalesmenConsole
                     while (!isOk)
                     {
 
-                        Console.WriteLine("Type first child mutate!\n Type T if true, type F if false");
+                        Console.WriteLine("Type first child mutate!\nType T if true, type F if false");
                         str = Console.ReadLine();
                         if (str == "T" || str == "t")
                         {
-                            firstChildMutate = true;
-                            readedDatas += "Firt child mutate: " + firstChildMutate + "\n";
+                            GA_firstChildMutate = true;
+                            readedDatas += "Firt child mutate: " + GA_firstChildMutate + "\n";
                             isOk = true;
                         }
                         else if (str == "F" || str == "f")
                         {
-                            firstChildMutate = false;
-                            readedDatas += "Firt child mutate: " + firstChildMutate + "\n";
+                            GA_firstChildMutate = false;
+                            readedDatas += "Firt child mutate: " + GA_firstChildMutate + "\n";
                             isOk = true;
                         }
                         else
@@ -339,18 +349,18 @@ namespace TravellingSalesmenConsole
                     while (!isOk)
                     {
 
-                        Console.WriteLine("Type second child mutate!\n Type T if true, type F if false");
+                        Console.WriteLine("Type second child mutate!\nType T if true, type F if false");
                         str = Console.ReadLine();
                         if (str == "T" || str == "t")
                         {
-                            secondChildMutate = true;
-                            readedDatas += "Second child mutate: " + secondChildMutate + "\n";
+                            GA_secondChildMutate = true;
+                            readedDatas += "Second child mutate: " + GA_secondChildMutate + "\n";
                             isOk = true;
                         }
                         else if (str == "F" || str == "f")
                         {
-                            secondChildMutate = false;
-                            readedDatas += "Second child mutate: " + secondChildMutate + "\n";
+                            GA_secondChildMutate = false;
+                            readedDatas += "Second child mutate: " + GA_secondChildMutate + "\n";
                             isOk = true;
                         }
                         else
@@ -382,39 +392,39 @@ namespace TravellingSalesmenConsole
                         switch (str)
                         {
                             case "1":
-                                intervalEnum = ParameterToInterval.GenerationNumber;
+                                GA_intervalEnum = GA_ParameterToInterval.GenerationNumber;
                                 isOk = true;
-                                intDoubleOrBool = 1;
+                                GA_intDoubleOrBool = 1;
                                 break;
                             case "2":
-                                intervalEnum = ParameterToInterval.PopulationNumber;
+                                GA_intervalEnum = GA_ParameterToInterval.PopulationNumber;
                                 isOk = true;
-                                intDoubleOrBool = 1;
+                                GA_intDoubleOrBool = 1;
                                 break;
                             case "3":
-                                intervalEnum = ParameterToInterval.MutationProbability;
+                                GA_intervalEnum = GA_ParameterToInterval.MutationProbability;
                                 isOk = true;
-                                intDoubleOrBool = 2;
+                                GA_intDoubleOrBool = 2;
                                 break;
                             case "4":
-                                intervalEnum = ParameterToInterval.WeakParentRate;
+                                GA_intervalEnum = GA_ParameterToInterval.WeakParentRate;
                                 isOk = true;
-                                intDoubleOrBool = 2;
+                                GA_intDoubleOrBool = 2;
                                 break;
                             case "5":
-                                intervalEnum = ParameterToInterval.FirstChildMutate;
+                                GA_intervalEnum = GA_ParameterToInterval.FirstChildMutate;
                                 isOk = true;
-                                intDoubleOrBool = 3;
+                                GA_intDoubleOrBool = 3;
                                 break;
                             case "6":
-                                intervalEnum = ParameterToInterval.SecondChildMutate;
+                                GA_intervalEnum = GA_ParameterToInterval.SecondChildMutate;
                                 isOk = true;
-                                intDoubleOrBool = 3;
+                                GA_intDoubleOrBool = 3;
                                 break;
                             case "NOTHING":
-                                intervalEnum = ParameterToInterval.Nothing;
+                                GA_intervalEnum = GA_ParameterToInterval.Nothing;
                                 isOk = true;
-                                intDoubleOrBool = 0;
+                                GA_intDoubleOrBool = 0;
                                 break;
 
                             default:
@@ -425,7 +435,7 @@ namespace TravellingSalesmenConsole
                                 break;
                         }
 
-                        if (intDoubleOrBool == 1)
+                        if (GA_intDoubleOrBool == 1)
                         {
 #region read Int interval numbers
                             isOk = false;
@@ -443,7 +453,7 @@ namespace TravellingSalesmenConsole
                                        scope */
                                     interval[0] = str2[0];
                                     interval[1] = str2[1];
-                                    readedDatas += intervalEnum.ToString() + " will run form " + interval[0] + " to " + interval[1] + "\n";
+                                    readedDatas += GA_intervalEnum.ToString() + " will run form " + interval[0] + " to " + interval[1] + "\n";
                                     isOk = true;
                                 }
                                 else
@@ -457,7 +467,7 @@ namespace TravellingSalesmenConsole
 #endregion
                         }
 
-                        else if (intDoubleOrBool == 2)
+                        else if (GA_intDoubleOrBool == 2)
                         {
 #region read Double interval numbers
                             isOk = false;
@@ -482,7 +492,7 @@ namespace TravellingSalesmenConsole
                                            scope */
                                         interval[0] = str2[0];
                                         interval[1] = str2[1];
-                                        readedDatas += intervalEnum.ToString() + " will run form " + interval[0] + " to " + interval[1] + "\n";
+                                        readedDatas += GA_intervalEnum.ToString() + " will run form " + interval[0] + " to " + interval[1] + "\n";
                                         isOk = true;
                                     }
                                     else
@@ -498,22 +508,25 @@ namespace TravellingSalesmenConsole
 #endregion
                         }
 
-                        else if (intDoubleOrBool == 3)
+                        else if (GA_intDoubleOrBool == 3)
                         {
-                            readedDatas += intervalEnum.ToString() + " will run form " + "True" + " to " + "False" + "\n";
+                            readedDatas += GA_intervalEnum.ToString() + " will run form " + "True" + " to " + "False" + "\n";
                             Console.Clear();
                             Console.WriteLine(readedDatas);
                         }
 
-                        else if (intDoubleOrBool == 0)
+                        else if (GA_intDoubleOrBool == 0)
                         {
-                            readedDatas += intervalEnum.ToString() + " will run in interval!\n";
+                            readedDatas += GA_intervalEnum.ToString() + " will run in interval!\n";
                             Console.Clear();
                             Console.WriteLine(readedDatas);
                         }
                     }
 #endregion
 
+                    break;
+                case "GreedySearch":
+                    //todo greedy paraméterei beolvasás
                     break;
             }
 
@@ -582,7 +595,7 @@ namespace TravellingSalesmenConsole
         public void Run()
         {
             
-            Console.WriteLine("elkezdödött");
+            Console.WriteLine("Algorithm is started");
             Coordinator coordinator = new Coordinator();
             const string BASE_FOLDER_LOCATION = @"..\..\RawData";
             string outputPath = BASE_FOLDER_LOCATION + @"\Outputs\" + outputFileName + ".txt";
@@ -606,7 +619,7 @@ namespace TravellingSalesmenConsole
             CompleteGraph cg = readGraphFromFile(graphPath);
             AgentManager am = readAgentsFromFile(agentPath);
             using (StreamWriter sw = (File.Exists(outputPath)) ? File.AppendText(outputPath) : File.CreateText(outputPath));
-            double result = 0;            
+            double result = 0;
             if (algoName == "BruteForce")
             {
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
@@ -618,6 +631,7 @@ namespace TravellingSalesmenConsole
                     stopwatch.Restart();
                     BruteForce bf = new BruteForce(cg, am);
                     coordinator.Algorithm = bf;
+                    coordinator.startAlgorithm();
                     coordinator.runAlgorithmThrough();
                     result = coordinator.Algorithm.getActualResult();
                     stopwatch.Stop();
@@ -627,6 +641,8 @@ namespace TravellingSalesmenConsole
                         file.WriteLine(this.algoName + "\t" + this.graphFileName + "\t" + this.agentFileName
                              + "\t" + result + "\t" + ts.TotalMilliseconds);
                     }
+                    Console.Clear();
+                    Console.WriteLine("Algorithm is already {0}/{1} done.",i,runNumber);
                 }
             }
             else if (algoName == "Cristofides")
@@ -640,6 +656,7 @@ namespace TravellingSalesmenConsole
                     stopwatch.Restart();
                     Christofides c = new Christofides(cg, am);
                     coordinator.Algorithm = c;
+                    coordinator.startAlgorithm();
                     coordinator.runAlgorithmThrough();
                     result = coordinator.Algorithm.getActualResult();
                     stopwatch.Stop();
@@ -649,6 +666,33 @@ namespace TravellingSalesmenConsole
                         file.WriteLine(this.algoName + "\t" + this.graphFileName + "\t" + this.agentFileName
                              + "\t" + result + "\t" + ts.TotalMilliseconds);
                     }
+                    Console.Clear();
+                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, runNumber);
+                }
+            }
+            else if (algoName == "GreedySearch")
+            {
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
+                {
+                    file.WriteLine("Algorithm name" + "\t" + "Graph filename" + "\t" + "Agents filename" + "\t" + "Result" + "\t" + "Run time");
+                }
+                for (int i = 0; i < runNumber; i++)
+                {
+                    stopwatch.Restart();
+                    GreedySearch gs = new GreedySearch(cg, am);
+                    coordinator.Algorithm = gs;
+                    coordinator.startAlgorithm();
+                    coordinator.runAlgorithmThrough();
+                    result = coordinator.Algorithm.getActualResult();
+                    stopwatch.Stop();
+                    TimeSpan ts = stopwatch.Elapsed;
+                    using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
+                    {
+                        file.WriteLine(this.algoName + "\t" + this.graphFileName + "\t" + this.agentFileName
+                             + "\t" + result + "\t" + ts.TotalMilliseconds);
+                    }
+                    Console.Clear();
+                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, runNumber);
                 }
             }
             else if (algoName == "Genetic")
@@ -657,7 +701,7 @@ namespace TravellingSalesmenConsole
                 double step = 0;
                 if (interval[0] != null && interval[1] != null)
                 {
-                    if(intDoubleOrBool == 1)
+                    if (GA_intDoubleOrBool == 1)
                     {
                         int k1 = Int32.Parse(interval[0]);
                         intervalStart = k1;
@@ -665,7 +709,7 @@ namespace TravellingSalesmenConsole
                         int delta = Math.Abs(k1 - k2);
                         step = delta / runNumber;
                     }
-                    else if(intDoubleOrBool == 2)
+                    else if (GA_intDoubleOrBool == 2)
                     {
                         double k1 = Double.Parse(interval[0]);
                         intervalStart = k1;
@@ -683,7 +727,7 @@ namespace TravellingSalesmenConsole
                 {
                     file.WriteLine("Algorithm name" + "\t" + "Graph filename" + "\t" + "Agents filename" + "\t" +
                         "Generation number" + "\t" + "Populatiom number" + "\t" + "Mutation probability" + "\t" +
-                        "Weakparent rate" + "\t" + "First childmutate" + "\t" + "Second child mutate" + "\t" + 
+                        "Weakparent rate" + "\t" + "First childmutate" + "\t" + "Second child mutate" + "\t" +
                         "Result" + "\t" + "Run time");
                 }
                 for (int i = 0; i < runNumber; i++)
@@ -692,87 +736,89 @@ namespace TravellingSalesmenConsole
                     int intervalIntStart = (int)intervalStart;
                     int stepInt = (int)step;
                     //GenerationNumber, PopulationNumber, MutationProbability, WeakParentRate, FirstChildMutate, SecondChildMutate, Nothing
-                    switch (intervalEnum.ToString())
+                    switch (GA_intervalEnum.ToString())
                     {
                         case "GenerationNumber":
-                            generationsNumber = (intervalIntStart + i * stepInt);
-                            ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                        mutationProbability, weakParentRate,
-                                        firstChildMutate, secondChildMutate, populationDefault);
+                            GA_generationsNumber = (intervalIntStart + i * stepInt);
+                            ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                        GA_mutationProbability, GA_weakParentRate,
+                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             break;
                         case "PopulationNumber":
-                            populationNumber = (intervalIntStart + i * stepInt);
-                            ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                        mutationProbability, weakParentRate,
-                                        firstChildMutate, secondChildMutate, populationDefault);
+                            GA_populationNumber = (intervalIntStart + i * stepInt);
+                            ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                        GA_mutationProbability, GA_weakParentRate,
+                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             break;
                         case "MutationProbability":
-                            mutationProbability = (intervalStart + i * step);
-                            ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                        mutationProbability, weakParentRate,
-                                        firstChildMutate, secondChildMutate, populationDefault);
+                            GA_mutationProbability = (intervalStart + i * step);
+                            ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                        GA_mutationProbability, GA_weakParentRate,
+                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             break;
                         case "WeakParentRate":
-                            weakParentRate = (intervalStart + i * step);
-                            ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                        mutationProbability, weakParentRate,
-                                        firstChildMutate, secondChildMutate, populationDefault);
+                            GA_weakParentRate = (intervalStart + i * step);
+                            ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                        GA_mutationProbability, GA_weakParentRate,
+                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             break;
                         case "FirstChildMutate":
                             if (i < runNumber / 2)
                             {
-                                firstChildMutate = true;
-                                ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                        mutationProbability, weakParentRate,
-                                        firstChildMutate, secondChildMutate, populationDefault);
+                                GA_firstChildMutate = true;
+                                ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                        GA_mutationProbability, GA_weakParentRate,
+                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             }
                             else
                             {
-                                firstChildMutate = false;
-                                ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                        mutationProbability, weakParentRate,
-                                        firstChildMutate, secondChildMutate, populationDefault);
+                                GA_firstChildMutate = false;
+                                ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                        GA_mutationProbability, GA_weakParentRate,
+                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             }
                             break;
                         case "SecondChildMutate":
                             if (i < runNumber / 2)
                             {
-                                secondChildMutate = true;
-                                ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                            mutationProbability, weakParentRate,
-                                            firstChildMutate, secondChildMutate, populationDefault);
+                                GA_secondChildMutate = true;
+                                ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                            GA_mutationProbability, GA_weakParentRate,
+                                            GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             }
                             else
                             {
-                                secondChildMutate = false;
-                                ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                            mutationProbability, weakParentRate,
-                                            firstChildMutate, secondChildMutate, populationDefault);
+                                GA_secondChildMutate = false;
+                                ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                            GA_mutationProbability, GA_weakParentRate,
+                                            GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             }
                             break;
                         case "Nothing":
-                            ga = new GeneticAlgorithm(cg, am, generationsNumber, populationNumber,
-                                        mutationProbability, weakParentRate,
-                                        firstChildMutate, secondChildMutate, populationDefault);
+                            ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
+                                        GA_mutationProbability, GA_weakParentRate,
+                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
                             break;
                     }
 
-                    
+
                     stopwatch.Stop();
                     TimeSpan ts = stopwatch.Elapsed;
                     stopwatch.Restart();
                     coordinator.Algorithm = ga;
-                    coordinator.Algorithm.Initialize();
+                    coordinator.startAlgorithm();
                     coordinator.runAlgorithmThrough();
                     result = coordinator.Algorithm.getActualResult();
-                    
+
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
                     {
                         file.WriteLine(this.algoName + "\t" + this.graphFileName + "\t" + this.agentFileName
-                             + "\t" + generationsNumber + "\t" + populationNumber + "\t" +mutationProbability
-                             + "\t" + weakParentRate + "\t" + firstChildMutate + "\t" + secondChildMutate
-                             +"\t" + result + "\t" + ts.TotalMilliseconds  );
+                             + "\t" + GA_generationsNumber + "\t" + GA_populationNumber + "\t" + GA_mutationProbability
+                             + "\t" + GA_weakParentRate + "\t" + GA_firstChildMutate + "\t" + GA_secondChildMutate
+                             + "\t" + result + "\t" + ts.TotalMilliseconds);
                     }
+                    Console.Clear();
+                    Console.WriteLine("Algorithm is already {0}/{1} done.", i, runNumber);
                 }
             }
         }
