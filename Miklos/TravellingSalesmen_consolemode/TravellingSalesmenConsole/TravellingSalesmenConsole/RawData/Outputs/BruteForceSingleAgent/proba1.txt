@@ -1,0 +1,21 @@
+Algorithm name	Graph filename	Agents filename	Result	Run time
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5026,8258
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5012,305
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5044,6656
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5080,5107
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5261,0701
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5170,5174
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5002,1
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5035,089
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5032,9088
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5066,2054
+BruteForceSingleAgent	graph10_1	agent0	1922,45	4979,6509
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5034,938
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5019,4611
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5015,2392
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5210,4803
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5032,2982
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5049,824
+BruteForceSingleAgent	graph10_1	agent0	1922,45	4983,4444
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5037,1528
+BruteForceSingleAgent	graph10_1	agent0	1922,45	5110,6692

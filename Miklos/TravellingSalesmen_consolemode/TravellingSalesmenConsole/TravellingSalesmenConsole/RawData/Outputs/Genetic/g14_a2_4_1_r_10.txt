@@ -1,0 +1,11 @@
+Algorithm name	Graph filename	Agents filename	Generation number	Populatiom number	Mutation probability	Weakparent rate	First childmutate	Second child mutate	Result	Run time
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1691,0732
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1617,9759
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1599,951
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1621,2344
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1625,4327
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1616,1301
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1585,9397
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1624,7539
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1851,6149
+Genetic	g14	agents2_max4_1	500	1500	0,8	0,025	True	True	141319,53	1585,9555

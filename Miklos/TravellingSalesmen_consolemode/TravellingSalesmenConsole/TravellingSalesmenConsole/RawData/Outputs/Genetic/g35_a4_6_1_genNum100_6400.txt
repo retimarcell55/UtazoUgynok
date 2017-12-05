@@ -1,0 +1,14 @@
+Algorithm name	Graph filename	Agents filename	Generation number	Populatiom number	Mutation probability	Weakparent rate	First childmutate	Second child mutate	Result	Run time
+Genetic	g35	agents4_max6_1	100	21500	0,75	0,025	True	True	24298,85	0,0012
+Genetic	g35	agents4_max6_1	595	21500	0,75	0,025	True	True	11909,66	14505,2533
+Genetic	g35	agents4_max6_1	1090	21500	0,75	0,025	True	True	12266,8	97890,2516
+Genetic	g35	agents4_max6_1	1585	21500	0,75	0,025	True	True	11909,66	176273,0906
+Genetic	g35	agents4_max6_1	2080	21500	0,75	0,025	True	True	12237,79	276629,9759
+Genetic	g35	agents4_max6_1	2575	21500	0,75	0,025	True	True	11909,66	314090,7083
+Genetic	g35	agents4_max6_1	3070	21500	0,75	0,025	True	True	12237,79	418515,9686
+Genetic	g35	agents4_max6_1	3565	21500	0,75	0,025	True	True	11909,66	476990,6986
+Genetic	g35	agents4_max6_1	4060	21500	0,75	0,025	True	True	12237,79	555278,1974
+Genetic	g35	agents4_max6_1	4555	21500	0,75	0,025	True	True	12915,42	652261,2203
+Genetic	g35	agents4_max6_1	5050	21500	0,75	0,025	True	True	11712,46	818526,5512
+Genetic	g35	agents4_max6_1	5545	21500	0,75	0,025	True	True	11978,95	1000022,6866
+Genetic	g35	agents4_max6_1	6040	21500	0,75	0,025	True	True	12237,79	1358020,2632
