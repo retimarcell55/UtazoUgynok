@@ -1,3 +1,0 @@
-Algorithm name	Graph filename	Agents filename	Result	Run time
-BruteForceSingleAgent	graph10_1	agent0	1922,45	5464,3662
-BruteForceSingleAgent	graph10_1	agent0	1922,45	5353,397

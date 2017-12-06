@@ -1,2 +1,0 @@
-Algorithm name	Graph filename	Agents filename	Generation number	Populatiom number	Mutation probability	Weakparent rate	First childmutate	Second child mutate	Result	Run time
-Genetic	graph100_1	MultiAgents\agents3_max5_1	80	7000	0,25	0,025	True	True	722	0,0145

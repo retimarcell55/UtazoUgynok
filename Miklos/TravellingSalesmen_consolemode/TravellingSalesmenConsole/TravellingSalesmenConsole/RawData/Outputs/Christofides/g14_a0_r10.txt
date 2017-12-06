@@ -1,2 +1,0 @@
-Algorithm name	Graph filename	Agents filename	Result	Run time
-Algorithm name	Graph filename	Agents filename	Result	Run time

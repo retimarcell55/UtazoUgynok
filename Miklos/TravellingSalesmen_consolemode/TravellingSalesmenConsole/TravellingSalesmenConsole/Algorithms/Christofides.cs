@@ -52,7 +52,7 @@ namespace TravellingSalesmenConsole
                     graph.Vertices.Single(x => x.Id == item.StartPosition).Used = true;
                 }
             }
-            for (int i = 0; i < agentManager.Agents.Count; i++)
+            /*for (int i = 0; i < agentManager.Agents.Count; i++)
             {
 
                 int nextVertex = hamiltonVertices[0].Id;
@@ -61,7 +61,28 @@ namespace TravellingSalesmenConsole
                 ((Edge)graph.Edges.Single(edge => (edge.StartVertex.Id == agentManager.Agents[i].ActualPosition && edge.EndVertex.Id == nextVertex)
                                                     || (edge.EndVertex.Id == agentManager.Agents[i].ActualPosition && edge.StartVertex.Id == nextVertex))).Used = true;
                 agentManager.Agents[i].ActualPosition = nextVertex;
+
+
+
+            }*/
+
+            graph.Edges.Single(e => (e.StartVertex.Id == agentManager.Agents[0].StartPosition && e.EndVertex.Id == agentManager.Agents[0].StartPosition)
+                                 || (e.EndVertex.Id == agentManager.Agents[0].StartPosition && e.StartVertex.Id == agentManager.Agents[0].StartPosition)).Used = true;
+            
+
+            for(int i = 0; i < hamiltonVertices.Count-1; i++)
+            {
+                
+                foreach (var e in graph.Edges)
+                {
+                    if((e.StartVertex.Id == hamiltonVertices[i].Id && e.EndVertex.Id == hamiltonVertices[i+1].Id) || (e.EndVertex.Id == hamiltonVertices[i].Id && e.StartVertex.Id == hamiltonVertices[i + 1].Id))
+                    {
+                        e.Used = true;
+                            break;
+                    }
+                }
             }
+
         }
 
         public override double getActualResult()

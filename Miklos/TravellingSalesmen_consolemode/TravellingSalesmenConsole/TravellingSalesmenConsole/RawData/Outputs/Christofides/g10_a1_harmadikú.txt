@@ -1,4 +1,0 @@
-Algorithm name	Graph filename	Agents filename	Result	Run time
-Christofides	graph10_1	agent0	249,19	76,8695
-Christofides	graph10_1	agent0	249,19	18,6658
-Christofides	graph10_1	agent0	249,19	4,299
