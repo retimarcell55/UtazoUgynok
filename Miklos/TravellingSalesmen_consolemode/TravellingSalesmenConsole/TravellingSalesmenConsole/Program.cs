@@ -13,6 +13,20 @@ namespace TravellingSalesmenConsole
         static void Main(string[] args)
         {
             bool runAgain = true;
+
+            /*
+for(int i = 0; i <20; i++)
+{
+    for(int j = 0; j < 20; j++)
+    {
+        using (System.IO.StreamWriter file = new System.IO.StreamWriter(BASE_FOLDER_LOCATION + @"\Graphs\" + "graph400_1" + ".txt", true))
+        {
+            file.WriteLine("{0}" +" "+ "{1}",100+i*11, 100+j*10 );
+        }
+    }
+
+}*/
+
             while (runAgain)
             {
                 Logger logger = new Logger();
