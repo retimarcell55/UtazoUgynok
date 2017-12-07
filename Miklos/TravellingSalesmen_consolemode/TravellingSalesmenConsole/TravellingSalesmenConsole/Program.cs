@@ -14,19 +14,19 @@ namespace TravellingSalesmenConsole
         {
             bool runAgain = true;
 
-        const string BASE_FOLDER_LOCATION = @"..\..\RawData";
-        for (int i = 0; i <5; i++)
+        /*const string BASE_FOLDER_LOCATION = @"..\..\RawData";
+        for (int i = 0; i <500; i++)
         {
-            
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(BASE_FOLDER_LOCATION + @"\Graphs\" + "g20_keret" + ".txt", true))
+                Random random1 = new Random(DateTime.Now.Millisecond);
+                Random random2 = new Random(DateTime.Now.Millisecond *2);
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(BASE_FOLDER_LOCATION + @"\Graphs\" + "g500_rand" + ".txt", true))
                 {
-                        file.WriteLine("{0}" + " " + "{1}", 50 + i*50, 50);
-                        file.WriteLine("{0}" + " " + "{1}", 50 + i*50, 500);
-                        file.WriteLine("{0}" + " " + "{1}", 50, 50 + i*50);
-                        file.WriteLine("{0}" + " " + "{1}", 500, 50 + i*50);
+                    int x = random1.Next() % 700;
+                    int y = random2.Next() % 500;
+                        file.WriteLine("{0}" + " " + "{1}", x, y);
                 }
             
-        }
+        }*/
 
             while (runAgain)
             {
