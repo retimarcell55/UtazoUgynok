@@ -14,18 +14,19 @@ namespace TravellingSalesmenConsole
         {
             bool runAgain = true;
 
-            /*
-for(int i = 0; i <20; i++)
-{
-    for(int j = 0; j < 20; j++)
-    {
-        using (System.IO.StreamWriter file = new System.IO.StreamWriter(BASE_FOLDER_LOCATION + @"\Graphs\" + "graph400_1" + ".txt", true))
+        const string BASE_FOLDER_LOCATION = @"..\..\RawData";
+        for (int i = 0; i <5; i++)
         {
-            file.WriteLine("{0}" +" "+ "{1}",100+i*11, 100+j*10 );
+            
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(BASE_FOLDER_LOCATION + @"\Graphs\" + "g20_keret" + ".txt", true))
+                {
+                        file.WriteLine("{0}" + " " + "{1}", 50 + i*50, 50);
+                        file.WriteLine("{0}" + " " + "{1}", 50 + i*50, 500);
+                        file.WriteLine("{0}" + " " + "{1}", 50, 50 + i*50);
+                        file.WriteLine("{0}" + " " + "{1}", 500, 50 + i*50);
+                }
+            
         }
-    }
-
-}*/
 
             while (runAgain)
             {

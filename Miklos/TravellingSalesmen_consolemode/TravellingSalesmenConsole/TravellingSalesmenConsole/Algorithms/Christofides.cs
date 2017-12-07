@@ -238,7 +238,6 @@ namespace TravellingSalesmenConsole
                     if (iteme.Used == false)
                         if (iteme.Weight == g.VertexIdAndEdges[iteme.StartVertex.Id].Where(x => x.Used == false).Min(x => x.Weight) && iteme.Weight == g.VertexIdAndEdges[iteme.EndVertex.Id].Where(x => x.Used == false).Min(x => x.Weight))
                         {
-                            Console.WriteLine(Result.Count + "Yolo" + iteme.Id);
                             Cost = 0;
                             iteme.StartVertex.Used = true;
                             iteme.EndVertex.Used = true;
