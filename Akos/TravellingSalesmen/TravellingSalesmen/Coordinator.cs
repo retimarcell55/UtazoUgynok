@@ -90,7 +90,7 @@ namespace TravellingSalesmen
                     mainForm.DrawGraph(algorithm.Graph, algorithm.AgentManager);
                     mainForm.UpdateResult(algorithm.getActualResult().ToString());
 
-                    System.Threading.Thread.Sleep(500);
+                    //System.Threading.Thread.Sleep(500);
                 }
                 algorithmStarted = false;
             }
