@@ -701,6 +701,7 @@ namespace TravellingSalesmenConsole
                     isOk = false;
                     Console.Clear();
                     Console.WriteLine(readedDatas);
+                    bool nothing = false;
                     while (!isOk)
                     {
                         Console.WriteLine("Type the number of that parameter what you would like to run from...  ...to.:\n\n" +
@@ -728,6 +729,7 @@ namespace TravellingSalesmenConsole
                             case "NOTHING":
                                 GS_intervalEnum = GS_ParameterToInterval.Nothing;
                                 isOk = true;
+                                nothing = true;
                                 GA_intDoubleOrBool = 0;
                                 break;
                             default:
@@ -744,25 +746,32 @@ namespace TravellingSalesmenConsole
                     Console.WriteLine(readedDatas);
                     while (!isOk)
                     {
-
-                        Console.WriteLine("Type the interval minimum and maximum in this form: 423-653\n");
-                        str = Console.ReadLine();
-                        string[] str2 = str.Split('-');
-                        if (Int32.TryParse(str2[0], out numberInt) && (Int32.TryParse(str2[1], out numberInt)))
+                        if (nothing)
                         {
-                            /* Yes input could be parsed and we can now use number in this code block 
-                               scope */
-                            interval[0] = str2[0];
-                            interval[1] = str2[1];
-                            readedDatas += GS_intervalEnum.ToString() + " will run form " + interval[0] + " to " + interval[1] + "\n";
                             isOk = true;
                         }
                         else
                         {
-                            /* No, input could not be parsed to an integer */
-                            Console.Clear();
-                            Console.WriteLine(readedDatas);
-                            Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                            Console.WriteLine("Type the interval minimum and maximum in this form: 423-653\n");
+                            str = Console.ReadLine();
+                            string[] str2 = str.Split('-');
+                            if (Int32.TryParse(str2[0], out numberInt) && (Int32.TryParse(str2[1], out numberInt)))
+                            {
+                                /* Yes input could be parsed and we can now use number in this code block 
+                                   scope */
+                                interval[0] = str2[0];
+                                interval[1] = str2[1];
+                                readedDatas += GS_intervalEnum.ToString() + " will run form " + interval[0] + " to " + interval[1] + "\n";
+                                isOk = true;
+                            }
+                            else
+                            {
+                                /* No, input could not be parsed to an integer */
+                                Console.Clear();
+                                Console.WriteLine(readedDatas);
+                                Console.WriteLine("Wrong arnswer !\nType it again!\n");
+                            }
+
                         }
                     }
 
@@ -1124,25 +1133,25 @@ namespace TravellingSalesmenConsole
                             GA_generationsNumber = (intervalIntStart + i * stepInt);
                             ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                         GA_mutationProbability, GA_weakParentRate,
-                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                        GA_firstChildMutate, GA_secondChildMutate);
                             break;
                         case "PopulationNumber":
                             GA_populationNumber = (intervalIntStart + i * stepInt);
                             ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                         GA_mutationProbability, GA_weakParentRate,
-                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                        GA_firstChildMutate, GA_secondChildMutate);
                             break;
                         case "MutationProbability":
                             GA_mutationProbability = (intervalStart + i * step);
                             ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                         GA_mutationProbability, GA_weakParentRate,
-                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                        GA_firstChildMutate, GA_secondChildMutate);
                             break;
                         case "WeakParentRate":
                             GA_weakParentRate = (intervalStart + i * step);
                             ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                         GA_mutationProbability, GA_weakParentRate,
-                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                        GA_firstChildMutate, GA_secondChildMutate);
                             break;
                         case "FirstChildMutate":
                             if (i < algorithmRunNumber / 2)
@@ -1150,14 +1159,14 @@ namespace TravellingSalesmenConsole
                                 GA_firstChildMutate = true;
                                 ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                         GA_mutationProbability, GA_weakParentRate,
-                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                        GA_firstChildMutate, GA_secondChildMutate);
                             }
                             else
                             {
                                 GA_firstChildMutate = false;
                                 ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                         GA_mutationProbability, GA_weakParentRate,
-                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                        GA_firstChildMutate, GA_secondChildMutate);
                             }
                             break;
                         case "SecondChildMutate":
@@ -1166,31 +1175,32 @@ namespace TravellingSalesmenConsole
                                 GA_secondChildMutate = true;
                                 ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                             GA_mutationProbability, GA_weakParentRate,
-                                            GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                            GA_firstChildMutate, GA_secondChildMutate);
                             }
                             else
                             {
                                 GA_secondChildMutate = false;
                                 ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                             GA_mutationProbability, GA_weakParentRate,
-                                            GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                            GA_firstChildMutate, GA_secondChildMutate);
                             }
                             break;
                         case "Nothing":
                             ga = new GeneticAlgorithm(cg, am, GA_generationsNumber, GA_populationNumber,
                                         GA_mutationProbability, GA_weakParentRate,
-                                        GA_firstChildMutate, GA_secondChildMutate, GA_populationDefault);
+                                        GA_firstChildMutate, GA_secondChildMutate);
                             break;
                     }
 
 
-                    stopwatch.Stop();
-                    TimeSpan ts = stopwatch.Elapsed;
+                    
                     stopwatch.Restart();
                     coordinator.Algorithm = ga;
                     coordinator.startAlgorithm();
                     coordinator.runAlgorithmThrough();
                     result = coordinator.Algorithm.getActualResult();
+                    stopwatch.Stop();
+                    TimeSpan ts = stopwatch.Elapsed;
 
                     using (System.IO.StreamWriter file = new System.IO.StreamWriter(outputPath, true))
                     {

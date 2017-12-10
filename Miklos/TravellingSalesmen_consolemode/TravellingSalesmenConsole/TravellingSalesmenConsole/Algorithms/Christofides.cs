@@ -12,10 +12,16 @@ namespace TravellingSalesmenConsole
         private SimpleGraph minimumSpanningTree = null;
         private List<Edge> independentMinimunEdges = null;
         private List<Vertex> hamiltonVertices = null;
+        private bool hasnext;
 
         public Christofides(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
+            hasnext = true;
+        }
 
+        public override bool hasAlgorithmNextMove()
+        {
+            return hasnext;
         }
 
         public override void NextTurn()
@@ -65,11 +71,11 @@ namespace TravellingSalesmenConsole
 
 
             }*/
-
-            graph.Edges.Single(e => (e.StartVertex.Id == agentManager.Agents[0].StartPosition && e.EndVertex.Id == agentManager.Agents[0].StartPosition)
-                                 || (e.EndVertex.Id == agentManager.Agents[0].StartPosition && e.StartVertex.Id == agentManager.Agents[0].StartPosition)).Used = true;
+            //EZ !!!!!!!!!
+            graph.Edges.Single(e => (e.StartVertex.Id == hamiltonVertices[0].Id && e.EndVertex.Id == agentManager.Agents[0].StartPosition)
+                                 || (e.EndVertex.Id == hamiltonVertices[0].Id && e.StartVertex.Id == agentManager.Agents[0].StartPosition)).Used = true;
             
-
+            //IDÁIG!!!!!!!
             for(int i = 0; i < hamiltonVertices.Count-1; i++)
             {
                 
@@ -82,6 +88,8 @@ namespace TravellingSalesmenConsole
                     }
                 }
             }
+
+            hasnext = false;
 
         }
 

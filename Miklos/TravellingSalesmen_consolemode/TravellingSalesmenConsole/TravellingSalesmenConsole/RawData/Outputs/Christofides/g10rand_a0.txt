@@ -1,0 +1,12 @@
+Algorithm name	Graph filename	Agents filename	Result	Run time
+Algorithm name	Graph filename	Agents filename	Result	Run time
+Christofides	g10_rand	SingleAgent\a0	1848,46	41,3308
+Christofides	g10_rand	SingleAgent\a0	1848,46	4,8678
+Christofides	g10_rand	SingleAgent\a0	1848,46	4,2009
+Christofides	g10_rand	SingleAgent\a0	1848,46	5,8082
+Christofides	g10_rand	SingleAgent\a0	1732,54	4,6165
+Christofides	g10_rand	SingleAgent\a0	1848,46	5,6533
+Christofides	g10_rand	SingleAgent\a0	1813,36	6,6368
+Christofides	g10_rand	SingleAgent\a0	1848,46	6,2856
+Christofides	g10_rand	SingleAgent\a0	1732,54	4,064
+Christofides	g10_rand	SingleAgent\a0	1813,36	4,0554

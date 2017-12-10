@@ -1,0 +1,11 @@
+Algorithm name	Graph filename	Agents filename	Result	Run time
+Christofides	g10	SingleAgent\a0	2093,95	6,7515
+Christofides	g10	SingleAgent\a0	2255,14	7,1688
+Christofides	g10	SingleAgent\a0	2255,14	4,1429
+Christofides	g10	SingleAgent\a0	2096,54	4,7283
+Christofides	g10	SingleAgent\a0	2093,95	4,0371
+Christofides	g10	SingleAgent\a0	2096,54	4,3379
+Christofides	g10	SingleAgent\a0	2255,14	3,9714
+Christofides	g10	SingleAgent\a0	2096,54	4,0712
+Christofides	g10	SingleAgent\a0	2096,54	6,9969
+Christofides	g10	SingleAgent\a0	2257,73	5,1921

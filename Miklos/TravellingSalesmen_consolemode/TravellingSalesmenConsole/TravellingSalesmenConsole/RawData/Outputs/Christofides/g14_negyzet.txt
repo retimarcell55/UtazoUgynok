@@ -1,0 +1,11 @@
+Algorithm name	Graph filename	Agents filename	Result	Run time
+Christofides	g12_negyzet	SingleAgent\a0	1870,71	14,3586
+Christofides	g12_negyzet	SingleAgent\a0	1870,71	14,0339
+Christofides	g12_negyzet	SingleAgent\a0	1550	13,2399
+Christofides	g12_negyzet	SingleAgent\a0	1550	12,9621
+Christofides	g12_negyzet	SingleAgent\a0	1870,71	12,1135
+Christofides	g12_negyzet	SingleAgent\a0	1870,71	11,4935
+Christofides	g12_negyzet	SingleAgent\a0	1550	11,3945
+Christofides	g12_negyzet	SingleAgent\a0	1870,71	12,8584
+Christofides	g12_negyzet	SingleAgent\a0	1550	15,5473
+Christofides	g12_negyzet	SingleAgent\a0	1550	11,0703
