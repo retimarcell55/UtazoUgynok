@@ -1,0 +1,15 @@
+Algorithm name	Graph filename	Agents filename	Generation number	Populatiom number	Mutation probability	Weakparent rate	First childmutate	Second child mutate	Result	Run time
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	100	52	0,6	0,035	True	False	1410,46	14,8752
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	109	52	0,6	0,035	True	False	1418,74	13,2987
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	118	52	0,6	0,035	True	False	1410,46	12,0328
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	127	52	0,6	0,035	True	False	1418,28	15,3412
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	136	52	0,6	0,035	True	False	1418,28	18,0441
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	145	52	0,6	0,035	True	False	1414,26	25,1989
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	154	52	0,6	0,035	True	False	1410,46	18,0053
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	163	52	0,6	0,035	True	False	1410	16,9147
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	172	52	0,6	0,035	True	False	1410,46	17,9093
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	181	52	0,6	0,035	True	False	1410	18,472
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	190	52	0,6	0,035	True	False	1418,28	22,9401
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	199	52	0,6	0,035	True	False	1410,46	20,474
+Genetic	g12_negyzet_sokkeves	MultiAgents\a1_0	208	52	0,6	0,035	True	False	1414,26	20,811
+

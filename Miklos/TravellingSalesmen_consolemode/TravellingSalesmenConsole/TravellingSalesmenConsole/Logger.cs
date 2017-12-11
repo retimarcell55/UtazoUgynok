@@ -315,7 +315,7 @@ namespace TravellingSalesmenConsole
                     Console.WriteLine(readedDatas);
                     while (!isOk)
                     {
-                        Console.WriteLine("Type the population number\nIf type 'Default' the number will be calculated.");
+                        Console.WriteLine("Type the population number\nIf type -1 the number will be calculated.");
                         str = Console.ReadLine();
 
                         if(str == "default" || str == "Default")
@@ -1127,7 +1127,7 @@ namespace TravellingSalesmenConsole
                     int intervalIntStart = (int)intervalStart;
                     int stepInt = (int)step;
                     //GenerationNumber, PopulationNumber, MutationProbability, WeakParentRate, FirstChildMutate, SecondChildMutate, Nothing
-                    switch (GA_intervalEnum.ToString())
+                    switch (GA_intervalEnum.ToString().ToString())
                     {
                         case "GenerationNumber":
                             GA_generationsNumber = (intervalIntStart + i * stepInt);
@@ -1192,7 +1192,7 @@ namespace TravellingSalesmenConsole
                             break;
                     }
 
-
+                    GA_populationNumber = ga.getPopSize();
                     
                     stopwatch.Restart();
                     coordinator.Algorithm = ga;

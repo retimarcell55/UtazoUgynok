@@ -13,6 +13,10 @@ namespace TravellingSalesmenConsole
         private int GENERATIONS;
 
         private int POPULATION_SIZE;
+        public int getPopSize()
+        {
+            return POPULATION_SIZE;
+        }
 
         private bool FIRST_CHILD_MUTATE;
         private bool SECEND_CHILD_MUTATE;
@@ -38,10 +42,22 @@ namespace TravellingSalesmenConsole
             SECEND_CHILD_MUTATE = SecondChildMutate;
             MUTATION_PROBABILITY = mutationProbability;
             WEAK_PARENT_RATE = weakParentRate;
-            POPULATION_SIZE = populationNumber;
 
-            population = new Chromosome[POPULATION_SIZE];
-            //ittttttttt 
+            if (populationNumber == -1)
+            {
+                double chromsize = System.Math.Round((Math.Log(graph.Vertices.Count)));
+                double length = chromsize * (graph.Vertices.Count + agentManager.Agents.Count);
+                POPULATION_SIZE = (int)(Math.Round((length * Math.Pow(2.0, chromsize)) / chromsize));
+                population = new Chromosome[POPULATION_SIZE];
+                populationNumber = POPULATION_SIZE;
+            }
+            else
+            {
+                POPULATION_SIZE = populationNumber;
+
+                population = new Chromosome[POPULATION_SIZE];
+            }
+
             startCity = agentManager.Agents[0].StartPosition;
             numberOfCities = graph.Vertices.Count;
             numberOfSalesmen = agentManager.Agents.Count;
