@@ -1,0 +1,4 @@
+Algorithm name	Graph filename	Agents filename	Generation number	Populatiom number	Mutation probability	Weakparent rate	First childmutate	Second child mutate	Result	Run time
+Genetic	g100_rand	MultiAgents\a16_11	200	7000	0,6	0,025	True	False	3192,31	35925,6947
+Genetic	g100_rand	MultiAgents\a16_11	200	7000	0,6	0,025	True	False	2821,81	36271,2872
+Genetic	g100_rand	MultiAgents\a16_11	200	7000	0,6	0,025	True	False	2747,99	37425,1388
