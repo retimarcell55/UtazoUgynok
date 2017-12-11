@@ -1,0 +1,20 @@
+Algorithm name	Graph filename	Agents filename	Generation number	Populatiom number	Mutation probability	Weakparent rate	First childmutate	Second child mutate	Result	Run time
+Genetic	g50_rand	MultiAgents\a2_0	300	100	0,6	0,025	True	False	3301	789,0071
+Genetic	g50_rand	MultiAgents\a2_0	300	200	0,6	0,025	True	False	2454,49	1029,6161
+Genetic	g50_rand	MultiAgents\a2_0	300	300	0,6	0,025	True	False	2096,67	1236,6052
+Genetic	g50_rand	MultiAgents\a2_0	300	400	0,6	0,025	True	False	2240,02	1513,0047
+Genetic	g50_rand	MultiAgents\a2_0	300	500	0,6	0,025	True	False	2457,91	1676,1692
+Genetic	g50_rand	MultiAgents\a2_0	300	600	0,6	0,025	True	False	2388,99	2003,6821
+Genetic	g50_rand	MultiAgents\a2_0	300	700	0,6	0,025	True	False	2786,21	2159,9209
+Genetic	g50_rand	MultiAgents\a2_0	300	800	0,6	0,025	True	False	2094,41	2715,9716
+Genetic	g50_rand	MultiAgents\a2_0	300	900	0,6	0,025	True	False	1999,53	2895,078
+Genetic	g50_rand	MultiAgents\a2_0	300	1000	0,6	0,025	True	False	2109,94	3037,4079
+Genetic	g50_rand	MultiAgents\a2_0	300	1100	0,6	0,025	True	False	2127,04	3285,185
+Genetic	g50_rand	MultiAgents\a2_0	300	1200	0,6	0,025	True	False	2777,53	3645,1988
+Genetic	g50_rand	MultiAgents\a2_0	300	1300	0,6	0,025	True	False	2028,16	3792,2301
+Genetic	g50_rand	MultiAgents\a2_0	300	1400	0,6	0,025	True	False	1888,74	4011,4167
+Genetic	g50_rand	MultiAgents\a2_0	300	1500	0,6	0,025	True	False	2065,07	4172,2895
+Genetic	g50_rand	MultiAgents\a2_0	300	1600	0,6	0,025	True	False	2031,72	4512,6318
+Genetic	g50_rand	MultiAgents\a2_0	300	1700	0,6	0,025	True	False	1913,24	4770,1416
+Genetic	g50_rand	MultiAgents\a2_0	300	1800	0,6	0,025	True	False	2312,9	5126,3836
+Genetic	g50_rand	MultiAgents\a2_0	300	1900	0,6	0,025	True	False	1974,67	5257,8702
