@@ -37,7 +37,11 @@ namespace TravellingSalesmen.Algorithms
             WEAK_PARENT_RATE = weakParentRate;
 
             if (populationNumber == -1)
-                population = new Chromosome[4 * (graph.Vertices.Count / 2) * (graph.Vertices.Count / 2) * (graph.Vertices.Count / 2)];
+            {
+                double chromsize = System.Math.Round((Math.Log(graph.Vertices.Count)));
+                double length = chromsize * (graph.Vertices.Count + agentManager.Agents.Count);
+                population = new Chromosome[(int)(Math.Round((length * Math.Pow(2.0, chromsize)) / chromsize))];
+            }
             else
                 population = new Chromosome[populationNumber];
 
