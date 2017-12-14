@@ -14,19 +14,6 @@ namespace TravellingSalesmenConsole
         {
             bool runAgain = true;
 
-        /*const string BASE_FOLDER_LOCATION = @"..\..\RawData";
-        for (int i = 0; i <500; i++)
-        {
-                Random random1 = new Random(DateTime.Now.Millisecond);
-                Random random2 = new Random(DateTime.Now.Millisecond *2);
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(BASE_FOLDER_LOCATION + @"\Graphs\" + "g500_rand" + ".txt", true))
-                {
-                    int x = random1.Next() % 700;
-                    int y = random2.Next() % 500;
-                        file.WriteLine("{0}" + " " + "{1}", x, y);
-                }
-            
-        }*/
 
             while (runAgain)
             {

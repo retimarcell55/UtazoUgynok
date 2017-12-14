@@ -83,9 +83,7 @@ namespace TravellingSalesmenConsole
                 {
 
                     snapshot[i] = travelers[indexes[i]];
-                    //Console.Write(snapshot[i] + " ");
                 }
-                //Console.WriteLine();
                 //A két permutáció találkozása
                 List<List<Vertex>> tmp = new List<List<Vertex>>();
                 //Végig az összes hamkörön
@@ -101,7 +99,6 @@ namespace TravellingSalesmenConsole
                         //külön listába az egyes utak
                         for (int k = 0; k < snapshot.Length; k++)
                         {
-                            //Console.Write(snapshot[k]+ " ");
                             if (snapshot[k] == j)
                             {
                                 if (hamcircles[i][0].Id != hamcircles[i][k].Id)
@@ -114,44 +111,9 @@ namespace TravellingSalesmenConsole
                             }
 
                         }
-                        /*int []pr= new int[] { 2, 2, 1, 1, 2, 2, 1, 1 };
-                        int jo = 0;
-                        for(int a=0;a<8;a++)
-                        {
-                            if(pr[a]==snapshot[a])
-                            {
-                               jo++;
-                            }
-                        }
-                        if(jo==8 && i==5)
-                        {
-                            //Kiirom az aktális gráf bejárást (2szer fogja, mert 2 route lesz)
-                            for (int hm = 0; hm < hamcircles[5].Count; hm++)
-                            {
-                                Console.Write(hamcircles[5][hm].Id + " ");
-                            }
-                            Console.WriteLine();
-                            ///Kiirom a két routeot
-                            for (int rci = 0; rci < rout.Count; rci++)
-                            {
-                                Console.Write(rout[rci].Id+ " ");
-                            }
-                            Console.WriteLine();
-                        }*/
 
                         tmp.Add(rout);
                     }
-                    /*if (tmp[0].Count > 1 && tmp[1].Count > 1)
-                    {
-                        foreach (var item in tmp)
-                        {
-                            foreach (var tem in item)
-                            {
-                                Console.Write(tem.Id + " ");
-                            }
-                            Console.WriteLine();
-                        }
-                    }*/
 
                     if (optimal.Count == 0)
                     {
@@ -170,35 +132,9 @@ namespace TravellingSalesmenConsole
                         }
                         for (int j = 0; j < tmp.Count; j++)
                         {
-
                             tmpWeight += SumWeight(tmp[j]);
                         }
-                        if (tmpWeight < 15)
-                        {
-                            /*
-                            foreach (var item in tmp)
-                            {
-                                foreach (var tem in item)
-                                {
-                                    Console.Write(tem.Id + " ");
-                                }
-                                Console.WriteLine();
-                            }*/
-                            /* for (int kk = 0; kk < size; kk++)
-                             {
-                                 Console.Write(snapshot[kk] + " ");
-                             }
-                             Console.WriteLine();*/
-
-                        }
-
-                        /* if (optimalWeight >= tmpWeight)
-                         {
-                            Console.WriteLine(tmpWeight);
-                             optimal.Clear();
-                             optimal =new List<List<Vertex>>(tmp);
-
-                         }*/
+                        
                         if (LongestRoute(tmp) < LongestRoute(optimal))
                         {
                             optimal.Clear();
@@ -242,7 +178,6 @@ namespace TravellingSalesmenConsole
             {
                 sumweight += graph.AdjacencyMatrix[l[i].Id, l[i + 1].Id];
             }
-            //sumweight += Math.Sqrt(Math.Pow(l[l.Count - 1].Position.X - l[0].Position.X, 2) + Math.Pow(l[l.Count - 1].Position.Y - l[0].Position.Y, 2));
 
             return sumweight;
         }

@@ -34,7 +34,6 @@ namespace TravellingSalesmenConsole
         protected int GS_maxRouteLengthPerAgent;
         protected enum GS_ParameterToInterval { PatienceParameter, NumberOfRuns, MaxRouteLengthPerAgent, Nothing};
         GS_ParameterToInterval GS_intervalEnum = new GS_ParameterToInterval();
-        //......................
 
         public string AlgoName { get => algoName; set => algoName = value; }
         public string GraphFileName { get => graphFileName; set => graphFileName = value; }
@@ -267,7 +266,7 @@ namespace TravellingSalesmenConsole
                 
             }
             #endregion
-            //kész
+            
 #region read Extras
             switch (algoName)
             { 
@@ -1126,7 +1125,6 @@ namespace TravellingSalesmenConsole
                     GeneticAlgorithm ga = null;
                     int intervalIntStart = (int)intervalStart;
                     int stepInt = (int)step;
-                    //GenerationNumber, PopulationNumber, MutationProbability, WeakParentRate, FirstChildMutate, SecondChildMutate, Nothing
                     switch (GA_intervalEnum.ToString().ToString())
                     {
                         case "GenerationNumber":

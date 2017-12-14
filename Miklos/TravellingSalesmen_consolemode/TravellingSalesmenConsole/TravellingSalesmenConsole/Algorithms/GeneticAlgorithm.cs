@@ -128,15 +128,7 @@ namespace TravellingSalesmenConsole
             //LESS SALESMEN THAN CITY!!
 
             int total = numberOfCities;
-
-            /*int lastSalesMan = 1;
-
-            chromosome.salesmen = new List<int>();
-            for (int i = 0; i < numberOfSalesmen - 1; i++)
-            {
-                lastSalesMan = Coordinator.rnd.Next(lastSalesMan, (numberOfCities-1-chromosome.salesmen.Sum())/(numberOfSalesmen-chromosome.salesmen.Count));
-                chromosome.salesmen.Add(lastSalesMan);
-            }*/
+            
 
             for (int i = 0; i < numberOfSalesmen - 1; i++)
             {

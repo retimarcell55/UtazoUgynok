@@ -26,8 +26,7 @@ namespace TravellingSalesmenConsole
             runCounter = 0;
             PATIENCE_PARAMETER = patienceParameter;
             NUMBER_OF_RUNS = numberOfRuns;
-            //MAX_ROUTE_LENGTH_PER_AGENT = maxRouteLengthPerAgent;
-            MAX_ROUTE_LENGTH_PER_AGENT = graph.Vertices.Count;
+            MAX_ROUTE_LENGTH_PER_AGENT = maxRouteLengthPerAgent;
         }
 
         public override double getActualResult()

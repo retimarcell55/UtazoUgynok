@@ -52,7 +52,6 @@
     <Compile Include="BasicClasses\Agent.cs" />
     <Compile Include="BasicClasses\AgentManager.cs" />
     <Compile Include="BasicClasses\CompleteGraph.cs" />
-    <Compile Include="BasicClasses\Configuration.cs" />
     <Compile Include="BasicClasses\Coordinate.cs" />
     <Compile Include="BasicClasses\Edge.cs" />
     <Compile Include="BasicClasses\SimpleGraph.cs" />

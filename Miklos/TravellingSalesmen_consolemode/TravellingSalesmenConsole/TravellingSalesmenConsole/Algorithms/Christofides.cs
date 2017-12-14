@@ -28,7 +28,7 @@ namespace TravellingSalesmenConsole
         {
             CompleteGraph tmp = new CompleteGraph(graph.Vertices);
             minimumSpanningTree = CreateMinimumSpanningTree(tmp);
-            //-------------
+
             List<Vertex> oddVertices = new List<Vertex>();
 
             foreach (var item in minimumSpanningTree.VertexIdAndEdges)
@@ -40,7 +40,7 @@ namespace TravellingSalesmenConsole
             }
             CompleteGraph fromOddVertices = new CompleteGraph(oddVertices);
             independentMinimunEdges = CalculateIndependentEdges(fromOddVertices);
-            //--------------
+
             if (hamiltonVertices == null)
             {
                 hamiltonVertices = CalculateHamiltonCircuit(minimumSpanningTree.Edges, independentMinimunEdges, graph, agentManager.Agents[0].StartPosition);
@@ -58,24 +58,10 @@ namespace TravellingSalesmenConsole
                     graph.Vertices.Single(x => x.Id == item.StartPosition).Used = true;
                 }
             }
-            /*for (int i = 0; i < agentManager.Agents.Count; i++)
-            {
-
-                int nextVertex = hamiltonVertices[0].Id;
-                hamiltonVertices.Remove(hamiltonVertices[0]);
-                graph.Vertices.Single(item => item.Id == nextVertex).Used = true;
-                ((Edge)graph.Edges.Single(edge => (edge.StartVertex.Id == agentManager.Agents[i].ActualPosition && edge.EndVertex.Id == nextVertex)
-                                                    || (edge.EndVertex.Id == agentManager.Agents[i].ActualPosition && edge.StartVertex.Id == nextVertex))).Used = true;
-                agentManager.Agents[i].ActualPosition = nextVertex;
-
-
-
-            }*/
-            //EZ !!!!!!!!!
             graph.Edges.Single(e => (e.StartVertex.Id == hamiltonVertices[0].Id && e.EndVertex.Id == agentManager.Agents[0].StartPosition)
                                  || (e.EndVertex.Id == hamiltonVertices[0].Id && e.StartVertex.Id == agentManager.Agents[0].StartPosition)).Used = true;
             
-            //IDÁIG!!!!!!!
+            
             for(int i = 0; i < hamiltonVertices.Count-1; i++)
             {
                 
@@ -110,7 +96,6 @@ namespace TravellingSalesmenConsole
         public SimpleGraph CreateMinimumSpanningTree(CompleteGraph g)
         {
             #region inicializálások
-            //inizializálások:
             SimpleGraph originalGraph = new SimpleGraph(g.Vertices,g.Edges);
 
             List<Vertex> treeVertices = new List<Vertex>();     //a fa csúcsai (semmiből építkezünk)
@@ -153,7 +138,7 @@ namespace TravellingSalesmenConsole
             #endregion
 
             #region függvények
-            //függvények
+            
             void MoveVertex(Vertex v)
             {
                 if (nonTreeVertices.Count > 0)
@@ -310,7 +295,6 @@ namespace TravellingSalesmenConsole
                     g.VertexIdAndEdges[ELC[0].e.StartVertex.Id].ForEach(x => x.Used = true);
                 }
             }
-            //ha maradt egy el, azt
             if (g.Edges.FindAll(x => x.Used == false).Count != 0)
                 Result.Add(g.Edges.First(x => x.Used == false && x.Weight == g.Edges.FindAll(y => y.Used == false).Min(y => y.Weight)));
             return Result;
