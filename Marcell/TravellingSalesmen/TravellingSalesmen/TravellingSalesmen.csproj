@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\AntColonyOptimization\Ant.cs" />
+    <Compile Include="Algorithms\AntColonyOptimization\AntColonyOptimization.cs" />
+    <Compile Include="Algorithms\AntColonyOptimization\AntManager.cs" />
     <Compile Include="Algorithms\BruteForce.cs" />
     <Compile Include="Algorithms\Christofides.cs" />
     <Compile Include="Algorithms\GeneticAlgorithm.cs" />

@@ -8,13 +8,16 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
 {
     class AntManager
     {
-        private const int SPRED_COUNT = 10;
-        private const double TRANSITION_INFLUENCE = 0.5;
-        private const double PHEROMONE_INFLUENCE = 0.5;
-        private const double MINIMUM_PHEROMONE = 0.1;
+        private const int SPREAD_COUNT = 100;
+        private const int PHEROMONE_UPDATE_TURNCOUNT = 10;
+        private const double TRANSITION_INFLUENCE = 0.4;
+        private const double PHEROMONE_INFLUENCE = 0.6;
+        private const double MINIMUM_PHEROMONE = 0.001;
+        private const double EVAPORATION = 0.96;
 
         private List<Ant> ants;
         private double[,] pheromoneMatrix;
+        double[,] temporalPheromoneMatrix;
         private CompleteGraph graph;
         private List<Vertex> unusedNodes;
 
@@ -38,11 +41,14 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
                     pheromoneMatrix[i, j] = MINIMUM_PHEROMONE;
                 }
             }
+            temporalPheromoneMatrix = new double[graph.AdjacencyMatrix.GetLength(0), graph.AdjacencyMatrix.GetLength(1)];
+            unusedNodes = new List<Vertex>();
             FillUnusedNodes();
         }
 
         private void FillUnusedNodes()
         {
+            unusedNodes.Clear();
             foreach (var vertex in graph.Vertices)
             {
                 if (vertex.Id != ants[0].StartPosition)
@@ -63,25 +69,83 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
         private void UpdatePheromones()
         {
 
+            for (int i = 0; i < pheromoneMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < pheromoneMatrix.GetLength(1); j++)
+                {
+                    pheromoneMatrix[i, j] = EVAPORATION * pheromoneMatrix[i, j] + temporalPheromoneMatrix[i,j];
+                    if(pheromoneMatrix[i, j] < MINIMUM_PHEROMONE)
+                    {
+                        pheromoneMatrix[i, j] = MINIMUM_PHEROMONE;
+                    }
+                }
+            }
+
+            Array.Clear(temporalPheromoneMatrix, 0, temporalPheromoneMatrix.Length);
         }
 
-        public List<List<Edge>> SpreadAnts()
+        private void UpdateTemporalPheromoneMatrix()
         {
-            for (int i = 0; i < SPRED_COUNT; i++)
+            Ant bestAnt = ants.Single(ant => ant.TotalDistanceTravelled == ants.Min(ant2 => ant2.TotalDistanceTravelled));
+            for (int i = 0; i < bestAnt.VisitedNodes.Length - 1; i++)
             {
+                temporalPheromoneMatrix[int.Parse(bestAnt.VisitedNodes[i].ToString()), int.Parse(bestAnt.VisitedNodes[i + 1].ToString())] += (1 / bestAnt.TotalDistanceTravelled);
+                temporalPheromoneMatrix[int.Parse(bestAnt.VisitedNodes[i + 1].ToString()), int.Parse(bestAnt.VisitedNodes[i].ToString())] += (1 / bestAnt.TotalDistanceTravelled);
+            }
+            /*foreach (var ant in ants)
+            {
+                for (int i = 0; i < ant.VisitedNodes.Length - 1; i++)
+                {
+                    temporalPheromoneMatrix[int.Parse(ant.VisitedNodes[i].ToString()), int.Parse(ant.VisitedNodes[i + 1].ToString())] += (1 / ant.TotalDistanceTravelled);
+                    temporalPheromoneMatrix[int.Parse(ant.VisitedNodes[i + 1].ToString()), int.Parse(ant.VisitedNodes[i].ToString())] += (1 / ant.TotalDistanceTravelled);
+                }
+            }*/
+        }
+
+        public List<string> SpreadAnts()
+        {
+            for (int i = 1; i <= SPREAD_COUNT; i++)
+            {
+                ResetAnts();
+                FillUnusedNodes();
                 foreach (var ant in ants)
                 {
                     AntMakeDecision(ant);
                 }
-                while(unusedNodes.Count != 0)
+                while(isEnabledAntInCollection())
                 {
-                    Ant selectedAnd = SelectAntToMove();
-
+                    Ant selectedAnt = SelectAntToMove();
+                    MoveAntAndUpdateOthers(selectedAnt);
+                    AntMakeDecision(selectedAnt);
                 }
-                ResetAnts();
-                UpdatePheromones();
-                FillUnusedNodes();
+                UpdateTemporalPheromoneMatrix();
+                if(SPREAD_COUNT % PHEROMONE_UPDATE_TURNCOUNT == 0)
+                {
+                    UpdatePheromones();
+                }  
             }
+            List<string> result = new List<string>();
+            foreach (var ant in ants)
+            {
+                result.Add(ant.VisitedNodes);
+            }
+            return result;
+        }
+
+        private void MoveAntAndUpdateOthers(Ant selectedAnt)
+        {
+            foreach (var ant in ants)
+            {
+                if(ant != selectedAnt && !ant.Stopped)
+                {
+                    ant.TotalDistanceTravelled += selectedAnt.DistanceToNextNode;
+                    ant.DistanceToNextNode -= selectedAnt.DistanceToNextNode;
+                }
+            }
+            selectedAnt.ActualPosition = selectedAnt.NextNode;
+            selectedAnt.TotalDistanceTravelled += selectedAnt.DistanceToNextNode;
+            selectedAnt.DistanceToNextNode = 0;
+            selectedAnt.VisitedNodes += selectedAnt.ActualPosition;
         }
 
         private void AntMakeDecision(Ant ant)
@@ -89,13 +153,20 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             if(unusedNodes.Count != 0)
             {
                 int nodeId = SelectNextNode(ant);
-                //updateAnt
+                ant.NextNode = nodeId;
+                ant.DistanceToNextNode = graph.AdjacencyMatrix[ant.ActualPosition, nodeId];
+                unusedNodes.Remove(unusedNodes.Single(node => node.Id == nodeId));
+            }
+            else
+            {
+                ant.Stopped = true;
+                ant.DistanceToNextNode = double.PositiveInfinity;
             }
         }
 
         private int SelectNextNode(Ant ant)
         {
-            int nodeId = 0;
+            int nodeId = -1;
             Dictionary<int, double> nodeAndPossibility = new Dictionary<int, double>();
 
             double total = 0;
@@ -120,11 +191,12 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             double ceiling = 0;
             foreach (var entry in nodeAndPossibility)
             {
-                if(rnd <= ceiling)
+                ceiling += entry.Value;
+                if (rnd <= ceiling)
                 {
                     nodeId = entry.Key;
+                    break;
                 }
-                ceiling += entry.Value;
             }
             return nodeId;
         }
@@ -144,9 +216,16 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             return selected;
         }
 
-        private void UpdateAntsByTheSelectedMove(Ant selectedAnt)
+        private bool isEnabledAntInCollection()
         {
-
+            foreach (var ant in ants)
+            {
+                if(!ant.Stopped)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

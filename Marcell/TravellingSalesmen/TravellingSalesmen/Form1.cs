@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TravellingSalesmen.Algorithms;
+using TravellingSalesmen.Algorithms.AntColonyOptimization;
 
 namespace TravellingSalesmen
 {
@@ -82,6 +83,9 @@ namespace TravellingSalesmen
                     break;
                 case "GreedySearch":
                     coordinator.Algorithm = new GreedySearch(conf.Graph, conf.AgentManager);
+                    break;
+                case "AntColonyOptimization":
+                    coordinator.Algorithm = new AntColonyOptimization(conf.Graph, conf.AgentManager);
                     break;
             }
 

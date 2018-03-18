@@ -12,16 +12,12 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
         private const int ITERATIONS = 10;
         private int currentIteration;
         private AntManager antManager;
-        private double actualResult;
-        private List<List<Edge>> iterationResult;
 
         public AntColonyOptimization(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
             currentIteration = 1;
-            actualResult = 0;
             actualDrawingMode = DRAWING_MODE.MORE_AGENT_CIRCLES;
             moreAgentCirclesToHighlight = new List<List<Edge>>();
-            iterationResult = new List<List<Edge>>();
         }
 
         public override void Initialize()
@@ -32,7 +28,21 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
 
         public override void NextTurn()
         {
-            iterationResult = antManager.SpreadAnts();
+            List<string> result = antManager.SpreadAnts();
+            moreAgentCirclesToHighlight.Clear();
+            
+            foreach (var path in result)
+            {
+                List<Edge> edgeList = new List<Edge>();
+                for (int i = 0; i < path.Length - 1; i++)
+                {
+                    Edge e = graph.Edges.Single(edge => (edge.StartVertex.Id.ToString() == path[i].ToString() && edge.EndVertex.Id.ToString() == path[i + 1].ToString()) || (edge.StartVertex.Id.ToString() == path[i + 1].ToString() && edge.EndVertex.Id.ToString() == path[i].ToString()));
+                    edgeList.Add(e);
+                }
+                moreAgentCirclesToHighlight.Add(edgeList);
+            }
+
+            currentIteration++;
         }
 
         public override bool hasAlgorithmNextMove()
@@ -46,7 +56,20 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
 
         public override double getActualResult()
         {
-            return actualResult;
+            double max = 0;
+            foreach (var path in moreAgentCirclesToHighlight)
+            {
+                double local = 0;
+                foreach (var edge in path)
+                {
+                    local += edge.Weight;
+                }
+                if(local > max)
+                {
+                    max = local;
+                }
+            }
+            return max;
         }
     }
 }
