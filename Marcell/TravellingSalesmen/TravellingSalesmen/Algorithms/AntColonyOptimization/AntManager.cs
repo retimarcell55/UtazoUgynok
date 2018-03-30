@@ -20,13 +20,15 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
         double[,] temporalPheromoneMatrix;
         private CompleteGraph graph;
         private List<Vertex> unusedNodes;
-
+        private double bestSolution;
+        private List<Ant> bestAntsolution;
 
         public List<Ant> Ants { get => ants;}
 
         public AntManager(int startPosition, int count, CompleteGraph graph)
         {
             ants = new List<Ant>();
+            bestAntsolution = new List<Ant>();
             for (int i = 0; i < count; i++)
             {
                 Ant ant = new Ant(i, startPosition);
@@ -44,6 +46,8 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             temporalPheromoneMatrix = new double[graph.AdjacencyMatrix.GetLength(0), graph.AdjacencyMatrix.GetLength(1)];
             unusedNodes = new List<Vertex>();
             FillUnusedNodes();
+
+            bestSolution = double.PositiveInfinity;
         }
 
         private void FillUnusedNodes()
@@ -112,7 +116,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
                 {
                     AntMakeDecision(ant);
                 }
-                while(isEnabledAntInCollection())
+                while(IsEnabledAntInCollection())
                 {
                     Ant selectedAnt = SelectAntToMove();
                     MoveAntAndUpdateOthers(selectedAnt);
@@ -121,11 +125,16 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
                 UpdateTemporalPheromoneMatrix();
                 if(SPREAD_COUNT % PHEROMONE_UPDATE_TURNCOUNT == 0)
                 {
+                    if(bestSolution > GetActualSolutionResult())
+                    {
+                        bestAntsolution = CloneAnts();
+                        bestSolution = GetActualSolutionResult();   
+                    }
                     UpdatePheromones();
                 }  
             }
             List<string> result = new List<string>();
-            foreach (var ant in ants)
+            foreach (var ant in bestAntsolution)
             {
                 result.Add(ant.VisitedNodes);
             }
@@ -216,7 +225,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             return selected;
         }
 
-        private bool isEnabledAntInCollection()
+        private bool IsEnabledAntInCollection()
         {
             foreach (var ant in ants)
             {
@@ -226,6 +235,28 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
                 }
             }
             return false;
+        }
+
+        private double GetActualSolutionResult()
+        {
+           return ants.Max(ant => ant.TotalDistanceTravelled);
+        }
+
+        private List<Ant> CloneAnts()
+        {
+            List<Ant> clonedAnts = new List<Ant>();
+            foreach (var ant in ants)
+            {
+                Ant newAnt = new Ant(ant.Id,ant.StartPosition);
+                newAnt.NextNode = ant.NextNode;
+                newAnt.Stopped = ant.Stopped;
+                newAnt.TotalDistanceTravelled = ant.TotalDistanceTravelled;
+                newAnt.VisitedNodes = ant.VisitedNodes;
+                newAnt.ActualPosition = ant.ActualPosition;
+                newAnt.DistanceToNextNode = ant.DistanceToNextNode;
+                clonedAnts.Add(newAnt);
+            }
+            return clonedAnts;
         }
     }
 }
