@@ -87,6 +87,9 @@ namespace TravellingSalesmen
                 case "AntColonyOptimization":
                     coordinator.Algorithm = new AntColonyOptimization(conf.Graph, conf.AgentManager);
                     break;
+                case "HeldKarpAlgorithm":
+                    coordinator.Algorithm = new HeldKarpAlgorithm(conf.Graph, conf.AgentManager);
+                    break;
             }
 
             Restart.Enabled = true;

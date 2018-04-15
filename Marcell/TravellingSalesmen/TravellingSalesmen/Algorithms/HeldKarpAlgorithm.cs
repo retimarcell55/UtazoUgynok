@@ -41,7 +41,6 @@ namespace TravellingSalesmen.Algorithms
         public override void NextTurn()
         {
 
-
             //add finish nodes
             for (int i = 0; i < graph.AdjacencyMatrix.GetLength(0); i++)
             {
@@ -59,7 +58,7 @@ namespace TravellingSalesmen.Algorithms
 
             FindAllSubsets(nodeSubsets, nodesExceptDepot, 0);
 
-            for (int i = 0; i < nodesExceptDepot.Length - 1; i++)
+            for (int i = 0; i < nodesExceptDepot.Length; i++)
             {
                 GenerateMinimumPathLengthBasedOnSetSize(nodeSubsets, i);
             }
@@ -69,23 +68,39 @@ namespace TravellingSalesmen.Algorithms
 
             List<string> orderedRoutes = orderAgentRoutes(routes);
 
-
-            foreach (var route in orderedRoutes)
+            //Add depot to orderedRoutes
+            for (int i = 0; i < orderedRoutes.Count; i++)
             {
-                double minRoute = graph.AdjacencyMatrix[0, int.Parse(route[0].ToString())];
-                char endNode = route[0];
-                for (int i = 1; i < route.Length; i++)
+                orderedRoutes[i] += depot;
+            }
+
+            double maxRoute = -1;
+            foreach (var path in orderedRoutes)
+            {
+                double distance = 0;
+                for (int i = path.Length - 1; i > 0; i--)
                 {
-                    double distance = graph.AdjacencyMatrix[int.Parse(route[i].ToString()), int.Parse(route[0].ToString())] + minimumDistanceToNode[int.Parse(route[i].ToString())][route.Remove(0, 1).Remove(i, 1)];
-                    if(distance < minRoute)
-                    {
-                        minRoute = distance;
-                    }
+                    distance += graph.AdjacencyMatrix[int.Parse(path[i].ToString()), int.Parse(path[i - 1].ToString())];
                 }
-                if(result < minRoute)
+
+                if (distance > maxRoute)
                 {
-                    result = minRoute;
+                    maxRoute = distance;
+                }  
+            }
+            result = maxRoute;
+
+            moreAgentCirclesToHighlight.Clear();
+
+            foreach (var path in orderedRoutes)
+            {
+                List<Edge> edgeList = new List<Edge>();
+                for (int i = path.Length - 1; i > 0; i--)
+                {
+                    Edge e = graph.Edges.Single(edge => (edge.StartVertex.Id.ToString() == path[i].ToString() && edge.EndVertex.Id.ToString() == path[i - 1].ToString()) || (edge.StartVertex.Id.ToString() == path[i - 1].ToString() && edge.EndVertex.Id.ToString() == path[i].ToString()));
+                    edgeList.Add(e);
                 }
+                moreAgentCirclesToHighlight.Add(edgeList);
             }
         }
 
@@ -95,16 +110,16 @@ namespace TravellingSalesmen.Algorithms
             foreach (var route in routes)
             {
                 string orderedRoute = backTrackRoute(route);
-
+                orderedRoutes.Add(orderedRoute);
             }
             return orderedRoutes;
         }
 
         private string backTrackRoute(string route)
         {
-            if (route == "")
+            if (route.Length == 1)
             {
-                return "";
+                return route[0].ToString();
             }
 
             char endNode = route[0];
@@ -115,59 +130,86 @@ namespace TravellingSalesmen.Algorithms
             for (int i = 0; i < set.Length; i++)
             {
                 double actualDistance = graph.AdjacencyMatrix[int.Parse(endNode.ToString()), int.Parse(set[i].ToString())];
-                actualDistance += minimumDistanceToNode[endNode][set.Replace(set[i].ToString(), "")];
+                actualDistance += minimumDistanceToNode[int.Parse(set[i].ToString())][set.Replace(set[i].ToString(), "")];
                 if (actualDistance <= min)
                 {
                     successorEndNode = set[i];
                     min = actualDistance;
                 }
             }
-            route = route.Replace(endNode.ToString(), "").Insert(0, successorEndNode.ToString());
-            return successorEndNode + backTrackRoute(route);
+            route = route.Replace(endNode.ToString(), "").Replace(successorEndNode.ToString(), "").Insert(0, successorEndNode.ToString());
+            return endNode + backTrackRoute(route);
         }
 
         private List<string> calculateTheBestRoutes(List<string> nodeSubsets, int agentCount)
         {
             List<string> routes = new List<string>();
+            //The possible agent ending points are represented as subsets
             foreach (var subSet in nodeSubsets)
             {
-                if (subSet.Length <= agentCount)
+                if (subSet.Length <= agentCount && subSet != "")
                 {
-                    FindBestAgentRoutesByEndingPointsByRecursion(routes, subSet, 0, "");
+                    FindBestAgentRoutesByEndingPointsByRecursion(routes, subSet, 0, "",-1, "");
                 }
             }
 
-            return routes;
+            double bestResult = double.PositiveInfinity;
+            List<string> bestRoutes = new List<string>();
+
+            foreach (var route in routes)
+            {
+                List<string> actual = route.Split(',').ToList();
+                double actualDistance = double.Parse(actual[actual.Count - 1]);
+                if (actualDistance < bestResult)
+                {
+                    bestResult = actualDistance;
+                    actual.RemoveAt(actual.Count - 1);
+                    bestRoutes.Clear();
+                    foreach (var item in actual)
+                    {
+                        bestRoutes.Add(item);
+                    }
+                    
+                }
+            }
+
+
+            return bestRoutes;
         }
 
-        private double FindBestAgentRoutesByEndingPointsByRecursion(List<string> routes, string subSet, int index, string visited)
+        private void FindBestAgentRoutesByEndingPointsByRecursion(List<string> routes, string subSet, int index, string visited, double actualDistance, string actualRoute)
         {
             if (index >= subSet.Length)
             {
                 //If all nodes were visited
                 if (visited.Length == nodesExceptDepot.Length)
                 {
-                    return -1;
+                    actualRoute += actualDistance;
+                    routes.Add(actualRoute);
+                    return;
                 }
                 //If not all nodes were visited
                 else
                 {
-                    return -2;
+                    return;
                 }
             }
 
-            double minDistance = double.PositiveInfinity;
-            string bestSubset = "";
+
             foreach (var item in minimumDistanceToNode[int.Parse(subSet[index].ToString())])
             {
                 //Calculate remaining nodes, if there is none skip it!
-                string remainingNodes = nodesExceptDepot.Replace(visited, "");
+                string remainingNodes = nodesExceptDepot;
+                foreach (var node in visited)
+                {
+                    remainingNodes = remainingNodes.Replace(node.ToString(), "");
+                }
                 if (!remainingNodes.Contains(subSet[index].ToString()))
                 {
                     continue;
                 }
                 remainingNodes = remainingNodes.Replace(subSet[index].ToString(), "");
-                visited += subSet[index].ToString();
+                string visitedBySubset = visited + subSet[index].ToString();
                 bool noElementFound = false;
                 foreach (var actual in item.Key)
                 {
@@ -176,7 +218,7 @@ namespace TravellingSalesmen.Algorithms
                         noElementFound = true;
                     }
                     remainingNodes = remainingNodes.Replace(actual.ToString(), "");
-                    visited += actual.ToString();
+                    visitedBySubset += actual.ToString();
                 }
                 if (noElementFound)
                 {
@@ -184,30 +226,16 @@ namespace TravellingSalesmen.Algorithms
                 }
 
                 double distance = item.Value;
+                if(distance < actualDistance)
+                {
+                    distance = actualDistance;
+                }
+                string route = subSet[index] + item.Key + ",";
+                route = actualRoute + route;
+                FindBestAgentRoutesByEndingPointsByRecursion(routes, subSet, index + 1, visitedBySubset, distance, route);
 
-                double feedback = FindBestAgentRoutesByEndingPointsByRecursion(routes, subSet, index + 1, visited);
-                if (feedback == -2)
-                {
-                    continue;
-                }
-                else if (feedback != -1 && feedback > distance)
-                {
-                    distance = feedback;
-                }
-                if (distance < minDistance)
-                {
-                    minDistance = distance;
-                    bestSubset = subSet[index] + item.Key;
-                }
             }
-
-            if (routes.ElementAtOrDefault(index) == null)
-            {
-                routes.Add("");
-            }
-
-            routes[index] = bestSubset;
-            return minDistance;
+            return;
         }
 
         private void GenerateMinimumPathLengthBasedOnSetSize(List<string> nodeSubsets, int setSize)
@@ -235,8 +263,8 @@ namespace TravellingSalesmen.Algorithms
                             {
                                 char endOfSubset = subSet[i];
                                 string remainingSubset = subSet.Remove(i, 1);
-                                double previousDistance = minimumDistanceToNode[endOfSubset][remainingSubset];
-                                double actualDistance = previousDistance + graph.AdjacencyMatrix[endOfSubset, item.Key];
+                                double previousDistance = minimumDistanceToNode[int.Parse(endOfSubset.ToString())][remainingSubset];
+                                double actualDistance = previousDistance + graph.AdjacencyMatrix[int.Parse(endOfSubset.ToString()), item.Key];
                                 if (minDistance > actualDistance)
                                 {
                                     minDistance = actualDistance;
