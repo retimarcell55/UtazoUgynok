@@ -8,12 +8,12 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
 {
     class AntManager
     {
-        private const int SPREAD_COUNT = 100;
-        private const int PHEROMONE_UPDATE_TURNCOUNT = 10;
-        private const double TRANSITION_INFLUENCE = 0.4;
-        private const double PHEROMONE_INFLUENCE = 0.6;
-        private const double MINIMUM_PHEROMONE = 0.001;
-        private const double EVAPORATION = 0.96;
+        private int SPREAD_COUNT = 100;
+        private int PHEROMONE_UPDATE_TURNCOUNT = 10;
+        private double TRANSITION_INFLUENCE = 0.4;
+        private double PHEROMONE_INFLUENCE = 0.6;
+        private double MINIMUM_PHEROMONE = 0.001;
+        private double EVAPORATION = 0.04;
 
         private List<Ant> ants;
         private double[,] pheromoneMatrix;
@@ -50,6 +50,18 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             bestSolution = double.PositiveInfinity;
         }
 
+        public void SetParameters(string testParameters)
+        {
+            string[] paramsArray = testParameters.Split(',');
+
+            SPREAD_COUNT = int.Parse(paramsArray[1]);
+            PHEROMONE_UPDATE_TURNCOUNT = int.Parse(paramsArray[2]);
+            TRANSITION_INFLUENCE = double.Parse(paramsArray[3]);
+            PHEROMONE_INFLUENCE = double.Parse(paramsArray[4]);
+            MINIMUM_PHEROMONE = double.Parse(paramsArray[5]);
+            EVAPORATION = double.Parse(paramsArray[6]);
+        }
+
         private void FillUnusedNodes()
         {
             unusedNodes.Clear();
@@ -77,7 +89,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             {
                 for (int j = 0; j < pheromoneMatrix.GetLength(1); j++)
                 {
-                    pheromoneMatrix[i, j] = EVAPORATION * pheromoneMatrix[i, j] + temporalPheromoneMatrix[i,j];
+                    pheromoneMatrix[i, j] = (1 - EVAPORATION) * pheromoneMatrix[i, j] + temporalPheromoneMatrix[i,j];
                     if(pheromoneMatrix[i, j] < MINIMUM_PHEROMONE)
                     {
                         pheromoneMatrix[i, j] = MINIMUM_PHEROMONE;

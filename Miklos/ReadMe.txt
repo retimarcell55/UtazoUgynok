@@ -1,3 +1,0 @@
-Miklós readme-ja :)
-
-semmi

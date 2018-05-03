@@ -1,4 +1,0 @@
-Algorithm name	Graph filename	Agents filename	Patience parameter	Number of runs	Max route length per agent	Result	Run time
-GreedySearch	g200_rand	MultiAgents\a2_0	200	200	200	25369,36	1658,6686
-GreedySearch	g200_rand	MultiAgents\a2_0	200	200	200	25029,43	1543,0851
-GreedySearch	g200_rand	MultiAgents\a2_0	200	200	200	24812,89	1606,2992

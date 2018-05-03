@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravellingSalesmen.AlgorithmParameters;
 
 namespace TravellingSalesmen.Algorithms
 {
     public abstract class Algorithm
     {
+        protected string testParameters;
+        protected ParamsWindow paramsWindow;
+
         public enum DRAWING_MODE { GRAPH, MIN_SPANNING_TREE, INDEPENDENT_EDGE_SET, MORE_AGENT_CIRCLES };
         public enum DRAWING_COLOR { RED,GREEN,BLUE };
         protected CompleteGraph graph;
@@ -24,6 +28,8 @@ namespace TravellingSalesmen.Algorithms
         public List<Edge> EdgesToHighlight { get => edgesToHighlight;}
         public List<Vertex> VerticesToHighlight { get => verticesToHighlight; }
         public List<List<Edge>> MoreAgentCirclesToHighlight { get => moreAgentCirclesToHighlight;}
+        public string TestParameters { get => testParameters; set => testParameters = value; }
+        public ParamsWindow ParamsWindow { get => paramsWindow; set => paramsWindow = value; }
 
         public Algorithm(CompleteGraph graph,AgentManager agentManager)
         {
@@ -34,15 +40,7 @@ namespace TravellingSalesmen.Algorithms
             edgesToHighlight = new List<Edge>();
             verticesToHighlight = new List<Vertex>();
             moreAgentCirclesToHighlight = new List<List<Edge>>();
-        }
 
-        public string GetName()
-        {
-            return this.GetType().Name;
-        }
-
-        public virtual void Initialize()
-        {
             foreach (var vertex in graph.Vertices)
             {
                 vertex.Used = false;
@@ -57,6 +55,20 @@ namespace TravellingSalesmen.Algorithms
                 graph.Vertices[agentManager.Agents[i].StartPosition].Used = true;
             }
         }
+
+        protected virtual void initParamsWindow(ParamsWindow window)
+        {
+            ParamsWindow = window;
+        }
+
+        public string GetName()
+        {
+            return this.GetType().Name;
+        }
+
+        abstract public void Initialize();
+        abstract public void TestInitialize();
+
 
         abstract public void NextTurn();
 

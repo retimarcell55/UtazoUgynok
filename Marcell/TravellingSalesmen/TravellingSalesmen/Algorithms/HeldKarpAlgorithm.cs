@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravellingSalesmen.AlgorithmParameters;
 
 namespace TravellingSalesmen.Algorithms
 {
@@ -21,9 +22,16 @@ namespace TravellingSalesmen.Algorithms
             moreAgentCirclesToHighlight = new List<List<Edge>>();
             actualDrawingMode = DRAWING_MODE.MORE_AGENT_CIRCLES;
             nodesExceptDepot = "";
+
+            initParamsWindow(new HeldKarpParams(this));
         }
 
         public override void Initialize()
+        {
+            this.NextTurn();
+        }
+
+        public override void TestInitialize()
         {
             this.NextTurn();
         }

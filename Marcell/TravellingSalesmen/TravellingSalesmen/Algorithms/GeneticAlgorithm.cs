@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravellingSalesmen.AlgorithmParameters;
 
 namespace TravellingSalesmen.Algorithms
 {
@@ -10,11 +11,13 @@ namespace TravellingSalesmen.Algorithms
     {
         //Number of generations
         private int GENERATIONS;
+        private int POPULATION_NUMBER;
 
         private bool FIRST_CHILD_MUTATE;
         private bool SECEND_CHILD_MUTATE;
         private double MUTATION_PROBABILITY;
         private double WEAK_PARENT_RATE;
+        
 
         private int startCity;
         private static int numberOfCities;
@@ -23,43 +26,54 @@ namespace TravellingSalesmen.Algorithms
         private int actualGeneration;
         private Chromosome[] population;
 
-        public GeneticAlgorithm(CompleteGraph graph, AgentManager agentManager,
-                int generationsNuber = 200, int populationNumber = -1,
-                double mutationProbability = 0.5, double weakParentRate = 0.025,
-                bool firstChildMutate = false, bool SecondChildMutate = true)
-            : base(graph, agentManager)
+        public GeneticAlgorithm(CompleteGraph graph, AgentManager agentManager) : base(graph, agentManager)
         {
-
-            GENERATIONS = generationsNuber;
-            FIRST_CHILD_MUTATE = firstChildMutate;
-            SECEND_CHILD_MUTATE = SecondChildMutate;
-            MUTATION_PROBABILITY = mutationProbability;
-            WEAK_PARENT_RATE = weakParentRate;
-
-            if (populationNumber == -1)
-            {
-                double chromsize = System.Math.Round((Math.Log(graph.Vertices.Count)));
-                double length = chromsize * (graph.Vertices.Count + agentManager.Agents.Count);
-                population = new Chromosome[(int)(Math.Round((length * Math.Pow(2.0, chromsize)) / chromsize))];
-            }
-            else
-                population = new Chromosome[populationNumber];
-
             startCity = agentManager.Agents[0].StartPosition;
             numberOfCities = graph.Vertices.Count;
             numberOfSalesmen = agentManager.Agents.Count;
             actualGeneration = 1;
             actualDrawingMode = DRAWING_MODE.MORE_AGENT_CIRCLES;
+
+            initParamsWindow(new GeneticAlgorithmParams(this));
         }
 
         public override void Initialize()
         {
-            base.Initialize();
+            GENERATIONS = 200;
+
+            double chromsize = Math.Round((Math.Log(graph.Vertices.Count)));
+            double length = chromsize * (graph.Vertices.Count + agentManager.Agents.Count);
+            POPULATION_NUMBER = (int)(Math.Round((length * Math.Pow(2.0, chromsize)) / chromsize));
+
+            population = new Chromosome[POPULATION_NUMBER];
+
+            FIRST_CHILD_MUTATE = false;
+            SECEND_CHILD_MUTATE = true;
+            MUTATION_PROBABILITY = 0.5;
+            WEAK_PARENT_RATE = 0.025;
+
             GenerateInitialPopulation();
             OrderPopulationByFitness();
-
             SelectBestChromosomeEdges();
+        }
 
+        public override void TestInitialize()
+        {
+            string[] paramsArray = testParameters.Split(',');
+
+            GENERATIONS = int.Parse(paramsArray[0]);
+            POPULATION_NUMBER = int.Parse(paramsArray[1]);
+
+            population = new Chromosome[POPULATION_NUMBER];
+
+            FIRST_CHILD_MUTATE = bool.Parse(paramsArray[2]);
+            SECEND_CHILD_MUTATE = bool.Parse(paramsArray[3]);
+            MUTATION_PROBABILITY = double.Parse(paramsArray[4]);
+            WEAK_PARENT_RATE = double.Parse(paramsArray[5]);
+
+            GenerateInitialPopulation();
+            OrderPopulationByFitness();
+            SelectBestChromosomeEdges();
         }
 
         public override double getActualResult()

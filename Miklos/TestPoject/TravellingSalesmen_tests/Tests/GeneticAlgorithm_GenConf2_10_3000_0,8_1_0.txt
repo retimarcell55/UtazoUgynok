@@ -1,3 +1,0 @@
-1. run:	Weight: 1339,26	Time: 14,4770056
-2. run:	Weight: 1167,73	Time: 12,3162046
-3. run:	Weight: 1260,63	Time: 13,3281944

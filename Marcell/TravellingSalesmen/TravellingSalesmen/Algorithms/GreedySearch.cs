@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravellingSalesmen.AlgorithmParameters;
 
 namespace TravellingSalesmen.Algorithms
 {
     class GreedySearch : Algorithm
     {
 
-        private const int PATIENCE_PARAMETER = 50;
-        private const int NUMBER_OF_RUNS = 100;
+        private int PATIENCE_PARAMETER;
+        private int NUMBER_OF_RUNS;
         private int MAX_ROUTE_LENGTH_PER_AGENT;
 
         private List<List<int>> OverallBest;
@@ -26,7 +27,8 @@ namespace TravellingSalesmen.Algorithms
             actualDrawingMode = DRAWING_MODE.MORE_AGENT_CIRCLES;
             moreAgentCirclesToHighlight = new List<List<Edge>>();
             runCounter = 0;
-            MAX_ROUTE_LENGTH_PER_AGENT = graph.Vertices.Count;
+
+            initParamsWindow(new GreedySearchParams(this));
         }
 
         public override double getActualResult()
@@ -43,12 +45,31 @@ namespace TravellingSalesmen.Algorithms
             return true;
         }
 
+
         public override void Initialize()
         {
+            PATIENCE_PARAMETER = 50;
+            NUMBER_OF_RUNS = 100;
+            MAX_ROUTE_LENGTH_PER_AGENT = graph.Vertices.Count;
+
             OverallBest = GenerateRandomSolution();
             CurrentBest = new List<List<int>>(OverallBest);
             SelectEdgesToHighLight();
         }
+
+        public override void TestInitialize()
+        {
+            string[] paramsArray = testParameters.Split(',');
+            
+            PATIENCE_PARAMETER = int.Parse(paramsArray[0]);
+            NUMBER_OF_RUNS = int.Parse(paramsArray[1]);
+            MAX_ROUTE_LENGTH_PER_AGENT = int.Parse(paramsArray[2]);
+
+            OverallBest = GenerateRandomSolution();
+            CurrentBest = new List<List<int>>(OverallBest);
+            SelectEdgesToHighLight();
+        }
+
 
         private List<List<int>> GenerateRandomSolution()
         {

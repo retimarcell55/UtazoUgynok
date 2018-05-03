@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravellingSalesmen.AlgorithmParameters;
 
 namespace TravellingSalesmen.Algorithms.AntColonyOptimization
 {
     class AntColonyOptimization : Algorithm
     {
 
-        private const int ITERATIONS = 10;
+        private int ITERATIONS = 10;
         private int currentIteration;
         private AntManager antManager;
 
@@ -18,12 +19,22 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             currentIteration = 1;
             actualDrawingMode = DRAWING_MODE.MORE_AGENT_CIRCLES;
             moreAgentCirclesToHighlight = new List<List<Edge>>();
+            antManager = new AntManager(agentManager.Agents[0].StartPosition, agentManager.Agents.Count, graph);
+
+            initParamsWindow(new AntColonyOptimizationParams(this));
         }
 
         public override void Initialize()
         {
-            base.Initialize();
-            antManager = new AntManager(agentManager.Agents[0].StartPosition, agentManager.Agents.Count, graph);
+            ITERATIONS = 10;
+        }
+
+        public override void TestInitialize()
+        {
+            string[] paramsArray = testParameters.Split(',');
+
+            ITERATIONS = int.Parse(paramsArray[0]);
+            antManager.SetParameters(testParameters);
         }
 
         public override void NextTurn()

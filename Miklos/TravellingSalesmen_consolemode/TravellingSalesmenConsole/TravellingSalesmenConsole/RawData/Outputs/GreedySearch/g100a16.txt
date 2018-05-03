@@ -1,1 +1,0 @@
-Algorithm name	Graph filename	Agents filename	Patience parameter	Number of runs	Max route length per agent	Result	Run time

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,6 +92,31 @@ namespace TravellingSalesmen
             }
 
             mainForm.UpdateResult(algorithm.getActualResult().ToString());
+        }
+
+        public void testAlgorithm(string confName)
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            algorithm.TestInitialize();
+            algorithmStarted = true;
+
+            if (algorithmStarted)
+            {
+                while (algorithm.hasAlgorithmNextMove())
+                {
+                    algorithm.NextTurn();
+                }
+                algorithmStarted = false;
+            }
+
+            stopwatch.Stop();
+            long elapsed_time = stopwatch.ElapsedMilliseconds;
+
+            FileManager fm = new FileManager();
+            fm.CreateTestFolderIfItNotExists();
+            fm.LogAlgorithmResults(algorithm.GetName(),confName,algorithm.TestParameters,elapsed_time.ToString(),algorithm.getActualResult().ToString());
         }
     }
 }

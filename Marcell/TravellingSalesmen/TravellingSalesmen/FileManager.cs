@@ -12,6 +12,7 @@ namespace TravellingSalesmen
     class FileManager
     {
         private const string BASE_FOLDER_LOCATION = @"..\..\..\Configurations";
+        private const string TEST_FOLDER_LOCATION = @"Tests";
 
         public FileManager()
         {
@@ -99,6 +100,24 @@ namespace TravellingSalesmen
             }
 
             return configurations;
+        }
+
+        public void CreateTestFolderIfItNotExists()
+        {
+            if(!Directory.Exists(TEST_FOLDER_LOCATION))
+            {
+                Directory.CreateDirectory(TEST_FOLDER_LOCATION);
+            }
+        }
+
+        public void LogAlgorithmResults(string name, string conf, string parameters, string time, string result)
+        {
+            string fileLocation = TEST_FOLDER_LOCATION + @"\" + name + ".txt";
+
+            using (StreamWriter sw = new StreamWriter(fileLocation, true))
+            {
+                sw.WriteLine(conf + " " + parameters + " " + time + " " + result);
+            }
         }
     }
 }
