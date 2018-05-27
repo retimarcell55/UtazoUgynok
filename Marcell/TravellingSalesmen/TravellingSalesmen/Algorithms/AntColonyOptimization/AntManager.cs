@@ -103,7 +103,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
         private void UpdateTemporalPheromoneMatrix()
         {
             Ant bestAnt = ants.Single(ant => ant.TotalDistanceTravelled == ants.Min(ant2 => ant2.TotalDistanceTravelled));
-            for (int i = 0; i < bestAnt.VisitedNodes.Length - 1; i++)
+            for (int i = 0; i < bestAnt.VisitedNodes.Count - 1; i++)
             {
                 temporalPheromoneMatrix[int.Parse(bestAnt.VisitedNodes[i].ToString()), int.Parse(bestAnt.VisitedNodes[i + 1].ToString())] += (1 / bestAnt.TotalDistanceTravelled);
                 temporalPheromoneMatrix[int.Parse(bestAnt.VisitedNodes[i + 1].ToString()), int.Parse(bestAnt.VisitedNodes[i].ToString())] += (1 / bestAnt.TotalDistanceTravelled);
@@ -118,7 +118,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             }*/
         }
 
-        public List<string> SpreadAnts()
+        public List<List<int>> SpreadAnts()
         {
             for (int i = 1; i <= SPREAD_COUNT; i++)
             {
@@ -145,7 +145,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
                     UpdatePheromones();
                 }  
             }
-            List<string> result = new List<string>();
+            List<List<int>> result = new List<List<int>>();
             foreach (var ant in bestAntsolution)
             {
                 result.Add(ant.VisitedNodes);
@@ -166,7 +166,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             selectedAnt.ActualPosition = selectedAnt.NextNode;
             selectedAnt.TotalDistanceTravelled += selectedAnt.DistanceToNextNode;
             selectedAnt.DistanceToNextNode = 0;
-            selectedAnt.VisitedNodes += selectedAnt.ActualPosition;
+            selectedAnt.VisitedNodes.Add(selectedAnt.ActualPosition);
         }
 
         private void AntMakeDecision(Ant ant)
@@ -263,7 +263,11 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
                 newAnt.NextNode = ant.NextNode;
                 newAnt.Stopped = ant.Stopped;
                 newAnt.TotalDistanceTravelled = ant.TotalDistanceTravelled;
-                newAnt.VisitedNodes = ant.VisitedNodes;
+                newAnt.VisitedNodes = new List<int>();
+                foreach (var item in ant.VisitedNodes)
+                {
+                    newAnt.VisitedNodes.Add(item);
+                }
                 newAnt.ActualPosition = ant.ActualPosition;
                 newAnt.DistanceToNextNode = ant.DistanceToNextNode;
                 clonedAnts.Add(newAnt);

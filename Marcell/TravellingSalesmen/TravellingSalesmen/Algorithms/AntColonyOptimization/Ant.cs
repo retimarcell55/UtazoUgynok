@@ -12,7 +12,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
         private int startPosition;
         private int actualPosition;
         private bool stopped;
-        private string visitedNodes;
+        private List<int> visitedNodes;
         private double distanceToNextNode;
         private int nextNode;
         private double totalDistanceTravelled;
@@ -21,10 +21,10 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
         public int StartPosition { get => startPosition; }
         public int ActualPosition { get => actualPosition; set => actualPosition = value; }
         public bool Stopped { get => stopped; set => stopped = value; }
-        public string VisitedNodes { get => visitedNodes; set => visitedNodes = value; }
         public double DistanceToNextNode { get => distanceToNextNode; set => distanceToNextNode = value; }
         public int NextNode { get => nextNode; set => nextNode = value; }
         public double TotalDistanceTravelled { get => totalDistanceTravelled; set => totalDistanceTravelled = value; }
+        public List<int> VisitedNodes { get => visitedNodes; set => visitedNodes = value; }
 
         public Ant(int id, int startPosition)
         {
@@ -32,7 +32,8 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
             this.startPosition = startPosition;
             this.actualPosition = startPosition;
             stopped = false;
-            visitedNodes = startPosition.ToString();
+            VisitedNodes = new List<int>();
+            visitedNodes.Add(this.startPosition);
             distanceToNextNode = 0;
             nextNode = -1;
             totalDistanceTravelled = 0;
@@ -42,7 +43,8 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
         {
             this.actualPosition = startPosition;
             stopped = false;
-            visitedNodes = startPosition.ToString();
+            VisitedNodes = new List<int>();
+            visitedNodes.Add(this.startPosition);
             distanceToNextNode = 0;
             nextNode = -1;
             totalDistanceTravelled = 0;

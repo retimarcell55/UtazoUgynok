@@ -39,13 +39,13 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
 
         public override void NextTurn()
         {
-            List<string> result = antManager.SpreadAnts();
+            List<List<int>> result = antManager.SpreadAnts();
             moreAgentCirclesToHighlight.Clear();
             
             foreach (var path in result)
             {
                 List<Edge> edgeList = new List<Edge>();
-                for (int i = 0; i < path.Length - 1; i++)
+                for (int i = 0; i < path.Count - 1; i++)
                 {
                     Edge e = graph.Edges.Single(edge => (edge.StartVertex.Id.ToString() == path[i].ToString() && edge.EndVertex.Id.ToString() == path[i + 1].ToString()) || (edge.StartVertex.Id.ToString() == path[i + 1].ToString() && edge.EndVertex.Id.ToString() == path[i].ToString()));
                     edgeList.Add(e);
