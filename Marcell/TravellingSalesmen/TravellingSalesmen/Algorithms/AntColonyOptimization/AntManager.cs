@@ -102,7 +102,7 @@ namespace TravellingSalesmen.Algorithms.AntColonyOptimization
 
         private void UpdateTemporalPheromoneMatrix()
         {
-            Ant bestAnt = ants.Single(ant => ant.TotalDistanceTravelled == ants.Min(ant2 => ant2.TotalDistanceTravelled));
+            Ant bestAnt = ants.First(ant => ant.TotalDistanceTravelled == ants.Min(ant2 => ant2.TotalDistanceTravelled));
             for (int i = 0; i < bestAnt.VisitedNodes.Count - 1; i++)
             {
                 temporalPheromoneMatrix[int.Parse(bestAnt.VisitedNodes[i].ToString()), int.Parse(bestAnt.VisitedNodes[i + 1].ToString())] += (1 / bestAnt.TotalDistanceTravelled);

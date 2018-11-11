@@ -51,6 +51,12 @@
     <Compile Include="AlgorithmParameters\AntColonyOptimizationParams.Designer.cs">
       <DependentUpon>AntColonyOptimizationParams.cs</DependentUpon>
     </Compile>
+    <Compile Include="AlgorithmParameters\HybridAlgorithmParams.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlgorithmParameters\HybridAlgorithmParams.Designer.cs">
+      <DependentUpon>HybridAlgorithmParams.cs</DependentUpon>
+    </Compile>
     <Compile Include="AlgorithmParameters\GeneticAlgorithmParams.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -78,6 +84,7 @@
     <Compile Include="Algorithms\GeneticAlgorithm.cs" />
     <Compile Include="Algorithms\GreedySearch.cs" />
     <Compile Include="Algorithms\HeldKarpAlgorithm.cs" />
+    <Compile Include="Algorithms\HybridAlgorithm.cs" />
     <Compile Include="BaseClasses\AbstractGraph.cs" />
     <Compile Include="BaseClasses\Agent.cs" />
     <Compile Include="BaseClasses\AgentManager.cs" />
@@ -100,6 +107,9 @@
     <Compile Include="BaseClasses\Vertex.cs" />
     <EmbeddedResource Include="AlgorithmParameters\AntColonyOptimizationParams.resx">
       <DependentUpon>AntColonyOptimizationParams.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlgorithmParameters\HybridAlgorithmParams.resx">
+      <DependentUpon>HybridAlgorithmParams.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AlgorithmParameters\GeneticAlgorithmParams.resx">
       <DependentUpon>GeneticAlgorithmParams.cs</DependentUpon>

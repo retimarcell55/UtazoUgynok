@@ -111,6 +111,9 @@ namespace TravellingSalesmen
                 case "HeldKarpAlgorithm":
                     coordinator.Algorithm = new HeldKarpAlgorithm(conf.Graph, conf.AgentManager);
                     break;
+                case "HybridAlgorithm":
+                    coordinator.Algorithm = new HybridAlgorithm(conf.Graph, conf.AgentManager);
+                    break;
             }
 
             coordinator.Algorithm.ParamsWindow.Show();

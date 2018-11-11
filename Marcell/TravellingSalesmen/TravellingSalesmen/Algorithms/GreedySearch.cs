@@ -173,6 +173,11 @@ namespace TravellingSalesmen.Algorithms
             }
         }
 
+        public List<List<int>> GetOverallBestSolution()
+        {
+            return OverallBest;
+        }
+
         public override void NextTurn()
         {
             int patienceCounter = 0;

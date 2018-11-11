@@ -1,0 +1,6 @@
+Conf1multiple  17 723.61
+Conf2multiple  2484 1086.5
+g10_a1  7 1922.45
+g10_a2  2953 1086.5
+Christofides1  16 1922.45
+Conf1multiple  0 723.61

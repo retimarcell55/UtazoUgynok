@@ -32,3 +32,4 @@ C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesm
 C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.AlgorithmParameters.HeldKarpParams.resources
 C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.AlgorithmParameters.GeneticAlgorithmParams.resources
 C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.AlgorithmParameters.AntColonyOptimizationParams.resources
+C:\Users\Marcell\Desktop\UtazoUgynok\Marcell\TravellingSalesmen\TravellingSalesmen\obj\Debug\TravellingSalesmen.AlgorithmParameters.HybridAlgorithmParams.resources
