@@ -122,10 +122,11 @@ namespace TravellingSalesmen.Algorithms
             if (initialChromosome != null)
             {
                 initialPopulationCount = POPULATION_NUMBER / 4;
-                for (int i = 0; i < initialPopulationCount; i++)
+                for (int i = 0; i < initialPopulationCount - 1; i++)
                 {
-                    population.Add(new Chromosome(initialChromosome.Cities, initialChromosome.Salesmen, initialChromosome.Fitness));
+                    population.Add(Crossover(initialChromosome, initialChromosome));
                 }
+                population.Add(new Chromosome(initialChromosome.Cities, initialChromosome.Salesmen, initialChromosome.Fitness));
             }
 
             for (int i = initialPopulationCount; i < POPULATION_NUMBER; i++)
